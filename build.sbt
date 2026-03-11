@@ -1,24 +1,54 @@
+import play.sbt.routes.RoutesKeys
+import sbt.*
+import sbt.Keys.libraryDependencySchemes
 import uk.gov.hmrc.DefaultBuildSettings
+import uk.gov.hmrc.DefaultBuildSettings.*
+import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
+val appName = "income-tax-financials-frontend"
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "3.3.6"
-ThisBuild / scalacOptions += "-Wconf:msg=Flag.*repeatedly:s"
+val currentScalaVersion = "2.13.16"
 
-lazy val microservice = Project("income-tax-financials-frontend", file("."))
+scalacOptions ++= Seq(
+  "-feature",
+  "-Wconf:src=target/.*:silent")
+
+lazy val plugins: Seq[Plugins] = Seq.empty
+lazy val playSettings: Seq[Setting[_]] = Seq.empty
+
+lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
+  .settings(playSettings *)
+  .settings(scalaSettings *)
+  .settings(scalaVersion := currentScalaVersion)
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
-    // https://www.scala-lang.org/2021/01/12/configuring-and-suppressing-warnings.html
-    // suppress warnings in generated routes files
-    scalacOptions += "-Wconf:src=routes/.*:s",
-    scalacOptions += "-Wconf:msg=unused import&src=html/.*:s",
-    pipelineStages := Seq(gzip),
+    retrieveManaged := true
   )
   .settings(CodeCoverageSettings.settings: _*)
+  .settings(defaultSettings() *)
+  .settings(
+    Test / Keys.fork := true,
+    Test / javaOptions += "-Dlogger.resource=logback-test.xml",
+    libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
+    PlayKeys.playDefaultPort := 9075
+  )
+  .settings(
+    Keys.fork := false
+  )
 
 lazy val it = project
-  .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test")
-  .settings(DefaultBuildSettings.itSettings())
+  .settings(DefaultBuildSettings.itSettings().head)
+  .enablePlugins(play.sbt.PlayScala)
+  .settings(
+    publish / skip := true
+  )
+  .settings(scalaVersion := currentScalaVersion)
+  .settings(
+    testForkedParallel := true
+  )
   .settings(libraryDependencies ++= AppDependencies.it)
+
+addCommandAlias("compileAll", "compile ; test:compile ; it/test:compile")
