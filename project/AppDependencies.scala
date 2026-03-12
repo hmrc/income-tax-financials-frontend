@@ -5,16 +5,16 @@ import play.sbt.PlayImport.caffeine
 
 object AppDependencies {
 
-  val bootstrapPlayVersion = "10.5.0"
+  val bootstrapPlayVersion = "10.7.0"
   val playPartialsVersion = "10.2.0"
-  val playFrontendHMRCVersion = "12.22.0"
+  val playFrontendHMRCVersion = "12.32.0"
   val catsVersion = "2.13.0"
   val scalaTestPlusVersion = "7.0.2"
   val jsoupVersion = "1.22.1"
   val mockitoVersion = "5.21.0"
   val scalaMockVersion = "7.5.3"
   val wiremockVersion = "3.0.0-beta-7"
-  val hmrcMongoVersion = "2.11.0"
+  val hmrcMongoVersion = "2.12.0"
   val playVersion = "play-30"
 
   val compile = Seq(

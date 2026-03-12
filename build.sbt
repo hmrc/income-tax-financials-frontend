@@ -7,7 +7,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 val appName = "income-tax-financials-frontend"
 ThisBuild / majorVersion := 0
-val currentScalaVersion = "2.13.16"
+val currentScalaVersion = "2.13.18"
 
 scalacOptions ++= Seq(
   "-feature",
@@ -32,7 +32,7 @@ lazy val microservice = Project(appName, file("."))
     Test / Keys.fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
     libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
-    PlayKeys.playDefaultPort := 9075
+    PlayKeys.playDefaultPort := 9092
   )
   .settings(
     Keys.fork := false
