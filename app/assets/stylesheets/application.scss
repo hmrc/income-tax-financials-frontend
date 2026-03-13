@@ -1,1 +1,87 @@
-@import "lib/govuk-frontend/dist/govuk/base";
+$govuk-assets-path: "/report-quarterly/income-and-expenses/view/assets/lib/govuk-frontend/dist/govuk/assets/";
+$hmrc-assets-path: "/report-quarterly/income-and-expenses/view/assets/lib/hmrc-frontend/hmrc/";
+
+@import "lib/govuk-frontend/dist/govuk/index";
+@import "lib/hmrc-frontend/hmrc/all";
+
+.app-reference-number {
+  display: block;
+  font-weight: bold;
+}
+
+.govuk-table__cell {
+  vertical-align: top;
+}
+
+.hmrc-account-menu {
+  border-top: 1px solid #b1b4b6;
+  font-size: 16px;
+}
+
+.hmrc-account-menu__link {
+  font-size: 1rem;
+}
+
+.nav-bar-wrapper {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+
+  .govuk-back-link {
+    margin-top: 30px;
+    margin-bottom: 0px;
+  }
+
+}
+
+.bta-nav-no-border{
+    border-top: 0px;
+}
+
+.client-utr{
+  font-weight: bold;
+  }
+
+#amount-due{
+   white-space:nowrap;
+}
+
+#balancing-charge{
+    margin:0px;
+}
+
+#pre-mtd-digital{
+    margin:0px;
+}
+
+.js-enabled .govuk-accordion__section-content {
+    padding-bottom: 0;
+}
+
+.dt-cell-width {
+  width: 68%;
+}
+
+.box-simple{
+    border-style:solid;
+    border-color:#0b0c0c;
+    border-width:thin;
+    padding:20px;
+    margin-top:20px;
+    margin-bottom:10px
+}
+
+.govuk-insettext-zero-spacing {
+    margin-top: govuk-spacing(0);
+    border-left: govuk-spacing(0);
+    padding: govuk-spacing(0);
+    margin-bottom: govuk-spacing(3);
+}
+
+.display-none {
+  display: none;
+}
+
+.govuk-tag {
+    max-width: none;
+}
