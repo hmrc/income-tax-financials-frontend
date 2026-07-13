@@ -7,6 +7,8 @@ echo "Copying files to tmp folder which we don't want to overwrite"
 cp -r app/common/config/ExternalRedirectHelper.scala tmp/.
 cp -r app/common/config/FrontendAppConfig.scala tmp/.
 cp app/common/models/incomeSourceDetails/IncomeSourceDetailsResponse.scala tmp/.
+cp app/common/models/liabilitycalculation/LiabilityCalculationResponse.scala tmp/.
+cp app/shared/enums/JourneyState.scala
 
 
 echo "Removing main code from the app folder"
@@ -24,10 +26,11 @@ echo "Copying files back from tmp folder to app folder"
 cp tmp/ExternalRedirectHelper.scala app/common/config/.
 cp tmp/FrontendAppConfig.scala app/common/config/.
 cp tmp/IncomeSourceDetailsResponse.scala app/common/models/incomeSourceDetails/.
+cp tmp/LiabilityCalculationResponse.scala app/common/models/liabilitycalculation/.
+cp tmp/JourneyState.scala app/shared/enums/.
 
 echo "Removing unused files"
 rm app/shared/models/UIJourneySessionData.scala
-rm app/shared/enums/JourneyState.scala
 rm -rf app/shared/enums/JourneyType
 rm -rf app/shared/repositories
 rm -rf app/shared/services
@@ -41,6 +44,7 @@ rm -rf tmp/*
 echo "Starting cut over of unit tests from income-tax-view-change-frontend"
 echo "Copying files to tmp folder which we don't want to overwrite"
 cp test/common/models/IncomeSourceDetailsModelSpec.scala tmp/.
+cp test/common/models/liabilityCalculation/LiabilityCalculationResponseModelSpec.scala tmp/.
 
 echo "Removing current unit tests"
 
@@ -57,11 +61,15 @@ cp -r ../income-tax-view-change-frontend/test/resources test/.
 
 echo "Copying files back from tmp folder to test folder"
 cp tmp/IncomeSourceDetailsModelSpec.scala test/common/models/.
+cp tmp/LiabilityCalculationResponseModelSpec.scala test/common/models/liabilityCalculation/.
 
 echo "Removing unused files"
-rm -rf test/shared/testConstants/NextUpdatesTestConstants.scala
+rm test/shared/testConstants/NextUpdatesTestConstants.scala
+rm -rf test/shared/services
+rm -rf test/shared/mocks/services
 
 echo "Removing files from tmp folder"
+rm -rf tmp/*
 
 echo "Starting cut over of integration tests from income-tax-view-change-frontend"
 echo "Copying files to tmp folder which we don't want to overwrite"

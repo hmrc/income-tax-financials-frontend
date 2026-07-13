@@ -15,17 +15,10 @@
  */
 
 package common.models
-
-import businessDetails.core.{IncomeSourceId, IncomeSourceIdHash}
-import businessDetails.enums.IncomeSourceJourney.SelfEmployment
-import common.testConstants.BusinessDetailsTestConstants.*
-import common.auth.MtdItUser
-import common.exceptions.{MultipleIncomeSourcesFound, NoIncomeSourceFound}
 import common.mocks.services.MockDateService
-import businessDetails.core.IncomeSourceId.mkIncomeSourceId
-import businessDetails.core.IncomeSourceIdHash.mkFromQueryString
-import common.models.incomeSourceDetails.{BusinessDetailsModel, ChooseSoleTraderAddressUserAnswer, IncomeSourceDetailsModel, PropertyDetailsModel}
+import common.models.incomeSourceDetails.{BusinessDetailsModel, IncomeSourceDetailsModel, PropertyDetailsModel}
 import common.testConstants.BaseTestConstants.*
+import common.testConstants.BusinessDetailsTestConstants.*
 import common.testConstants.IncomeSourceDetailsTestConstants.*
 import common.testUtils.{TestSupport, UnitSpec}
 import org.scalatest.matchers.should.Matchers
@@ -33,14 +26,7 @@ import org.scalatest.matchers.should.Matchers
 import java.time.LocalDate
 
 class IncomeSourceDetailsModelSpec extends UnitSpec with Matchers with MockDateService with TestSupport{
-
-  val testQueryString: String = mkIncomeSourceId("XA00001234").toHash.hash
-  val testSelfEmploymentIdHash: Either[Throwable, IncomeSourceIdHash] = mkFromQueryString(testQueryString)
-  val testSelfEmploymentIdMaybe: Option[IncomeSourceId] = Option(mkIncomeSourceId("XA00001234"))
-  val testSelfEmploymentIdHashValueMaybe: Option[String] = Option(testQueryString)
-  val emptyIncomeSourceIdHash: IncomeSourceIdHash = mkIncomeSourceId("").toHash
-
-
+  
   "The IncomeSourceDetailsModel" when {
 
     "the user has both businesses and property income sources" should {
@@ -111,154 +97,6 @@ class IncomeSourceDetailsModelSpec extends UnitSpec with Matchers with MockDateS
         noIncomeDetails.businesses shouldBe List.empty
       }
     }
-    "the sanitise method" should {
-      "remove all unnecessary fields" in {
-        val expected = IncomeSourceDetailsModel(
-          testNino,
-          testMtditid,
-          Some((fixedDate.getYear - 1).toString),
-          List(
-            BusinessDetailsModel(
-              incomeSourceId = "",
-              incomeSource = Some(testIncomeSource),
-              accountingPeriod = None,
-              tradingName = Some("nextUpdates.business"),
-              firstAccountingPeriodEndDate = None,
-              tradingStartDate = Some(LocalDate.parse("2022-01-01")),
-              contextualTaxYear = None,
-              cessation = None,
-              latencyDetails = None,
-              address = Some(address),
-            ),
-            BusinessDetailsModel(
-              incomeSourceId = "",
-              incomeSource = Some(testIncomeSource),
-              accountingPeriod = None,
-              tradingName = Some("nextUpdates.business"),
-              tradingStartDate = Some(LocalDate.parse("2022-01-01")),
-              contextualTaxYear = None,
-              firstAccountingPeriodEndDate = Some(getCurrentTaxYearEnd.minusYears(1)),
-              cessation = None,
-              latencyDetails = None,
-              address = Some(address),
-            )
-          ),
-          List(PropertyDetailsModel(
-            incomeSourceId = "",
-            accountingPeriod = None,
-            firstAccountingPeriodEndDate = None,
-            incomeSourceType = Some("property-unspecified"),
-            tradingStartDate = Some(LocalDate.parse("2022-01-01")),
-            contextualTaxYear = None,
-            cessation = None,
-          )
-          ))
-        preSanitised.sanitise shouldBe expected
-      }
-    }
-  }
-
-  ".compareHashToQueryString method" when {
-    "user has income incomeSourceIdHashes matching the url incomeSourceIdHash" should {
-      "return the matching incomeSourceId inside an Option" in {
-        implicit val user: MtdItUser[_] = getIndividualUserIncomeSourcesConfigurable(fakeRequestWithActiveSession, singleBusinessIncome)
-
-        val result = user.incomeSources.compareHashToQueryString(incomeSourceIdHash = testSelfEmploymentIdHash.toOption.get)
-
-        result shouldBe Right(testSelfEmploymentIdMaybe.get)
-      }
-    }
-    "user has multiple incomeSourceIdHashes matching the url incomeSourceIdHash" should {
-      "return the matching incomeSourceId inside an Option" in {
-        implicit val user: MtdItUser[_] = getIndividualUserIncomeSourcesConfigurable(fakeRequestWithActiveSession, dualBusinessIncome)
-
-        val listOfIncomeSourceIds: List[String] = user.incomeSources.businesses.filterNot(_.isCeased).map(_.incomeSourceId)
-
-        val result = user.incomeSources.compareHashToQueryString(incomeSourceIdHash = testSelfEmploymentIdHash.toOption.get)
-
-        result shouldBe Left(MultipleIncomeSourcesFound(testSelfEmploymentIdHash.toOption.get.hash, listOfIncomeSourceIds))
-      }
-    }
-    "user has no incomeSourceIdHashes matching the url incomeSourceIdHash" should {
-      "return an exception" in {
-        implicit val user: MtdItUser[_] = getIndividualUserIncomeSourcesConfigurable(fakeRequestWithActiveSession, singleBusinessIncome2023)
-
-        val result = user.incomeSources.compareHashToQueryString(incomeSourceIdHash = emptyIncomeSourceIdHash)
-
-        result shouldBe Left(NoIncomeSourceFound(emptyIncomeSourceIdHash.hash))
-      }
-    }
-    "user has no incomeSources" should {
-      "return None" in {
-        implicit val user: MtdItUser[_] = getIndividualUserIncomeSourcesConfigurable(fakeRequestWithActiveSession, noIncomeDetails)
-
-        val result = user.incomeSources.compareHashToQueryString(incomeSourceIdHash = testSelfEmploymentIdHash.toOption.get)
-
-        result shouldBe Left(NoIncomeSourceFound(testSelfEmploymentIdHash.toOption.get.hash))
-      }
-    }
-  }
-
-
-  "getIncomeSourceBusinessName" should {
-    "return None when we don't pass sole trader business id for SelfEmployment" in {
-      singleBusinessIncome.getIncomeSourceBusinessName(SelfEmployment, None) shouldBe None
-    }
-  }
-
-  "earliestSubmissionTaxYear" should {
-
-    "return the earliest accounting period end year across businesses and properties" in {
-      val business1 = BusinessDetailsModel(
-        incomeSourceId = "BUS1",
-        incomeSource = None,
-        accountingPeriod = None,
-        tradingName = Some("Biz One"),
-        firstAccountingPeriodEndDate = Some(LocalDate.of(2024, 4, 5)),
-        tradingStartDate = None,
-        contextualTaxYear = None,
-        cessation = None,
-        latencyDetails = None,
-        address = None,
-      )
-
-      val business2 = business1.copy(
-        incomeSourceId = "BUS2",
-        firstAccountingPeriodEndDate = Some(LocalDate.of(2021, 4, 5))
-      )
-
-      val property1 = PropertyDetailsModel(
-        incomeSourceId = "PROP1",
-        accountingPeriod = None,
-        firstAccountingPeriodEndDate = Some(LocalDate.of(2023, 4, 5)),
-        incomeSourceType = None,
-        tradingStartDate = None,
-        contextualTaxYear = None,
-        cessation = None,
-      )
-
-      val model = IncomeSourceDetailsModel(
-        nino = testNino,
-        mtdbsa = testMtditid,
-        yearOfMigration = Some("2020"),
-        businesses = List(business1, business2),
-        properties = List(property1)
-      )
-
-      model.earliestSubmissionTaxYear shouldBe Some(2021)
-    }
-
-    "return None when there are no accounting period end dates" in {
-      val model = IncomeSourceDetailsModel(
-        nino = testNino,
-        mtdbsa = testMtditid,
-        yearOfMigration = Some("2020"),
-        businesses = Nil,
-        properties = Nil
-      )
-
-      model.earliestSubmissionTaxYear shouldBe None
-    }
   }
 
   "orderedTaxYearsByAccountingPeriods" should {
@@ -317,51 +155,4 @@ class IncomeSourceDetailsModelSpec extends UnitSpec with Matchers with MockDateS
       }
     }
   }
-
-  "return all active business addresses" when {
-
-    "getAllUniqueBusinessAddresses finds an international address" in {
-      val model = IncomeSourceDetailsModel(
-        nino = testNino,
-        mtdbsa = testMtditid,
-        yearOfMigration = None,
-        businesses = List(business1International),
-        properties = Nil
-      )
-      model.getAllUniqueBusinessAddresses shouldBe List(ChooseSoleTraderAddressUserAnswer(Some("31 Some street"), None, None, None, None, Some("US"), false))
-    }
-    "getAllUniqueBusinessAddresses finds a UK address" in {
-      val model = IncomeSourceDetailsModel(
-        nino = testNino,
-        mtdbsa = testMtditid,
-        yearOfMigration = None,
-        businesses = List(business1),
-        properties = Nil
-      )
-      model.getAllUniqueBusinessAddresses shouldBe List(ChooseSoleTraderAddressUserAnswer(Some("8 Test"), Some("New Court"), Some("New Town"), Some("New City"), Some("NE12 6CI"), Some("GB"), false))
-    }
-
-    "getAllUniqueBusinessAddressesWithIndex finds two international address that are not distinct" in {
-      val model = IncomeSourceDetailsModel(
-        nino = testNino,
-        mtdbsa = testMtditid,
-        yearOfMigration = None,
-        businesses = List(business1International, business1International),
-        properties = Nil
-      )
-      model.getAllUniqueBusinessAddressesWithIndex shouldBe List((ChooseSoleTraderAddressUserAnswer(Some("31 Some street"), None, None, None, None, Some("US"), false), 0))
-    }
-    "getAllUniqueBusinessAddressesWithIndex finds a UK address" in {
-      val model = IncomeSourceDetailsModel(
-        nino = testNino,
-        mtdbsa = testMtditid,
-        yearOfMigration = None,
-        businesses = List(business1),
-        properties = Nil
-      )
-      model.getAllUniqueBusinessAddressesWithIndex shouldBe List((ChooseSoleTraderAddressUserAnswer(Some("8 Test"), Some("New Court"), Some("New Town"), Some("New City"), Some("NE12 6CI"), Some("GB"), false), 0))
-    }
-  }
-
-
 }

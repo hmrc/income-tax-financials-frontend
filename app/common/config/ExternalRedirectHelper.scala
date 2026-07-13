@@ -31,7 +31,7 @@ trait ExternalRedirectHelper {
     hubBaseUrl
 
   lazy val individualHomeUrlWithOrigin: Option[String] => String = origin =>
-    s"$hubBaseUrl?origin=$origin"
+    origin.fold(hubBaseUrl)(o => s"$hubBaseUrl?origin=$o")
 
   lazy val homePageUrl: String = {
     individualHomeUrl
@@ -149,5 +149,25 @@ trait ExternalRedirectHelper {
       returnsTaxYearsAgentUrl(returnsFrontendEnabled)
     else
       returnsTaxYearsIndividualUrl(returnsFrontendEnabled)
+
+  def returnsTaxYearSummaryIndividualUrl(taxYear: Int, origin: Option[String] = None,
+                                         fragment: Option[String] = None, returnsFrontendEnabled: Boolean): String = {
+    val baseUri = if (returnsFrontendEnabled) {
+      s"$returnsBaseUrl/tax-year-summary/$taxYear"
+    } else {
+      s"$hubBaseUrl/tax-year-summary/$taxYear"
+    }
+    val baseUriWithOptOrigin = origin.fold(baseUri)(o => s"$baseUri?origin=$o")
+    fragment.fold(baseUriWithOptOrigin)(f => s"$baseUriWithOptOrigin#$f")
+  }
+
+  def returnsTaxYearSummaryAgentUrl(taxYear: Int, fragment: Option[String] = None, returnsFrontendEnabled: Boolean): String = {
+    val baseUri = if (returnsFrontendEnabled) {
+      s"$returnsAgentBaseUrl/tax-year-summary/$taxYear"
+    } else {
+      s"$hubAgentBaseUrl/tax-year-summary/$taxYear"
+    }
+    fragment.fold(baseUri)(f => s"$baseUri#$f")
+  }
 
 }

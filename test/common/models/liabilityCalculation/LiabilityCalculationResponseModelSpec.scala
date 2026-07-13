@@ -20,7 +20,6 @@ import common.models.helpers.LiabilityCalculationDataHelper
 import common.models.liabilitycalculation.*
 import common.testUtils.TestSupport
 import play.api.http.Status
-import play.api.i18n.Lang
 import play.api.libs.json.*
 
 import scala.io.Source
@@ -111,63 +110,6 @@ class LiabilityCalculationResponseModelSpec extends LiabilityCalculationDataHelp
               |}
            """.stripMargin.trim)
       }
-    }
-  }
-
-  "Messages" when {
-    "variable values from message for individual" in {
-      Messages(errors = errorMessagesIndividual).getErrorMessageVariables(messagesApi, isAgent = false) shouldBe Seq(
-        Message("C55012", "05/01/2023"),
-        Message("C15507", "£2000"),
-        Message("C15510", "10"),
-        Message("C55009", ""),
-        Message("C55007", "2024-04-05")
-      )
-    }
-
-    "variable values from message for agent" in {
-      Messages(errors = errorMessagesAgent).getErrorMessageVariables(messagesApi, isAgent = true) shouldBe Seq(
-        Message("C55012", "05/01/2023"),
-        Message("C15507", "£2000"),
-        Message("C15510", "10"),
-        Message("C55009", ""),
-        Message("C55007", "2024-04-05")
-      )
-    }
-
-    "translate date variable values from messages for individual" in {
-      val values = Messages(errors = errorMessagesIndividual).getErrorMessageVariables(messagesApi, isAgent = false)
-      Messages.translateMessageDateVariables(values)(messagesApi.preferred(Seq(Lang("cy"))), mockImplicitDateFormatter) shouldBe Seq(
-        Message("C55012", "5 Ionawr 2023"),
-        Message("C15507", "£2000"),
-        Message("C15510", "10"),
-        Message("C55009", ""),
-        Message("C55007", "5 Ebrill 2024")
-      )
-    }
-    "translate date variable values from messages for agent" in {
-      val values = Messages(errors = errorMessagesAgent).getErrorMessageVariables(messagesApi, isAgent = true)
-      Messages.translateMessageDateVariables(values)(messagesApi.preferred(Seq(Lang("cy"))), mockImplicitDateFormatter) shouldBe Seq(
-        Message("C55012", "5 Ionawr 2023"),
-        Message("C15507", "£2000"),
-        Message("C15510", "10"),
-        Message("C55009", ""),
-        Message("C55007", "5 Ebrill 2024")
-      )
-    }
-
-    "Scottish tax regime info messages" in {
-      Messages(info = InfoMessagesScottishTaxRegime).formatMessagesScottishWelshTaxRegime(InfoMessagesScottishTaxRegime.get.toSeq) shouldBe Seq(
-        Message("C22225_Scottish", "Your tax has been reduced because of Gift Aid charity donations - the Scottish Basic Rate of Income Tax is higher than the rate at which charities have obtained relief."),
-        Message("C22226_Scottish", "Your tax has increased because of Gift Aid charity donations - the Scottish Basic Rate of Income Tax is lower than the rate at which charities have obtained relief."),
-      )
-    }
-
-    "Welsh tax regime info messages" in {
-      Messages(info = InfoMessagesWelshTaxRegime).formatMessagesScottishWelshTaxRegime(InfoMessagesWelshTaxRegime.get.toSeq) shouldBe Seq(
-        Message("C22225", "Your tax has been reduced because of Gift Aid charity donations - the Welsh Basic Rate of Income Tax is higher than the rate at which charities have obtained relief."),
-        Message("C22226", "Your tax has increased because of Gift Aid charity donations - the Welsh Basic Rate of Income Tax is lower than the rate at which charities have obtained relief."),
-      )
     }
   }
 
