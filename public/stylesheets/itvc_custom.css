@@ -1,0 +1,103 @@
+.flex-container {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 1em 0.5em 1.5em;
+}
+
+.tile {
+    flex-grow: 0;
+    flex-basis: 100%;
+    margin-bottom: 2em;
+    background-color: #f8f8f8;
+    border: 1px solid #dee0e2;
+}
+
+@media screen and (min-width: 600px) {
+    .tile {
+        flex-basis: 46.99%;
+    }
+
+    .tile:nth-child(2n-2) {
+        margin-left: 2%;
+    }
+
+    .tile:nth-child(2n-1) {
+        margin-right: 2%;
+    }
+}
+
+html[data-useragent*='MSIE 10.0'] .flex-container {
+
+.tile {
+    flex-basis: 31%;
+    margin: 3%;
+}
+
+}
+
+.tile-no-border {
+    border: 0;
+}
+
+.tile .tile-body {
+    border-bottom: 0;
+    padding: 1em 1.5em 1.5em;
+}
+
+.tile .tile-body .heading-medium {
+    margin-top: 0;
+}
+
+.tile .tile-body *:last-child {
+    margin-bottom: 0;
+}
+
+.heading-xl-addon {
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+	color: #0b0c0c;
+	font-size: 24px;
+    padding-bottom: 60px;
+}
+
+@media (max-width: 641px) {
+    .heading-xl-addon {
+        font-size: 18px;
+        padding-bottom: 30px;
+    }
+}
+
+.margin-bottom-zero {
+    margin-bottom: 0;
+}
+
+.margin-bottom-sixty {
+	margin-bottom: 60px;
+}
+
+@media(max-width: 1024px){
+    .warning-wrapper{
+        padding: 0 15px;
+    }
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.uplift {
+    color: #505a5f;
+}
+
+@media screen and (min-width: 640px) and (max-width: 1020px) {
+    #updates-and-deadlines-tabs {
+        width: calc(100vw - 60px);
+    }
+}

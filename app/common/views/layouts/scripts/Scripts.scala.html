@@ -1,0 +1,80 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.helper.CSPNonce
+
+@this()
+
+@()(implicit request: RequestHeader, messages:Messages)
+
+<script @CSPNonce.attr src='@controllers.routes.Assets.versioned("lib/hmrc-frontend/hmrc/all.js")'></script>
+
+<script @CSPNonce.attr type="module">
+ import { initAll } from '@routes.Assets.versioned("lib/govuk-frontend/dist/govuk/govuk-frontend.min.js")'
+   initAll()
+window.HMRCFrontend.initAll();
+
+// ensure space bar triggers a click on pay now button link
+const handleKeyDown = function (event) {
+  const KEY_SPACE = 32
+  if (event.target.getAttribute('role') === 'button' && event.keyCode === KEY_SPACE) {
+    event.preventDefault()
+    event.target.click()
+  }
+}
+const payButton = document.querySelector("#payment-button-link")
+if(payButton) {
+    payButton.addEventListener('keydown', handleKeyDown)
+}
+
+// ensure POSTed pages are replaced with GET to avoid form resubmission errors
+if (window.history && window.history.replaceState && typeof window.history.replaceState === 'function') {
+    window.history.replaceState(null, null, window.location.href);
+}
+
+</script>
+<link rel="stylesheet" type="text/css" href='@routes.Assets.versioned("stylesheets/itvc_custom.css")'>
+<script @CSPNonce.attr type="module">
+    const showAllSpan = document.getElementsByClassName('govuk-accordion__show-all-text')[0]
+    const showAllButton = document.querySelector('.govuk-accordion__controls button')
+    const accordionSections = document.getElementsByClassName('govuk-accordion__section')
+    const setAccordionMessages = function() {
+
+       // set main openall/showall message
+       if (showAllButton.getAttribute('aria-expanded') == 'false') {
+           showAllSpan.textContent = "@messages("sections.open.all")"
+       } else {
+           showAllSpan.textContent = "@messages("sections.close.all")"
+       }
+
+       // set section button messages
+       for (let i = 0; i <= accordionSections.length - 1; i++) {
+           const sectionButton = document.getElementsByClassName('govuk-accordion__section-button')[i]
+           const message = sectionButton.getAttribute('aria-expanded') == 'false' ? '@messages("sections.open")' : '@messages("sections.close")'
+           sectionButton.querySelector('span.govuk-accordion__section-toggle-text').textContent = message;
+       }
+
+    }
+    if(showAllButton) {
+        setAccordionMessages()
+        showAllButton.addEventListener("click", setAccordionMessages);
+        for (let i = 0; i <= accordionSections.length - 1; i++) {
+            document.getElementsByClassName('govuk-accordion__section-button')[i].addEventListener("click", function() {
+                setTimeout(setAccordionMessages, 0);
+            });
+        }
+    }
+</script>
