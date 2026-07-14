@@ -18,7 +18,7 @@ package common.config
 
 import com.google.inject.Inject
 import play.api.Configuration
-import play.api.i18n.{Lang, Messages}
+import play.api.i18n.Lang
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.Singleton
@@ -56,19 +56,9 @@ class FrontendAppConfig @Inject()(val servicesConfig: ServicesConfig, val config
   //Income tax financial details service
   lazy val incomeTaxFinancialDetailsService: String = servicesConfig.baseUrl("income-tax-financial-details")
   
-  //Address lookup service
-  lazy val addressLookupService: String = servicesConfig.baseUrl("address-lookup-frontend")
-  lazy val addressLookupExternalHost: String = servicesConfig.getString("address-lookup.external-host")
-  lazy val accessibilityHost: String = servicesConfig.getString("accessibility-statement.host")
-  lazy val accessibilityUrl: String = accessibilityHost + "/accessibility-statement" + servicesConfig.getString("accessibility-statement.service-path")
   //View L&P
   def saViewLandPService(utr: String): String = servicesConfig.getString("old-sa-viewer-frontend.host") + s"/$utr/account"
-
-  //individual sa302
-  def sa302:String = s"$baseUrl$basePath/mortgage-evidence/proof-of-income"
-  //agent sa302
-  def sa302Agent:String = s"$baseUrl$agentBasePath/mortgage-evidence/proof-of-income"
-
+  
   //GG Sign In via BAS Gateway
   lazy val signInUrl: String = servicesConfig.getString("base.sign-in")
   lazy val ggSignInUrl: String = servicesConfig.getString("government-gateway.sign-in.url")
@@ -82,13 +72,7 @@ class FrontendAppConfig @Inject()(val servicesConfig: ServicesConfig, val config
   lazy val ggUrl: String = servicesConfig.getString("government-gateway.url")
 
   def ggSignOutUrl(identifier: String): String = s"$ggUrl/bas-gateway/sign-out-without-state?continue=${exitSurveyUrl(identifier)}"
-
-  //Business Tax Account
-  lazy val btaService: String = servicesConfig.baseUrl("business-account")
-  lazy val businessTaxAccount: String = servicesConfig.getString("business-tax-account.url")
-  lazy val btaManageAccountUrl: String = s"$businessTaxAccount/manage-account"
-  lazy val btaMessagesUrl: String = s"$businessTaxAccount/messages"
-
+  
   // NRS
   lazy val nrsBaseUrl: String = servicesConfig.baseUrl("non-repudiation")
   lazy val nrsApiKey: String = servicesConfig.getString("microservice.services.non-repudiation.xApiKey")
@@ -111,50 +95,29 @@ class FrontendAppConfig @Inject()(val servicesConfig: ServicesConfig, val config
   lazy val paymentHistoryLimit: Int = config.get[Int]("payment-history.number-of-years")
 
   lazy val repaymentsUrl: String = servicesConfig.baseUrl("repayment-api")
-
-  lazy val hipRepaymentsUrl: String = servicesConfig.baseUrl("hip-repayment-api")
-
+  
   //Payment Redirect route
   lazy val paymentRedirectUrl: String = s"$baseUrl$basePath/what-you-owe"
   //Payment Redirect route
   lazy val agentPaymentRedirectUrl: String = s"$baseUrl$agentBasePath/payments-owed"
-
-
-  // Submission service
-  // This URL has a set year and environment. Please use submissionFrontendTaxOverviewUrl instead.
-  lazy val submissionFrontendTaxOverviewUrl: Int => String = taxYear =>
-    servicesConfig.getString("income-tax-submission-frontend.host") + s"/update-and-submit-income-tax-return/$taxYear/view"
-
-  lazy val submissionFrontendFinalDeclarationUrl: Int => String = taxYear =>
-    servicesConfig.getString("income-tax-submission-frontend.host") + s"/update-and-submit-income-tax-return/$taxYear/declaration"
-
-  lazy val submissionFrontendTaxYearsPage: Int => String = taxYear =>
-    servicesConfig.getString("income-tax-submission-frontend.host") + s"/update-and-submit-income-tax-return/$taxYear/start"
-
+  
   // Disagree with a tax decision
   lazy val taxAppealsUrl: String = servicesConfig.getString("tax-appeals.url")
 
   // income-tax-session-data url
   lazy val incomeTaxSessionDataUrl: String = servicesConfig.baseUrl("income-tax-session-data")
-
-  lazy val penaltiesBackendBase: String = servicesConfig.baseUrl("penalties")
-
+  
   //penalties frontend
   lazy val incomeTaxPenaltiesFrontend: String = servicesConfig.getString("income-tax-penalties-frontend.homeUrl")
   lazy val incomeTaxPenaltiesFrontendLPP1Calculation: String => String = chargeRef => servicesConfig.getString("income-tax-penalties-frontend.homeUrl") + s"/first-lpp-calculation?penaltyId=$chargeRef"
   lazy val incomeTaxPenaltiesFrontendLPP1CalculationAgent: String => String = chargeRef => servicesConfig.getString("income-tax-penalties-frontend.homeUrl") + s"/agent-first-lpp-calculation?penaltyId=$chargeRef"
   lazy val incomeTaxPenaltiesFrontendLPP2Calculation: String => String = chargeRef => servicesConfig.getString("income-tax-penalties-frontend.homeUrl") + s"/second-lpp-calculation?penaltyId=$chargeRef"
   lazy val incomeTaxPenaltiesFrontendLPP2CalculationAgent: String => String = chargeRef => servicesConfig.getString("income-tax-penalties-frontend.homeUrl") + s"/agent-second-lpp-calculation?penaltyId=$chargeRef"
-
-  lazy val incomeTaxVcFsAndStubUrl: String = servicesConfig.getString("income-tax-vc-fs-and-stub.url")
-
+  
   // API timeout
 
   lazy val claimToAdjustTimeout: Int = servicesConfig.getInt("claim-to-adjust.timeout")
-
-  // enrolment-store-proxy url
-  lazy val enrolmentStoreProxyUrl: String = servicesConfig.baseUrl("enrolment-store-proxy")
-
+  
   lazy val agentServicesAccountFrontend: String = servicesConfig.baseUrl("agent-services-account-frontend")
 
   // Service Navigation Links
@@ -191,9 +154,7 @@ class FrontendAppConfig @Inject()(val servicesConfig: ServicesConfig, val config
   def triggeredMigrationOverrides(): Option[Seq[String]] = config.getOptional[Seq[String]]("afterMigration")
 
   val cacheTtl: Int = config.get[Int]("mongodb.timeToLiveInSeconds")
-
-  val encryptionIsEnabled: Boolean = config.get[Boolean]("encryption.isEnabled")
-
+  
   lazy val readFeatureSwitchesFromMongo: Boolean = servicesConfig.getBoolean("feature-switches.read-from-mongo")
   
   lazy val isTimeMachineEnabled: Boolean = servicesConfig.getBoolean("feature-switch.enable-time-machine")
@@ -201,53 +162,6 @@ class FrontendAppConfig @Inject()(val servicesConfig: ServicesConfig, val config
   lazy val timeMachineAddDays: Int = servicesConfig.getInt("time-machine.add-days")
 
   lazy val isSessionDataStorageEnabled: Boolean = servicesConfig.getBoolean("feature-switch.enable-session-data-storage")
-
-  lazy val isHipRepaymentApiEnabled: Boolean = servicesConfig.getBoolean("feature-switch.enable-hip-repayment-api")
-
-  //External-Urls
-  def logInFileSelfAssessmentTaxReturnLink(implicit messages: Messages): String =
-    messages.lang.code match {
-      case "en" => "https://www.gov.uk/log-in-file-self-assessment-tax-return"
-      case "cy" => "https://www.gov.uk/cyflwyno-ch-ffurflen-dreth-hunanasesiad-ar-lein"
-      case _ => "https://www.gov.uk/log-in-file-self-assessment-tax-return"
-    }
-
-  def selfAssessmentTaxReturnLink(isAgent: Boolean)(implicit messages: Messages): String =
-    messages.lang.code match {
-      case _ if isAgent => "https://www.gov.uk/guidance/self-assessment-for-agents-online-service"
-      case "en" => "https://www.gov.uk/self-assessment-tax-returns"
-      case "cy" => "https://www.gov.uk/ffurflenni-treth-hunanasesiad/trosolwg"
-      case _ => "https://www.gov.uk/self-assessment-tax-returns"
-    }
-
-  def findHmrcContactsSALink(): String =
-    "https://www.gov.uk/find-hmrc-contacts/self-assessment-general-enquiries"
-
-
-  def compatibleSoftwareLink(implicit messages: Messages): String =
-    messages.lang.code match {
-      case "en" => "https://www.gov.uk/guidance/choose-the-right-software-for-making-tax-digital-for-income-tax"
-      case "cy" => "https://www.gov.uk/guidance/choose-the-right-software-for-making-tax-digital-for-income-tax.cy"
-      case _ => "https://www.gov.uk/guidance/choose-the-right-software-for-making-tax-digital-for-income-tax"
-    }
-
-  def mtdIncomeTaxLink(implicit messages: Messages): String =
-    messages.lang.code match {
-      case "cy" => "https://www.gov.uk/guidance/defnyddio-r-cynllun-troi-treth-yn-ddigidol-ar-gyfer-treth-incwm"
-      case _ => "https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax"
-    }
-
-  def paySelfAssessmentBillLink(implicit messages: Messages): String =
-    messages.lang.code match {
-      case "cy" => "https://www.gov.uk/taluch-bil-treth-hunanasesiad"
-      case _ => "https://www.gov.uk/pay-self-assessment-tax-bill"
-    }
-
-  def strugglingToPayTaxLink(implicit messages: Messages): String =
-    messages.lang.code match {
-      case "cy" => "https://www.gov.uk/anawsterau-talu-cthem"
-      case _ => "https://www.gov.uk/difficulties-paying-hmrc"
-    }
 
   lazy val preThreshold2027 = servicesConfig.getString("thresholds.prethreshold2027")
   lazy val threshold2027 = servicesConfig.getString("thresholds.threshold2027")

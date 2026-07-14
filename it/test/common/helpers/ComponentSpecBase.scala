@@ -24,7 +24,6 @@ import common.helpers.servicemocks.AuditStub
 import common.implicits.ImplicitDateFormatterImpl
 import common.models.incomeSourceDetails.{IncomeSourceDetailsModel, TaxYear}
 import common.services.{DateService, DateServiceInterface}
-import obligations.repositories.OptOutSessionDataRepository
 import org.scalatest.*
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.should.Matchers
@@ -99,7 +98,6 @@ trait ComponentSpecBase extends TestSuite with CustomMatchers
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
   implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(testSessionId)))
   implicit val testAppConfig: FrontendAppConfig = appConfig
-  implicit val optOutSessionDataRepository: OptOutSessionDataRepository = app.injector.instanceOf[OptOutSessionDataRepository]
   implicit val dateService: DateService = new DateService()(frontendAppConfig = testAppConfig) {
     override def getCurrentDate: LocalDate = LocalDate.of(2023, 4, 5)
 
@@ -146,12 +144,6 @@ trait ComponentSpecBase extends TestSuite with CustomMatchers
     "microservice.services.income-tax-obligations.port" -> mockPort,
     "microservice.services.income-tax-business-details.host" -> mockHost,
     "microservice.services.income-tax-business-details.port" -> mockPort,
-    "microservice.services.self-assessment-api.host" -> mockHost,
-    "microservice.services.self-assessment-api.port" -> mockPort,
-    "microservice.services.business-account.host" -> mockHost,
-    "microservice.services.business-account.port" -> mockPort,
-    "microservice.services.financial-transactions.host" -> mockHost,
-    "microservice.services.financial-transactions.port" -> mockPort,
     "microservice.services.repayment-api.host" -> mockHost,
     "microservice.services.repayment-api.port" -> mockPort,
     "microservice.services.pay-api.host" -> mockHost,
@@ -160,20 +152,11 @@ trait ComponentSpecBase extends TestSuite with CustomMatchers
     "microservice.services.income-tax-calculation.port" -> mockPort,
     "microservice.services.income-tax-financial-details.host" -> mockHost,
     "microservice.services.income-tax-financial-details.port" -> mockPort,
-    "microservice.services.income-tax-penalties-stub.host" -> mockHost,
-    "microservice.services.income-tax-penalties-stub.port" -> mockPort,
     "microservice.services.itvc-dynamic-stub.host" -> mockHost,
     "microservice.services.itvc-dynamic-stub.port" -> mockPort,
-    "microservice.services.penalties.host" -> mockHost,
-    "microservice.services.penalties.port" -> mockPort,
-    "microservice.services.penalties.host" -> mockHost,
-    "microservice.services.stub.port" -> mockPort,
     "auditing.consumer.baseUri.host" -> mockHost,
     "auditing.consumer.baseUri.port" -> mockPort,
-    "microservice.services.address-lookup-frontend.port" -> mockPort,
     "auditing.enabled" -> "true",
-    "encryption.key" -> "QmFyMTIzNDVCYXIxMjM0NQ==",
-    "encryption.isEnabled" -> "false",
     "microservice.services.non-repudiation.numberOfRetries" -> "10",
     "microservice.services.non-repudiation.host" -> mockHost,
     "microservice.services.non-repudiation.port" -> mockPort,

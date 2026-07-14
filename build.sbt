@@ -6,7 +6,7 @@ import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings.*
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
-val appName = "income-tax-financial-details-frontend"
+val appName = "income-tax-financials-details-frontend"
 val cryptoJsonVersion = "8.4.0"
 val bootstrapPlayVersion = "10.7.0"
 val playPartialsVersion = "10.2.0"

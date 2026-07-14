@@ -20,7 +20,6 @@ import common.config.FrontendAppConfig
 import common.helpers.{SessionCookieBaker, TestDateService, WiremockHelper}
 import common.implicits.ImplicitDateFormatterImpl
 import common.services.{DateService, DateServiceInterface}
-import obligations.repositories.OptOutSessionDataRepository
 import org.scalatest.*
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.should.Matchers
@@ -71,9 +70,7 @@ trait ControllerISpecBase
 
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
   implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = Some(SessionId(testSessionId)))
-
-  implicit val optOutSessionDataRepository: OptOutSessionDataRepository = app.injector.instanceOf[OptOutSessionDataRepository]
-
+  
   implicit val dateService: DateService =
     new DateService()(frontendAppConfig = testAppConfig) {
 
@@ -98,19 +95,10 @@ trait ControllerISpecBase
     "microservice.services.auth.port" -> mockPort,
     "microservice.services.itvc-dynamic-stub.host" -> mockHost,
     "microservice.services.itvc-dynamic-stub.port" -> mockPort,
-    "microservice.services.self-assessment-api.host" -> mockHost,
-    "microservice.services.self-assessment-api.port" -> mockPort,
-    "microservice.services.business-account.host" -> mockHost,
-    "microservice.services.business-account.port" -> mockPort,
-    "microservice.services.financial-transactions.host" -> mockHost,
-    "microservice.services.financial-transactions.port" -> mockPort,
     "microservice.services.pay-api.host" -> mockHost,
     "microservice.services.pay-api.port" -> mockPort,
     "microservice.services.income-tax-calculation.host" -> mockHost,
     "microservice.services.income-tax-calculation.port" -> mockPort,
-    "microservice.services.address-lookup-frontend.port" -> mockPort,
-    "encryption.key" -> "QmFyMTIzNDVCYXIxMjM0NQ==",
-    "encryption.isEnabled" -> "false",
     "microservice.services.contact-frontend.host" -> mockHost,
     "microservice.services.contact-frontend.port" -> mockPort,
     "feature-switches.read-from-mongo" -> "true",
