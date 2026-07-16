@@ -1,10 +1,14 @@
 # income-tax-financials-frontend
 
-This is the repository for the Income Tax View and Change frontend.
+This is the repository for the Income Tax Financials Details frontend.
 
-Backend: https://github.com/hmrc/income-tax-view-change
+Backends:
+https://github.com/hmrc/income-tax-calculation
+https://github.com/hmrc/income-tax-obligations
+https://github.com/hmrc/income-tax-business-details
+https://github.com/hmrc/income-tax-financial-details
 
-Stub: https://github.com/hmrc/income-tax-view-change-dynamic-stub
+Stub: https://github.com/hmrc/income-tax-vc-fs-and-stub
 
 Feature switch info: https://confluence.tools.tax.service.gov.uk/pages/viewpage.action?spaceKey=MISUV&title=Feature+Switches+State
 
@@ -73,24 +77,3 @@ sbt clean coverage test it/test coverageOff coverageReport
 ### License
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html")
-
-### To access Opt Out Custom Data testOnly page to see current data, first log in as a whitelisted opt out user (e.g: OP000001A) and then go to:
-
-Local:
-
-Individual: http://localhost:9081/report-quarterly/income-and-expenses/view/test-only/showOptOutCurrentData
-
-Agent: http://localhost:9081/report-quarterly/income-and-expenses/view/agents/test-only/showOptOutCurrentData
-
-Staging:
-
-Individual: https://www.staging.tax.service.gov.uk/report-quarterly/income-and-expenses/view/test-only/showOptOutCurrentData
-
-Agent: https://www.staging.tax.service.gov.uk/report-quarterly/income-and-expenses/view/agents/test-only/showOptOutCurrentData
-
-### To access income-tax-session-data testOnly page to test the income-tax-session-data service, first log in as an agent and then go to:
-
-Local: http://localhost:9081/report-quarterly/income-and-expenses/view/agents/test-only/session-storage
-Staging: https://www.staging.tax.service.gov.uk/report-quarterly/income-and-expenses/view/agents/test-only/session-storage
-
-Functionality for getting this working with individuals will be added soon.

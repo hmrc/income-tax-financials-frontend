@@ -1,3 +1,4 @@
+
 import play.sbt.routes.RoutesKeys
 import sbt.*
 import sbt.Keys.libraryDependencySchemes
@@ -5,37 +6,120 @@ import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings.*
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
-val appName = "income-tax-financials-frontend"
-ThisBuild / majorVersion := 0
-val currentScalaVersion = "2.13.18"
+val appName = "income-tax-financials-details-frontend"
+val cryptoJsonVersion = "8.4.0"
+val bootstrapPlayVersion = "10.7.0"
+val playPartialsVersion = "10.2.0"
+val playFrontendHMRCVersion = "13.7.0"
+val catsVersion = "2.13.0"
+val jsoupVersion = "1.22.1"
+val mockitoVersion = "5.23.0"
+val scalaMockVersion = "7.5.5"
+val wiremockVersion = "3.0.1"
+val hmrcMongoVersion = "2.12.0"
+val currentScalaVersion = "3.3.6"
+val playVersion = "play-30"
+
+val wErrorScalacOption: String = "-Werror"
 
 scalacOptions ++= Seq(
   "-feature",
-  "-Wconf:src=target/.*:silent")
+  "-Wconf:src=target/.*:silent",
+  "-unchecked",
+  wErrorScalacOption)
+
+val compile = Seq(
+  ws,
+  "uk.gov.hmrc" %% s"bootstrap-frontend-$playVersion" % bootstrapPlayVersion,
+  "uk.gov.hmrc" %% s"play-partials-$playVersion" % playPartialsVersion,
+  "org.typelevel" %% "cats-core" % catsVersion,
+  "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion" % hmrcMongoVersion,
+  "uk.gov.hmrc" %% s"play-frontend-hmrc-$playVersion" % playFrontendHMRCVersion,
+  "uk.gov.hmrc" %% s"crypto-json-$playVersion" % cryptoJsonVersion,
+  "org.jsoup" % "jsoup" % jsoupVersion,
+)
+
+def test(scope: String = "test"): Seq[ModuleID] = Seq(
+  "org.scalamock" %% "scalamock" % scalaMockVersion % scope,
+  "org.jsoup" % "jsoup" % jsoupVersion % scope,
+  "org.mockito" % "mockito-core" % mockitoVersion % scope,
+  "uk.gov.hmrc.mongo" %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion % scope,
+  "org.scalacheck" %% "scalacheck" % "1.19.0" % scope,
+  "org.scalatestplus" %% "scalacheck-1-15" % "3.2.11.0" % scope,
+  "uk.gov.hmrc" %% s"bootstrap-test-$playVersion" % bootstrapPlayVersion % "test",
+  caffeine,
+  "uk.gov.hmrc" %% s"crypto-json-$playVersion" % cryptoJsonVersion
+)
+
+def it(scope: String = "test"): Seq[ModuleID] = Seq(
+  "org.scalamock" %% "scalamock" % scalaMockVersion % scope,
+  "org.jsoup" % "jsoup" % jsoupVersion % scope,
+  "org.mockito" % "mockito-core" % mockitoVersion % scope,
+  "com.github.tomakehurst" % "wiremock" % wiremockVersion % scope,
+  "uk.gov.hmrc.mongo" %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion % scope,
+  caffeine
+)
+
+lazy val appDependencies: Seq[ModuleID] = compile ++ test()
+lazy val appDependenciesIt: Seq[ModuleID] = it()
 
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
+lazy val scoverageSettings = {
+  import scoverage.ScoverageKeys
+  Seq(
+    ScoverageKeys.coverageExcludedPackages := "<empty>;controllers\\..*Reverse.*;models/.data/..*;" +
+      "filters.*;.handlers.*;components.*;.*BuildInfo.*;.*standardError*.*;.*Routes.*;views.html.*;appConfig.*;" +
+      "controllers.feedback.*;app.*;prod.*;appConfig.*;com.*;testOnlyDoNotUseInAppConf.*;testOnly.*;\"",
+    ScoverageKeys.coverageMinimumStmtTotal := 70.0,
+    ScoverageKeys.coverageFailOnMinimum := false,
+    ScoverageKeys.coverageHighlighting := true
+  )
+}
+
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
-  .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
+  .disablePlugins(JUnitXmlReportPlugin)
   .settings(playSettings *)
   .settings(scalaSettings *)
   .settings(scalaVersion := currentScalaVersion)
-  .settings(
-    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
-    retrieveManaged := true
-  )
-  .settings(CodeCoverageSettings.settings: _*)
+  .settings(scoverageSettings *)
   .settings(defaultSettings() *)
+  .settings(majorVersion := 1)
   .settings(
     Test / Keys.fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
-    libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
-    PlayKeys.playDefaultPort := 9092
+    libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
   )
   .settings(
-    Keys.fork := false
+    libraryDependencies ++= appDependencies,
+    retrieveManaged := true
+  )
+  .settings(
+    Test / Keys.fork := true,
+    scalaVersion := currentScalaVersion,
+    Test / javaOptions += "-Dlogger.resource=logback-test.xml")
+  .settings(
+    Keys.fork := false,
+    TwirlKeys.templateImports ++= Seq(
+      "uk.gov.hmrc.govukfrontend.views.html.components.implicits._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.helpers._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.components.implicits._"
+    ),
+    RoutesKeys.routesImport := Seq("common.models.admin._", "common.models.core._"),
+  )
+  .settings(ThisBuild / scalacOptions += "-Wconf:msg=Flag.*repeatedly:s")
+  .settings(
+    scalacOptions --= Seq("-Wunused", "-Wunused:all"),
+    scalacOptions += "-deprecation",
+    Test / scalacOptions ++= Seq(
+      "-Wunused:imports",
+      "-Wunused:params",
+      "-Wunused:implicits",
+      "-Wunused:explicits",
+      "-Wunused:privates"
+    ),
   )
 
 lazy val it = project
@@ -46,9 +130,13 @@ lazy val it = project
     publish / skip := true
   )
   .settings(scalaVersion := currentScalaVersion)
+  .settings(majorVersion := 1)
   .settings(
     testForkedParallel := true
   )
-  .settings(libraryDependencies ++= AppDependencies.it)
+  .settings(scalacOptions += wErrorScalacOption)
+  .settings(
+    libraryDependencies ++= appDependenciesIt)
 
 addCommandAlias("compileAll", "compile ; test:compile ; it/test:compile")
+
