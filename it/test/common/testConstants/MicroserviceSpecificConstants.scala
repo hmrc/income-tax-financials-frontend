@@ -20,7 +20,7 @@ object MicroserviceSpecificConstants {
 
   val basePath = "/manage-self-assessment/financials"
   val baseUrl = s"http://localhost:9092$basePath"
-  val auditSource = "income-tax-financials-details-frontend"
+  val auditSource = "income-tax-financials-frontend"
 
 }
 
