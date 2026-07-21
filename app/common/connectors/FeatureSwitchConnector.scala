@@ -17,10 +17,8 @@
 package common.connectors
 
 import common.config.FrontendAppConfig
-import common.models.admin.{FeatureSwitch, FeatureSwitchName}
-import play.api.http.Status.{NO_CONTENT, OK}
-import play.api.libs.json.Json
-import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import common.models.admin.FeatureSwitch
+import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
@@ -30,50 +28,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class FeatureSwitchConnector @Inject()(val appConfig: FrontendAppConfig,
                                        http: HttpClientV2)(implicit ec: ExecutionContext) extends RawResponseReads{
 
-  def setSwitchStubUrl(featureFlagName: FeatureSwitchName, isEnabled: Boolean): String = {
-    s"${appConfig.dynamicStubUrl}/features/${featureFlagName.name}?isEnabled=$isEnabled"
-  }
-
   def switchesStubBaseUrl: String = {
     s"${appConfig.dynamicStubUrl}/features"
-  }
-
-  def setSwitch(featureFlagName: FeatureSwitchName, isEnabled: Boolean)(implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
-
-    val url = setSwitchStubUrl(featureFlagName, isEnabled)
-
-    http.put(url"$url")
-      .execute[HttpResponse] map { response =>
-      response.status match {
-        case NO_CONTENT => true
-        case _ => false
-      }
-    }
-  }
-
-  def setSwitches(featureSwitches: Map[FeatureSwitchName, Boolean])
-                 (implicit headerCarrier: HeaderCarrier): Future[Boolean] = {
-
-    val url = switchesStubBaseUrl
-
-    val featureSwitchSeq: Seq[FeatureSwitch] =
-      featureSwitches.toSeq.map { case (name, isEnabled) =>
-        FeatureSwitch(name, isEnabled)
-      }
-
-    val payload = Json.obj(
-      "features" -> featureSwitchSeq
-    )
-
-    http.post(url"$url")
-      .withBody(payload)
-      .execute[HttpResponse]
-      .map { response =>
-        response.status match {
-          case NO_CONTENT => true
-          case _ => false
-        }
-      }
   }
 
   def getAllSwitches()(implicit headerCarrier: HeaderCarrier): Future[List[FeatureSwitch]] = {

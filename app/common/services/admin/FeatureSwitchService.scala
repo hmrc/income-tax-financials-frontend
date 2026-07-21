@@ -52,24 +52,4 @@ class FeatureSwitchService @Inject()(val featureSwitchConnector: FeatureSwitchCo
     }
   }
 
-  def set(featureSwitchName: FeatureSwitchName, enabled: Boolean)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    Logger("application").info(s"Setting feature switch ${featureSwitchName.name} to ${enabled.toString}")
-    if (appConfig.readFeatureSwitchesFromMongo) {
-      featureSwitchConnector.setSwitch(featureSwitchName, enabled)
-    } else {
-      Logger("application").error("Cannot set feature switch when read-from-mongo is disabled")
-      Future(false)
-    }
-  }
-
-  def setAll(featureSwitches: Map[FeatureSwitchName, Boolean])(implicit hc: HeaderCarrier): Future[Unit] = {
-    Logger("application").info(s"Setting all feature switches. FS values: $featureSwitches")
-    if (appConfig.readFeatureSwitchesFromMongo) {
-      featureSwitchConnector.setSwitches(featureSwitches).map(_ => ())
-    } else {
-      Logger("application").error("Cannot set feature switches when read-from-mongo is disabled")
-      Future.successful((): Unit)
-    }
-  }
-
 }
