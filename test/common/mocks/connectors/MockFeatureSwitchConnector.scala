@@ -34,11 +34,6 @@ trait MockFeatureSwitchConnector extends UnitSpec with BeforeAndAfterEach {
     reset(mockFeatureSwitchConnector)
   }
 
-  def mockConnectorSetFeatureSwitch(response: Boolean): Unit = {
-    when(mockFeatureSwitchConnector.setSwitch(any(), any())(any()))
-      .thenReturn(Future.successful(response))
-  }
-
   def mockConnectorGetAllSwitches(response: List[FeatureSwitch]): Unit = {
     when(mockFeatureSwitchConnector.getAllSwitches()(any()))
       .thenReturn(Future.successful(response))
