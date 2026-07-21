@@ -16,7 +16,6 @@
 
 package common.models.admin
 
-import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc.PathBindable
 
@@ -58,7 +57,6 @@ object FeatureSwitchName {
     case JsString(NoIncomeSourcesRedirect.name) =>
       JsSuccess(NoIncomeSourcesRedirect)
     case invalidName =>
-      Logger("application").error(s"Invalid feature switch Json found: $invalidName")
       JsSuccess(InvalidFS)
   }
 
