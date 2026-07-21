@@ -59,8 +59,11 @@ class NotMigratedUserController @Inject()(val notMigrated: NotMigratedUserView,
 
   def show(): Action[AnyContent] = authActions.asMTDIndividual().async {
     implicit user =>
-      handleShowRequest(errorHandler = itvcErrorHandler,
-        backUrl = appConfig.individualHomeUrl)
+      Future {
+        Ok(notMigrated(appConfig.individualHomeUrl))
+      }
+//      handleShowRequest(errorHandler = itvcErrorHandler,
+//        backUrl = appConfig.individualHomeUrl)
   }
 
   def redirect(): Action[AnyContent] = Action {
@@ -73,7 +76,10 @@ class NotMigratedUserController @Inject()(val notMigrated: NotMigratedUserView,
 
   def showAgent(): Action[AnyContent] = authActions.asMTDPrimaryAgent().async {
     implicit user =>
-      handleShowRequest(errorHandler = itvcErrorHandlerAgent,
-        backUrl = appConfig.homePageUrl(isAgent = true))
+      Future {
+        Ok(notMigrated(appConfig.homePageUrl(isAgent = true)))
+      }
+//      handleShowRequest(errorHandler = itvcErrorHandlerAgent,
+//        backUrl = appConfig.homePageUrl(isAgent = true))
   }
 }
