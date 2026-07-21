@@ -8,7 +8,12 @@ cp -r app/common/config/ExternalRedirectHelper.scala tmp/.
 cp -r app/common/config/FrontendAppConfig.scala tmp/.
 cp app/common/models/incomeSourceDetails/IncomeSourceDetailsResponse.scala tmp/.
 cp app/common/models/liabilitycalculation/LiabilityCalculationResponse.scala tmp/.
-cp app/shared/enums/JourneyState.scala
+cp app/shared/enums/JourneyState.scala tmp/.
+# ========== feature switch ==============
+cp app/common/models/admin/FeatureSwitchName.scala tmp/.
+cp app/common/services/admin/FeatureSwitchService.scala tmp/.
+cp app/common/connectors/FeatureSwitchConnector.scala tmp/.
+# ========================================
 
 
 echo "Removing main code from the app folder"
@@ -28,6 +33,11 @@ cp tmp/FrontendAppConfig.scala app/common/config/.
 cp tmp/IncomeSourceDetailsResponse.scala app/common/models/incomeSourceDetails/.
 cp tmp/LiabilityCalculationResponse.scala app/common/models/liabilitycalculation/.
 cp tmp/JourneyState.scala app/shared/enums/.
+# ========== feature switch ==============
+cp tmp/FeatureSwitchName.scala app/common/models/admin/.
+cp tmp/FeatureSwitchService.scala app/common/services/admin/.
+cp tmp/FeatureSwitchConnector.scala app/common/connectors/.
+# ========================================
 
 echo "Removing unused files"
 rm app/shared/models/UIJourneySessionData.scala
@@ -45,6 +55,12 @@ echo "Starting cut over of unit tests from income-tax-view-change-frontend"
 echo "Copying files to tmp folder which we don't want to overwrite"
 cp test/common/models/IncomeSourceDetailsModelSpec.scala tmp/.
 cp test/common/models/liabilityCalculation/LiabilityCalculationResponseModelSpec.scala tmp/.
+# ========== feature switch ==============
+cp test/common/admin/FeatureSwitchNameSpec.scala tmp/.
+cp test/common/config/featureswitch/FeatureSwitchingSpec.scala tmp/.
+cp test/common/services/admin/FeatureSwitchServiceSpec.scala tmp/.
+cp test/common/mocks/connectors/MockFeatureSwitchConnector.scala tmp/.
+# ========================================
 
 echo "Removing current unit tests"
 
@@ -62,6 +78,12 @@ cp -r ../income-tax-view-change-frontend/test/resources test/.
 echo "Copying files back from tmp folder to test folder"
 cp tmp/IncomeSourceDetailsModelSpec.scala test/common/models/.
 cp tmp/LiabilityCalculationResponseModelSpec.scala test/common/models/liabilityCalculation/.
+# ========== feature switch ==============
+cp tmp/FeatureSwitchNameSpec.scala test/common/admin/.
+cp tmp/FeatureSwitchingSpec.scala test/common/config/featureswitch/.
+cp tmp/FeatureSwitchServiceSpec.scala test/common/services/admin/.
+cp tmp/MockFeatureSwitchConnector.scala test/common/mocks/connectors/.
+# ========================================
 
 echo "Removing unused files"
 rm test/shared/testConstants/NextUpdatesTestConstants.scala
