@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package financials.models
+package common.enums.TriggeredMigration
 
-import common.models.incomeSourceDetails.TaxYear
-
-
-case class WYOClaimToAdjustViewModel(poaTaxYear: Option[TaxYear]) {
-
-  val claimToAdjustTaxYear: Option[TaxYear] = poaTaxYear
-
+enum Channel(value: String) {
+  case CustomerLed extends Channel("Customer-led")
+  case HmrcUnconfirmed extends Channel("Hmrc-led-unconfirmed")
+  case HmrcConfirmed extends Channel("Hmrc-led-confirmed")
+  
+  def getValue: String = value
 }

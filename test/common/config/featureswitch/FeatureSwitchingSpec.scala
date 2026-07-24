@@ -52,6 +52,7 @@ class FeatureSwitchingSpec extends TestSupport with MockitoSugar {
     `CY+1YouMustWaitToSignUpPageEnabled`,
     NoIncomeSourcesRedirect,
     ObligationsFrontend,
+    BusinessDetailsFrontend,
     NoIncomeSourcesRedirect
   )
 

@@ -56,6 +56,8 @@ object FeatureSwitchName {
       JsSuccess(ObligationsFrontend)
     case JsString(NoIncomeSourcesRedirect.name) =>
       JsSuccess(NoIncomeSourcesRedirect)
+    case JsString(BusinessDetailsFrontend.name) =>
+      JsSuccess(BusinessDetailsFrontend)
     case invalidName =>
       JsSuccess(InvalidFS)
   }
@@ -89,6 +91,7 @@ object FeatureSwitchName {
       TriggeredMigration,
       `CY+1YouMustWaitToSignUpPageEnabled`,
       NoIncomeSourcesRedirect,
+      BusinessDetailsFrontend
     )
 
   def get(str: String): Option[FeatureSwitchName] = allFeatureSwitches find (_.name == str)
@@ -147,4 +150,9 @@ case object `CY+1YouMustWaitToSignUpPageEnabled` extends FeatureSwitchName {
 case object NoIncomeSourcesRedirect extends FeatureSwitchName {
   override val name: String = "no-income-sources-redirect"
   override def toString: String = "No Income Sources Redirect"
+}
+
+case object BusinessDetailsFrontend extends FeatureSwitchName {
+  override val name: String = "business-details-frontend"
+  override val toString: String = "Business Details Frontend"
 }
