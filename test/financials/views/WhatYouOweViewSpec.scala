@@ -111,6 +111,7 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
   val cancelledPayeSelfAssessment: String = messages("whatYouOwe.cancelledPayeSelfAssessment.text")
   val poa1CollectedCodedOut: String = messages("whatYouOwe.poa1CodedOut.text")
   val poa2CollectedCodedOut: String = messages("whatYouOwe.poa2CodedOut.text")
+  val totalRowLabel: String = messages("whatYouOwe.total-row.label")
 
 
   val interestEndDateFuture: LocalDate = LocalDate.of(2100, 1, 1)
@@ -141,7 +142,8 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
                   migrationYear: Int = fixedDate.getYear - 1,
                   @unused adjustPaymentsOnAccountFSEnabled: Boolean = false,
                   claimToAdjustViewModel: Option[WYOClaimToAdjustViewModel] = None,
-                  LPP2Url: String = ""
+                  LPP2Url: String = "",
+                  totalBalance: Option[BigDecimal] = None
                  ) {
     val individualUser: MtdItUser[_] = defaultMTDITUser(
       Some(testUserTypeIndividual),
@@ -153,7 +155,6 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
     val wyoViewModel: WhatYouOweViewModel = WhatYouOweViewModel(
       currentDate = dateService.getCurrentDate,
       hasOverdueOrAccruingInterestCharges = false,
-      hasCrystallisedInterest = false,
       whatYouOweChargesList = charges,
       hasLpiWithDunningLock = hasLpiWithDunningLock,
       currentTaxYear = currentTaxYear,
@@ -170,10 +171,10 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
         financialsRoutes.ChargeSummaryController.show(taxYearEnd, transactionId, isInterest, origin).url,
       paymentHandOffUrl = financialsRoutes.PaymentController.makingPayment(_, None).url,
       selfServeTimeToPayEnabled = true,
-      selfServeTimeToPayStartUrl = "/self-serve-time-to-pay"
+      totalBalance = totalBalance
     )
 
-    val html: HtmlFormat.Appendable = whatYouOweView(wyoViewModel)(FakeRequest(), individualUser, implicitly, dateService)
+    val html: HtmlFormat.Appendable = whatYouOweView(viewModel = wyoViewModel, origin = None, isSelfServeTimeToPayEnabled = true)(FakeRequest(), individualUser, implicitly, dateService)
     val pageDocument: Document = Jsoup.parse(contentAsString(html))
 
     def findElementById(id: String): Option[Element] = {
@@ -195,7 +196,8 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
                        taxYear: Int = fixedDate.getYear,
                        @unused hasLpiWithDunningLock: Boolean = false,
                        @unused adjustPaymentsOnAccountFSEnabled: Boolean = false,
-                       claimToAdjustViewModel: Option[WYOClaimToAdjustViewModel] = None) {
+                       claimToAdjustViewModel: Option[WYOClaimToAdjustViewModel] = None,
+                       totalBalance: Option[BigDecimal] = None) {
 
     val defaultClaimToAdjustViewModel: WYOClaimToAdjustViewModel = ctaViewModel
 
@@ -212,7 +214,6 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
     val wyoViewModelAgent: WhatYouOweViewModel = WhatYouOweViewModel(
       currentDate = currentDateIs,
       hasOverdueOrAccruingInterestCharges = false,
-      hasCrystallisedInterest = false,
       whatYouOweChargesList = charges,
       hasLpiWithDunningLock = hasLpiWithDunningLock,
       currentTaxYear = currentTaxYear,
@@ -229,10 +230,10 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
         financialsRoutes.ChargeSummaryController.showAgent(taxYearEnd, transactionId, isInterest).url,
       paymentHandOffUrl = financialsRoutes.PaymentController.makingPayment(_, None).url,
       selfServeTimeToPayEnabled = true,
-      selfServeTimeToPayStartUrl = "/self-serve-time-to-pay"
+      totalBalance = totalBalance
     )
 
-    val html: HtmlFormat.Appendable = whatYouOweView(wyoViewModelAgent)(FakeRequest(), agentUser, implicitly, dateService)
+    val html: HtmlFormat.Appendable = whatYouOweView(viewModel = wyoViewModelAgent, origin = None, isSelfServeTimeToPayEnabled = true)(FakeRequest(), agentUser, implicitly, dateService)
     val pageDocument: Document = Jsoup.parse(contentAsString(html))
   }
 
@@ -1233,7 +1234,7 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
       "have a class 2 Nics overdue entry" in new TestSetup(charges = whatYouOweDataWithCodingOutNics2) {
         Option(pageDocument.getElementById("due-0")).isDefined shouldBe true
         pageDocument.getElementById("due-0").text().contains(CODING_OUT_CLASS2_NICS) shouldBe true
-        pageDocument.select("#payments-due-table tbody > tr").size() shouldBe 1
+        pageDocument.select("#what-you-owe-payments-due-table tbody > tr").size() shouldBe 1
       }
 
       "should have payment made paragraph when there is coding out" in new TestSetup(charges = whatYouOweDataWithCodingOutNics2) {
@@ -1252,17 +1253,17 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
       "have a cancelled paye self assessment entry" in new TestSetup(charges = whatYouOweDataWithCancelledPayeSa) {
         findElementById("coding-out-notice") shouldBe None
         pageDocument.getElementById("due-0").text().contains(cancelledPayeSelfAssessment) shouldBe true
-        pageDocument.select("#payments-due-table tbody > tr").size() shouldBe 1
+        pageDocument.select("#what-you-owe-payments-due-table tbody > tr").size() shouldBe 1
       }
 
       "have a Payment on Account 1 entry" in new TestSetup(charges = whatYouOweWithPoaOneCollected, taxYear = whatYouOweWithPoaOneCollected.codedOutDetails.get.codingTaxYear.endYear) {
         pageDocument.getElementById("due-0").text().contains(poa1CollectedCodedOut) shouldBe true
-        pageDocument.select("#payments-due-table tbody > tr").size() shouldBe 1
+        pageDocument.select("#what-you-owe-payments-due-table tbody > tr").size() shouldBe 1
       }
 
       "have a Payment on Account 2 entry" in new TestSetup(charges = whatYouOweWithPoaTwoCollected, taxYear = whatYouOweWithPoaTwoCollected.codedOutDetails.get.codingTaxYear.endYear) {
         pageDocument.getElementById("due-0").text().contains(poa2CollectedCodedOut) shouldBe true
-        pageDocument.select("#payments-due-table tbody > tr").size() shouldBe 1
+        pageDocument.select("#what-you-owe-payments-due-table tbody > tr").size() shouldBe 1
       }
     }
   }
@@ -1273,7 +1274,7 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
       pageDocument.selectFirst("h1").text shouldBe whatYouOweHeading
       pageDocument.getElementById("due-0").text.contains(hmrcAdjustment)
       pageDocument.select("#due-0 a").get(0).text() shouldBe hmrcAdjustment + s" 1"
-      pageDocument.select("#payments-due-table tbody > tr").size() shouldBe 1
+      pageDocument.select("#what-you-owe-payments-due-table tbody > tr").size() shouldBe 1
     }
   }
 
@@ -1363,6 +1364,49 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
     "not show unallocated credits" when {
       "user has no money in his account" in new TestSetup(charges = whatYouOweDataWithZeroMoneyInAccount()) {
         findElementById("unallocated-credit-note") shouldBe None
+      }
+    }
+
+    "the what you owe total row" should {
+
+      "display the label and correctly formatted amount when totalBalance is present" in new TestSetup(
+        charges = whatYouOweDataFullDataWithoutOutstandingCharges(),
+        totalBalance = Some(BigDecimal("4282.20"))
+      ) {
+        val totalRow: Element = pageDocument.getElementById("what-you-owe-total-row")
+        totalRow should not be null
+        totalRow.select(".what-you-owe-total-row__label").text() shouldBe totalRowLabel
+        totalRow.select(".what-you-owe-total-row__amount").text() shouldBe "£4,282.20"
+      }
+
+      "not render at all when totalBalance is None" in new TestSetup(
+        charges = whatYouOweDataFullDataWithoutOutstandingCharges(),
+        totalBalance = None
+      ) {
+        findElementById("what-you-owe-total-row") shouldBe None
+      }
+
+      "appear after the payments-due table" in new TestSetup(
+        charges = whatYouOweDataWithDataDueInMoreThan30Days(),
+        totalBalance = Some(BigDecimal("4282.20"))
+      ) {
+        val processingNoteIndex = pageDocument.getElementById("what-you-owe-payments-due-table").elementSiblingIndex()
+        val totalRowIndex = pageDocument.getElementById("what-you-owe-total-row").elementSiblingIndex()
+        totalRowIndex should be > processingNoteIndex
+      }
+
+      "not render when there are no charges to owe" in new TestSetup(
+        charges = whatYouOweDataNoCharges,
+        totalBalance = Some(BigDecimal("4282.20"))
+      ) {
+        findElementById("what-you-owe-total-row") shouldBe None
+      }
+
+      "render correctly on the agent view" in new AgentTestSetup(
+        charges = whatYouOweDataWithDataDueInMoreThan30Days(),
+        totalBalance = Some(BigDecimal("4282.20"))
+      ) {
+        findAgentElementById("what-you-owe-total-row") should not be None
       }
     }
   }

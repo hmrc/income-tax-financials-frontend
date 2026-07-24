@@ -23,7 +23,6 @@ import java.time.LocalDate
 
 case class WhatYouOweViewModel(currentDate: LocalDate,
                                hasOverdueOrAccruingInterestCharges: Boolean,
-                               hasCrystallisedInterest: Boolean,
                                whatYouOweChargesList: WhatYouOweChargesList,
                                hasLpiWithDunningLock: Boolean,
                                currentTaxYear: Int,
@@ -39,7 +38,8 @@ case class WhatYouOweViewModel(currentDate: LocalDate,
                                chargeSummaryUrl: (Int, String, Boolean, Option[String]) => String,
                                paymentHandOffUrl: Long => String,
                                selfServeTimeToPayEnabled: Boolean,
-                               selfServeTimeToPayStartUrl: String)(implicit val dateServiceInterface: DateServiceInterface) {
+                               totalBalance: Option[BigDecimal] = None
+                              )(implicit val dateServiceInterface: DateServiceInterface) {
 
   val chargesListAndCodedOutDetailsAreEmpty: Boolean = whatYouOweChargesList.isChargesListEmpty && whatYouOweChargesList.codedOutDetails.isEmpty
 
