@@ -17,6 +17,7 @@
 package common.models.incomeSourceDetails
 
 import common.services.DateServiceInterface
+import common.enums.TriggeredMigration.Channel.{CustomerLed, HmrcConfirmed}
 import play.api.libs.json.{Format, JsValue, Json, OFormat}
 import play.api.{Logger, Logging}
 
@@ -75,6 +76,10 @@ case class IncomeSourceDetailsModel(
     val taxYears = yearOfMigration.map(year => (year.toInt to dateService.getCurrentTaxYearEnd).toList).getOrElse(orderedTaxYearsByAccountingPeriods)
     Logger("application").debug(s"Tax years list = $taxYears")
     taxYears
+  }
+
+  def isConfirmedUser: Boolean = {
+    Set(CustomerLed.getValue, HmrcConfirmed.getValue).contains(channel)
   }
 }
 

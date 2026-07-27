@@ -128,14 +128,12 @@ class WhatYouOweControllerSpec extends MockAuthActions
                    claimToAdjustViewModel: Option[WYOClaimToAdjustViewModel] = None,
                    LPP2Url: String = "",
                    hasOverdueOrAccruingInterestCharges: Boolean = false,
-                   hasCrystallisedInterest: Boolean = false,
                    poaTaxYear: Option[TaxYear] = None,
                   //Todo Update this field to true when the FS is built
                    returnsFrontendEnabled: Boolean = false
                   ): WhatYouOweViewModel = WhatYouOweViewModel(
     currentDate = mockDateServiceInjected.getCurrentDate,
     hasOverdueOrAccruingInterestCharges = hasOverdueOrAccruingInterestCharges,
-    hasCrystallisedInterest = hasCrystallisedInterest,
     whatYouOweChargesList = charges,
     hasLpiWithDunningLock = hasLpiWithDunningLock,
     currentTaxYear = currentTaxYear,
@@ -157,9 +155,7 @@ class WhatYouOweControllerSpec extends MockAuthActions
     else
       ChargeSummaryController.show(taxYearEnd, transactionId, isInterest, origin).url,
     paymentHandOffUrl = PaymentController.paymentHandoff(_, None).url,
-    selfServeTimeToPayEnabled = true,
-    selfServeTimeToPayStartUrl = "/self-serve-time-to-pay"
-  )
+    selfServeTimeToPayEnabled = true)
 
   val noFinancialDetailErrors = List(testFinancialDetail(2018))
   val hasFinancialDetailErrors = List(testFinancialDetail(2018), testFinancialDetailsErrorModel)

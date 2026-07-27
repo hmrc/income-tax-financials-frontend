@@ -69,8 +69,6 @@ case class ChargeItem(
 
   def hasInterest: Boolean = interestOutstandingAmount.getOrElse[BigDecimal](0) > 0
 
-  def hasCrystallisedInterest = latePaymentInterestAmount.exists(_ != 0) && interestOutstandingAmount.exists(_ != 0)
-
   def isRARAccruingInterest()(implicit dateService: DateServiceInterface): Boolean = {
     Seq(PoaOneReconciliationDebit, PoaTwoReconciliationDebit).contains(transactionType) && isAccruingInterest
   }
@@ -186,6 +184,8 @@ case class ChargeItem(
   val isBalancingCharge: Boolean = transactionType == BalancingCharge
 
   val isPenalty: Boolean = List(LateSubmissionPenalty, FirstLatePaymentPenalty, SecondLatePaymentPenalty).contains(this.transactionType)
+
+  val isLPP: Boolean = List(FirstLatePaymentPenalty, SecondLatePaymentPenalty).contains(this.transactionType)
 
   val isLPP2: Boolean = transactionType == SecondLatePaymentPenalty
 
