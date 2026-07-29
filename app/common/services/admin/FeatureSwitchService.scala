@@ -51,5 +51,4 @@ class FeatureSwitchService @Inject()(val featureSwitchConnector: FeatureSwitchCo
       Future.successful(enrich(getFSList))
     }
   }
-
 }

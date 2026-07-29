@@ -11,7 +11,6 @@ cp app/common/models/liabilitycalculation/LiabilityCalculationResponse.scala tmp
 cp app/shared/enums/JourneyState.scala tmp/.
 # ========== feature switch ==============
 cp app/common/models/admin/FeatureSwitchName.scala tmp/.
-cp app/common/services/admin/FeatureSwitchService.scala tmp/.
 cp app/common/connectors/FeatureSwitchConnector.scala tmp/.
 # ========================================
 
@@ -35,7 +34,6 @@ cp tmp/LiabilityCalculationResponse.scala app/common/models/liabilitycalculation
 cp tmp/JourneyState.scala app/shared/enums/.
 # ========== feature switch ==============
 cp tmp/FeatureSwitchName.scala app/common/models/admin/.
-cp tmp/FeatureSwitchService.scala app/common/services/admin/.
 cp tmp/FeatureSwitchConnector.scala app/common/connectors/.
 # ========================================
 
