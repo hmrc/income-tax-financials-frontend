@@ -40,7 +40,7 @@ trait ExternalRedirectHelper {
   lazy val agentHomeUrl: String =
     s"$hubAgentBaseUrl/client-income-tax"
     
-  def homePageUrl(isAgent: Boolean): String = if (isAgent) agentHomeUrl else individualHomeUrl
+  def homePageUrl(isAgent: Boolean, origin: Option[String] = None): String = if (isAgent) agentHomeUrl else individualHomeUrlWithOrigin(origin)
 
   lazy val enterClientsUTRUrl: String = s"$hubAgentBaseUrl/client-utr"
 
@@ -102,6 +102,16 @@ trait ExternalRedirectHelper {
       s"$hubAgentBaseUrl/tax-year-summary/$taxYear"
     }
     fragment.fold(baseUri)(f => s"$baseUri#$f")
+  }
+
+  def taxYearSummaryUrl(isAgent: Boolean, taxYear: Int,
+                        origin: Option[String] = None, fragment: Option[String] = None, returnsEnabled: Boolean = false): String = {
+
+    if (isAgent) {
+      returnsTaxYearSummaryAgentUrl(taxYear, fragment, returnsEnabled)
+    } else {
+      returnsTaxYearSummaryIndividualUrl(taxYear, origin, fragment, returnsEnabled)
+    }
   }
 
 }
