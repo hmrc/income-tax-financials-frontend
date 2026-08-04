@@ -16,7 +16,8 @@
 
 package financials.models.claimToAdjustPoa
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, Json, OFormat}
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 import java.time.Instant
 
@@ -27,6 +28,7 @@ case class PoaSessionData(
                             )
 
 object PoaSessionData {
+  implicit val instantFormat: Format[Instant] = MongoJavatimeFormats.instantFormat
   implicit val format: OFormat[PoaSessionData] = Json.format[PoaSessionData]
 }
 
