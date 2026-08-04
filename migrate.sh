@@ -13,7 +13,7 @@ cp app/shared/enums/JourneyState.scala tmp/.
 cp app/common/models/admin/FeatureSwitchName.scala tmp/.
 cp app/common/connectors/FeatureSwitchConnector.scala tmp/.
 # ========================================
-
+cp app/financials/models/claimToAdjustPoa/PoaAmendmentData.scala tmp/.
 
 echo "Removing main code from the app folder"
 rm -rf app/common
@@ -36,6 +36,7 @@ cp tmp/JourneyState.scala app/shared/enums/.
 cp tmp/FeatureSwitchName.scala app/common/models/admin/.
 cp tmp/FeatureSwitchConnector.scala app/common/connectors/.
 # ========================================
+cp tmp/PoaAmendmentData.scala app/financials/models/claimToAdjustPoa/.
 
 echo "Removing unused files"
 rm app/shared/models/UIJourneySessionData.scala
