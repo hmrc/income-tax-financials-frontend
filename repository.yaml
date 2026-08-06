@@ -3,4 +3,4 @@ type: service
 service-type: frontend
 tags: []
 test-repositories:
-  - income-tax-view-change-frontend-acceptance-tests
+  - income-tax-view-change-frontend-acceptance-test
