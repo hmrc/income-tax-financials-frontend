@@ -51,18 +51,13 @@ case class AdjustPaymentsOnAccountAuditModel(isSuccessful: Boolean,
 
   val outcome: JsObject = if (isSuccessful) successOutcome else failureOutcome
 
-  val optionAdjustmentReasonDescription: JsObject = adjustmentReasonCode match {
-    case "005" => Json.obj()
-    case _ => Json.obj("adjustmentReasonDescription" -> adjustmentReasonDescription)
-  }
-
-  override val detail: JsValue = {
+  override val detail: JsValue =
     Utilities.userAuditDetails(user) ++ outcome ++
       Json.obj(
         "previousPaymentOnAccountAmount" -> previousPaymentOnAccountAmount,
         "requestedPaymentOnAccountAmount" -> requestedPaymentOnAccountAmount,
-        "isDecreased" -> isDecreased,
-        "adjustmentReasonCode" -> adjustmentReasonCode
-      ) ++ optionAdjustmentReasonDescription
-  }
+        "adjustmentReasonCode" -> adjustmentReasonCode,
+        "adjustmentReasonDescription" -> adjustmentReasonDescription,
+        "isDecreased" -> isDecreased
+      )
 }
