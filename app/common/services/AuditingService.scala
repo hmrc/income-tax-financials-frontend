@@ -29,6 +29,7 @@ import uk.gov.hmrc.play.audit.model.{DataEvent, ExtendedDataEvent}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import play.api.libs.json.Writes
 
 @Singleton
 class AuditingService @Inject()(appConfig: FrontendAppConfig, auditConnector: AuditConnector) extends Logging {
@@ -82,5 +83,4 @@ class AuditingService @Inject()(appConfig: FrontendAppConfig, auditConnector: Au
       detail = details
     )
   }
-
 }

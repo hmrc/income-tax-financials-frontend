@@ -14,6 +14,7 @@ cp app/common/models/admin/FeatureSwitchName.scala tmp/.
 cp app/common/connectors/FeatureSwitchConnector.scala tmp/.
 # ========================================
 cp app/financials/models/claimToAdjustPoa/PoaAmendmentData.scala tmp/.
+cp app/common/services/AuditingService.scala tmp/.
 
 echo "Removing main code from the app folder"
 rm -rf app/common
@@ -37,6 +38,7 @@ cp tmp/FeatureSwitchName.scala app/common/models/admin/.
 cp tmp/FeatureSwitchConnector.scala app/common/connectors/.
 # ========================================
 cp tmp/PoaAmendmentData.scala app/financials/models/claimToAdjustPoa/.
+cp tmp/AuditingService.scala app/common/services/.
 
 echo "Removing unused files"
 rm app/shared/models/UIJourneySessionData.scala
@@ -60,6 +62,7 @@ cp test/common/config/featureswitch/FeatureSwitchingSpec.scala tmp/.
 cp test/common/services/admin/FeatureSwitchServiceSpec.scala tmp/.
 cp test/common/mocks/connectors/MockFeatureSwitchConnector.scala tmp/.
 # ========================================
+cp test/common/mocks/services/MockAuditingService.scala tmp/.
 
 echo "Removing current unit tests"
 
@@ -83,6 +86,7 @@ cp tmp/FeatureSwitchingSpec.scala test/common/config/featureswitch/.
 cp tmp/FeatureSwitchServiceSpec.scala test/common/services/admin/.
 cp tmp/MockFeatureSwitchConnector.scala test/common/mocks/connectors/.
 # ========================================
+cp tmp/MockAuditingService.scala test/common/mocks/services/.
 
 echo "Removing unused files"
 rm test/shared/testConstants/NextUpdatesTestConstants.scala

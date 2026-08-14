@@ -408,6 +408,7 @@ newHome.overview.tax-year.proofOfIncome.card.sa302value.action   = View
 new.home.help.heading                                           = Making Tax Digital
 new.home.help.openInNewTab                                      = All links open in new tab.
 new.home.navigation.tabs.help                                   = Help
+new.home.navigation.opensInNewTab                               = (opens in new tab)
 
 home.help.link.makingTaxDigital.incomeTax                       = Find information about using Making Tax Digital for Income Tax
 home.help.link.makingTaxDigital.changeCircumstances             = Find out what you need to do if your circumstances change
@@ -556,6 +557,7 @@ tax-year-summary.payments.amount                                   = Amount
 tax-year-summary.payments.paymentOnAccount1.text                   = First payment on account
 tax-year-summary.payments.paymentOnAccount2.text                   = Second payment on account
 tax-year-summary.payments.balancingCharge.text                     = Balancing payment
+tax-year-summary.payments.enquiryAmendment.text                    = Extra amount to pay due to HMRC enquiry amendment
 tax-year-summary.payments.lpi.paymentOnAccount1.text               = Late payment interest on first payment on account
 tax-year-summary.payments.lpi.paymentOnAccount2.text               = Late payment interest on second payment on account
 tax-year-summary.payments.lpi.balancingCharge.text                 = Late payment interest on balancing payment
@@ -813,6 +815,31 @@ tax-year-summary.calculation-example                               = For example
 tax-year-summary.calculation-contact-hmrc                          = If that date has passed, or you cannot amend your return for another reason,
 tax-year-summary.calculation-contact-hmrc-link                     = you’ll need to contact HMRC
 tax-year-summary.calculation-bill                                  = Your calculation as well as your bill will then be updated based on what you report. This may mean you have to pay more tax or that you can claim a refund.
+
+# Tax Year Summary - Errors and Corrections #
+tax-year-summary.latest-calculation.correction-revenueAmendment.desc          = HMRC amended your tax return on {0} and as a result this is your most up-to-date calculation.
+tax-year-summary.latest-calculation.correction-revenueAmendment.inset-1       = We’ve updated your tax calculation.
+tax-year-summary.latest-calculation.correction-revenueAmendment.inset-2       = The amount of tax you owe may have increased or decreased.
+tax-year-summary-latest-calculation.correction-revenueAmendment.inset-3       = You can check your
+tax-year-summary.latest-calculation.correction-revenueAmendment.inset-link-1  = payments, credits and refunds history
+tax-year-summary.latest-calculation.correction-revenueAmendment.inset-inset-4 = or see
+tax-year-summary.latest-calculation.correction-revenueAmendment.inset-link-2  = what you owe and how to make a payment
+
+tax-year-summary.previous-calculation.correction-revenueAmendment.desc            = HMRC amended your tax return on {0}. This changed your tax calculation at that time. This is now a previous calculation. A newer calculation may have been made since.
+tax-year-summary.previous-calculation.correction-revenueAmendment.subheading      = Calculation made on {0}
+tax-year-summary.previous-calculation.correction-revenueAmendment.subheading.desc = This calculation reflects the tax position at that time.
+
+tax-year-summary.latest-calculation.rejection.desc          = On {0} HMRC changed your tax return back to what it was before HMRC amended it. As a result, this is your most up-to-date calculation.
+tax-year-summary.latest-calculation.rejection.inset-1       = We’ve updated your tax calculation.
+tax-year-summary.latest-calculation.rejection.inset-2       = The amount of tax you owe may have increased or decreased.
+tax-year-summary-latest-calculation.rejection.inset-3       = You can check your
+tax-year-summary.latest-calculation.rejection.inset-link-1  = payments, credits and refunds history
+tax-year-summary.latest-calculation.rejection.inset-inset-4 = or see
+tax-year-summary.latest-calculation.rejection.inset-link-2  = what you owe and how to make a payment
+
+tax-year-summary.previous-calculation.rejection.desc            = HMRC amended your tax return on {0}. This changed your tax calculation at that time. This is now a previous calculation. A newer calculation may have been made since.
+tax-year-summary.previous-calculation.rejection.subheading      = Calculation made on {0}
+tax-year-summary.previous-calculation.rejection.subheading.desc = This calculation reflects the tax position at that time.
 
 ## Income Breakdown Page ##
 income_breakdown.heading                                        = Income
@@ -1934,6 +1961,7 @@ refund-to-taxpayer.tableHead.total-interest                     = Total interest
 refund-to-taxpayer.tableHead.varied-interest-rates-value        = Rate of interest varied between {0}% and {1}% from {2} and {3}
 refund-to-taxpayer.method-type-bacs                             = Bacs
 refund-to-taxpayer.method-type-card                             = Card
+refund-to-taxpayer.method-type-repayment-to-card                = Repayment to card
 refund-to-taxpayer.method-type-postal-order                     = Postal Order
 refund-to-taxpayer.method-type-payable-order-repayment          = Payable order repayment
 refund-to-taxpayer.method-type-bacs-payment-out                 = BACS payment out
@@ -2677,9 +2705,10 @@ yourSelfAssessmentChargeSummary.enquiryAmendment.p1                             
 yourSelfAssessmentChargeSummary.enquiryAmendment.link                               = tax calculation for {0} to {1}
 yourSelfAssessmentChargeSummary.enquiryAmendment.p2                                 = , resulting in an extra amount to pay towards your tax bill.
 
+
+
 yourSelfAssessmentChargeSummary.itsaReturnAmendmentCredit.p1                        = HMRC has added a credit to your account because your amended tax return shows that your {0} to {1} tax bill was too high.
 yourSelfAssessmentChargeSummary.itsaReturnAmendmentCredit.p2                        = This credit may be used automatically by HMRC to cover your future tax bills when they become due.
-
 #######################################################################################################################
 ## Business Details
 #######################################################################################################################
