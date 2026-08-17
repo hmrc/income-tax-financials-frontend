@@ -19,7 +19,7 @@ package common.config.featureswitch
 import common.auth.actions.AuthActionsTestData.*
 import common.auth.MtdItUser
 import common.config.FrontendAppConfig
-import common.models.admin.*
+import common.models.admin.{NewHubContextRootEnabled, *}
 import common.models.incomeSourceDetails.IncomeSourceDetailsModel
 import common.testUtils.TestSupport
 import org.mockito.Mockito.*
@@ -53,7 +53,8 @@ class FeatureSwitchingSpec extends TestSupport with MockitoSugar {
     ObligationsFrontend,
     BusinessDetailsFrontend,
     NoIncomeSourcesRedirect,
-    ReturnsFrontend
+    ReturnsFrontend,
+    NewHubContextRootEnabled
   )
 
   "FeatureSwitchName" when {

@@ -58,6 +58,8 @@ object FeatureSwitchName {
       JsSuccess(BusinessDetailsFrontend)
     case JsString(ReturnsFrontend.name) =>
       JsSuccess(ReturnsFrontend)
+    case JsString(NewHubContextRootEnabled.name) =>
+      JsSuccess(NewHubContextRootEnabled)
     case invalidName =>
       JsSuccess(InvalidFS)
   }
@@ -91,7 +93,8 @@ object FeatureSwitchName {
       TriggeredMigration,
       NoIncomeSourcesRedirect,
       BusinessDetailsFrontend,
-      ReturnsFrontend
+      ReturnsFrontend,
+      NewHubContextRootEnabled
     )
 
   def get(str: String): Option[FeatureSwitchName] = allFeatureSwitches find (_.name == str)
@@ -155,4 +158,9 @@ case object BusinessDetailsFrontend extends FeatureSwitchName {
 case object ReturnsFrontend extends FeatureSwitchName {
   override val name: String = "returns-frontend"
   override val toString: String = "Returns Frontend"
+}
+
+case object NewHubContextRootEnabled extends FeatureSwitchName {
+  override val name: String = "enable-new-hub-context-root"
+  override val toString: String = "New Hub Context-root Enabled"
 }
