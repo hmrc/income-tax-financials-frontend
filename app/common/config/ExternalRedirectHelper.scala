@@ -24,29 +24,35 @@ trait ExternalRedirectHelper {
   val servicesConfig: ServicesConfig
   val config: Configuration
   
-  lazy val hubBaseUrl: String = servicesConfig.getString("income-tax-view-change-frontend.baseUrl")
-  lazy val hubAgentBaseUrl: String = s"${hubBaseUrl}/agents"
-  
-  lazy val individualHomeUrl: String =
-    s"$hubBaseUrl/income-tax"
+  lazy val vcFrontendBaseUrl: String = servicesConfig.getString("income-tax-view-change-frontend.baseUrl")
+  lazy val vcFrontendAgentBaseUrl: String = s"${vcFrontendBaseUrl}/agents"
 
-  lazy val individualHomeUrlWithOrigin: Option[String] => String = origin =>
-    origin.fold(individualHomeUrl)(o => s"$individualHomeUrl?origin=$o")
+  def hubBaseUrl(newHubContextRootEnabled: Boolean): String =
+    if (newHubContextRootEnabled) servicesConfig.getString("income-tax-view-change-frontend.hubBaseUrl") else vcFrontendBaseUrl
 
-  lazy val homePageUrl: String = {
-    individualHomeUrl
-  }
-  
-  lazy val agentHomeUrl: String =
-    s"$hubAgentBaseUrl/client-income-tax"
-    
-  def homePageUrl(isAgent: Boolean, origin: Option[String] = None): String = if (isAgent) agentHomeUrl else individualHomeUrlWithOrigin(origin)
+  def hubAgentBaseUrl(newHubContextRootEnabled: Boolean): String =
+    s"${hubBaseUrl(newHubContextRootEnabled)}/agents"
 
-  lazy val enterClientsUTRUrl: String = s"$hubAgentBaseUrl/client-utr"
+  def individualHomeUrl(newHubContextRootEnabled: Boolean): String =
+    s"${hubBaseUrl(newHubContextRootEnabled)}/income-tax"
 
-  lazy val confirmClientUTRUrl: String =
-    s"$hubAgentBaseUrl/confirm-client-details"
-  
+  def individualHomeUrlWithOrigin(newHubContextRootEnabled: Boolean, origin: Option[String]): String =
+    origin.fold(individualHomeUrl(newHubContextRootEnabled))(o => s"${individualHomeUrl(newHubContextRootEnabled)}?origin=$o")
+
+  def agentHomeUrl(newHubContextRootEnabled: Boolean): String =
+    s"${hubAgentBaseUrl(newHubContextRootEnabled)}/client-income-tax"
+
+  def homePageUrl(isAgent: Boolean, newHubContextRootEnabled: Boolean, origin: Option[String] = None): String =
+    if (isAgent) agentHomeUrl(newHubContextRootEnabled) else individualHomeUrlWithOrigin(newHubContextRootEnabled, origin)
+
+
+  def enterClientsUTRUrl(newHubContextRootEnabled: Boolean): String =
+    s"${hubAgentBaseUrl(newHubContextRootEnabled)}/client-utr"
+
+  def confirmClientUTRUrl(newHubContextRootEnabled: Boolean): String =
+    s"${hubAgentBaseUrl(newHubContextRootEnabled)}/confirm-client-details"
+
+
   //Obligation routes
   
   lazy val obligationsBaseUrl: String = servicesConfig.getString("income-tax-obligations-frontend.baseUrl")
@@ -56,13 +62,13 @@ trait ExternalRedirectHelper {
     if (newObligationsEnabled)
       s"$obligationsBaseUrl/access-service-from-next-tax-year"
     else
-      s"$hubBaseUrl/access-service-from-next-tax-year"
+      s"$vcFrontendBaseUrl/access-service-from-next-tax-year"
 
   lazy val obligationsWaitToSignUpAgentUrl: Boolean => String = newObligationsEnabled =>
     if (newObligationsEnabled)
       s"$obligationsAgentBaseUrl/view-client-from-next-tax-year"
     else
-      s"$hubAgentBaseUrl/view-client-from-next-tax-year"
+      s"$vcFrontendAgentBaseUrl/view-client-from-next-tax-year"
       
   //Business Details routes
 
@@ -74,7 +80,7 @@ trait ExternalRedirectHelper {
       val baseUri = if (isAgent) businessDetailsAgentBaseUrl else businessDetailsBaseUrl
       s"$baseUri/check-your-active-businesses/hmrc-record"
     } else {
-      val baseUri = if (isAgent) hubAgentBaseUrl else hubBaseUrl
+      val baseUri = if (isAgent) vcFrontendAgentBaseUrl else vcFrontendBaseUrl
       s"$baseUri/check-your-active-businesses/hmrc-record"
     }
   }
@@ -89,7 +95,7 @@ trait ExternalRedirectHelper {
     val baseUri = if (returnsFrontendEnabled) {
       s"$returnsBaseUrl/tax-year-summary/$taxYear"
     } else {
-      s"$hubBaseUrl/tax-year-summary/$taxYear"
+      s"$vcFrontendBaseUrl/tax-year-summary/$taxYear"
     }
     val baseUriWithOptOrigin = origin.fold(baseUri)(o => s"$baseUri?origin=$o")
     fragment.fold(baseUriWithOptOrigin)(f => s"$baseUriWithOptOrigin#$f")
@@ -99,7 +105,7 @@ trait ExternalRedirectHelper {
     val baseUri = if (returnsFrontendEnabled) {
       s"$returnsAgentBaseUrl/tax-year-summary/$taxYear"
     } else {
-      s"$hubAgentBaseUrl/tax-year-summary/$taxYear"
+      s"$vcFrontendAgentBaseUrl/tax-year-summary/$taxYear"
     }
     fragment.fold(baseUri)(f => s"$baseUri#$f")
   }
