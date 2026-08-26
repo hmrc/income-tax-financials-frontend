@@ -23,6 +23,7 @@ trait ExternalRedirectHelper {
 
   val servicesConfig: ServicesConfig
   val config: Configuration
+  lazy val hubContextRootEnabledConfig: Boolean = servicesConfig.getBoolean("feature-switch.enable-new-hub-context-root")
   
   lazy val vcFrontendBaseUrl: String = servicesConfig.getString("income-tax-view-change-frontend.baseUrl")
   lazy val vcFrontendAgentBaseUrl: String = s"${vcFrontendBaseUrl}/agents"
@@ -33,7 +34,7 @@ trait ExternalRedirectHelper {
   def hubAgentBaseUrl(newHubContextRootEnabled: Boolean): String =
     s"${hubBaseUrl(newHubContextRootEnabled)}/agents"
 
-  def individualHomeUrl(newHubContextRootEnabled: Boolean): String =
+  def individualHomeUrl(newHubContextRootEnabled: Boolean = hubContextRootEnabledConfig): String =
     s"${hubBaseUrl(newHubContextRootEnabled)}/income-tax"
 
   def individualHomeUrlWithOrigin(newHubContextRootEnabled: Boolean, origin: Option[String]): String =
@@ -46,7 +47,7 @@ trait ExternalRedirectHelper {
     if (isAgent) agentHomeUrl(newHubContextRootEnabled) else individualHomeUrlWithOrigin(newHubContextRootEnabled, origin)
 
 
-  def enterClientsUTRUrl(newHubContextRootEnabled: Boolean): String =
+  def enterClientsUTRUrl(newHubContextRootEnabled: Boolean = hubContextRootEnabledConfig): String =
     s"${hubAgentBaseUrl(newHubContextRootEnabled)}/client-utr"
 
   def confirmClientUTRUrl(newHubContextRootEnabled: Boolean): String =

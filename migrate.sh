@@ -15,6 +15,7 @@ cp app/common/connectors/FeatureSwitchConnector.scala tmp/.
 # ========================================
 cp app/financials/models/claimToAdjustPoa/PoaAmendmentData.scala tmp/.
 cp app/common/services/AuditingService.scala tmp/.
+cp app/common/viewUtils/InternalUrlHelper.scala tmp/.
 
 echo "Removing main code from the app folder"
 rm -rf app/common
@@ -39,6 +40,8 @@ cp tmp/FeatureSwitchConnector.scala app/common/connectors/.
 # ========================================
 cp tmp/PoaAmendmentData.scala app/financials/models/claimToAdjustPoa/.
 cp tmp/AuditingService.scala app/common/services/.
+cp tmp/InternalUrlHelper.scala app/common/viewUtils/.
+
 
 echo "Removing unused files"
 rm app/shared/models/UIJourneySessionData.scala
@@ -101,7 +104,9 @@ echo "Copying files to tmp folder which we don't want to overwrite"
 
 cp it/test/common/helpers/ComponentSpecBase.scala tmp/.
 cp it/test/common/controllers/ControllerISpecBase.scala tmp/.
+cp it/test/common/controllers/ControllerISpecHelper.scala tmp/.
 cp it/test/common/testConstants/MicroserviceSpecificConstants.scala tmp/.
+cp it/test/common/controllers/agent/ClientDetailsFailureControllerISpec.scala tmp/.
 
 echo "Removing current integration tests"
 
@@ -117,7 +122,9 @@ cp -r ../income-tax-view-change-frontend/it/test/shared it/test/.
 echo "Copying files back from tmp folder to test folder"
 cp tmp/ComponentSpecBase.scala it/test/common/helpers/.
 cp tmp/ControllerISpecBase.scala it/test/common/controllers/.
+cp tmp/ControllerISpecHelper.scala it/test/common/controllers/.
 cp tmp/MicroserviceSpecificConstants.scala it/test/common/testConstants/.
+cp tmp/ClientDetailsFailureControllerISpec.scala it/test/common/controllers/agent/.
 
 echo "Removing tmp folder"
 rm -rf tmp
