@@ -17,12 +17,14 @@
 package common.viewUtils
 
 import common.controllers.routes as appRoutes
+import common.controllers.agent.routes as agentRoutes
+import common.controllers.errors.routes as errorRoutes
 import common.controllers.timeout.routes as timeoutRoutes
 import common.controllers.feedback.routes as feedbackRoutes
 import common.controllers.agent.errors.routes as agentErrorRoutes
 
 object InternalUrlHelper {
-  
+
   val signinUrl = appRoutes.SignInController.signIn().url
   val signinCall = appRoutes.SignInController.signIn()
   val signoutUrl = appRoutes.SignOutController.signOut().url
@@ -36,5 +38,17 @@ object InternalUrlHelper {
   val feedbackUrl = feedbackRoutes.FeedbackController.show().url
   val agentFeedbackUrl = feedbackRoutes.FeedbackController.showAgent().url
   val agentErrorCall = agentErrorRoutes.AgentErrorController.show()
+
+  def noIncomeSourceUrl(isAgent: Boolean) = appRoutes.NoIncomeSourcesController.show(isAgent)
+
+  val upliftSuccessUrl = appRoutes.UpliftSuccessController.success().url
+
+  val upliftFailureUrl = errorRoutes.UpliftFailedController.show().url
+
+  val clientRelationshipFailureCall = agentRoutes.ClientRelationshipFailureController.show()
+
+  val noAssignmentCall = agentRoutes.NoAssignmentController.show().url
+
+  val notEnrolledCall = errorRoutes.NotEnrolledController.show()
 
 }
