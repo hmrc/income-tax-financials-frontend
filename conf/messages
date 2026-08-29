@@ -2524,6 +2524,8 @@ yourSelfAssessmentChargeSummary.due                                 = Due {0}
 yourSelfAssessmentChargeSummary.chargeReference                     = Charge Reference: {0}
 yourSelfAssessmentChargeSummary.creditCreated                       = This credit was created on {0}
 
+yourSelfAssessmentChargeSummary.correctionCredit.text.heading       = Credit from HMRC correction to your tax return
+
 yourSelfAssessmentChargeSummary.whatIsABalancingPayment.linkText    = What is a balancing payment?
 yourSelfAssessmentChargeSummary.whatIsABalancingPayment.p1          = A balancing payment is the tax you still need to pay for a tax year. This happens if you:
 yourSelfAssessmentChargeSummary.whatIsABalancingPayment.p2          = did not have any tax to pay during the year (for example, if your last Self Assessment tax bill was under £1,000)
@@ -2711,6 +2713,10 @@ yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.1                 
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.link-text             = {0} to {1} tax calculation
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.2                     = was too high, and HMRC has added a credit to your account.
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p2                       = This credit may be used automatically by HMRC to cover your future tax bills when they become due.
+
+yourSelfAssessmentChargeSummary.correction.p1.1                                     = HMRC corrected your tax return. This changed your 
+yourSelfAssessmentChargeSummary.correction.p1.link-text                             = tax calculation for {0} to {1}
+yourSelfAssessmentChargeSummary.correction.p1.2                                     = resulting in a credit being added to your account.
 
 
 

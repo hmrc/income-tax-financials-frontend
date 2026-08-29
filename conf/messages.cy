@@ -2509,6 +2509,8 @@ yourSelfAssessmentChargeSummary.due                                 = Yn ddyledu
 yourSelfAssessmentChargeSummary.chargeReference                     = Charge Reference: {0}
 yourSelfAssessmentChargeSummary.creditCreated                       = Cafodd y credyd hwn ei greu ar {0}
 
+yourSelfAssessmentChargeSummary.correctionCredit.text.heading       = Credyd o ganlyniad i gywiriad gan CThEF, i’ch Ffurflen Dreth
+
 yourSelfAssessmentChargeSummary.whatIsABalancingPayment.linkText    = Beth yw taliad mantoli?
 yourSelfAssessmentChargeSummary.whatIsABalancingPayment.p1          = Taliad mantoli yw’r dreth sydd dal gennych i’w thalu ar gyfer blwyddyn dreth. Mae hyn yn digwydd os yw’r canlynol yn wir:
 yourSelfAssessmentChargeSummary.whatIsABalancingPayment.p2          = nid oedd gennych unrhyw dreth i’w thalu yn ystod y flwyddyn (er enghraifft, roedd eich bil treth Hunanasesiad diwethaf yn llai na £1,000)
@@ -2695,6 +2697,10 @@ yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.1                 
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.link-text             = ar gyfer {0} i {1}
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.2                     = yn rhy uchel, ac mae CThEF wedi ychwanegu credyd at eich cyfrif.
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p2                       = Efallai y bydd CThEF yn defnyddio’r credyd hwn yn awtomatig i dalu’ch biliau treth yn y dyfodol pan fydd y rhain yn dod yn ddyledus.
+
+yourSelfAssessmentChargeSummary.correction.p1.1                                     = Mae CThEF wedi cywiro’ch Ffurflen Dreth. Mae hyn wedi newid eich
+yourSelfAssessmentChargeSummary.correction.p1.link-text                             = cyfrifiad treth ar gyfer {0} i {1}
+yourSelfAssessmentChargeSummary.correction.p1.2                                     = gan arwain at ychwnaegu credyd at eich cyfrif.
 
 #######################################################################################################################
 ## Business Details
