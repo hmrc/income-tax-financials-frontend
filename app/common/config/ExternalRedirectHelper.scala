@@ -86,6 +86,16 @@ trait ExternalRedirectHelper {
     }
   }
 
+  def triggeredMigrationCompleteStepsUrl(isAgent: Boolean, businessDetailsFrontendEnabled: Boolean): String = {
+    if (businessDetailsFrontendEnabled) {
+      val baseUri = if (isAgent) businessDetailsAgentBaseUrl else businessDetailsBaseUrl
+      s"$baseUri/complete-steps"
+    } else {
+      val baseUri = if (isAgent) vcFrontendAgentBaseUrl else vcFrontendBaseUrl
+      s"$baseUri/complete-steps"
+    }
+  }
+
   //Returns routes
 
   lazy val returnsBaseUrl: String = servicesConfig.getString("income-tax-returns-frontend.baseUrl")
