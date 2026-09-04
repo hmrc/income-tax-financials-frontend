@@ -9,9 +9,9 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 val appName = "income-tax-financials-frontend"
 val bootstrapPlayVersion = "10.8.0"
 val playPartialsVersion = "10.2.0"
-val playFrontendHMRCVersion = "13.9.0"
+val playFrontendHMRCVersion = "13.13.0"
 val catsVersion = "2.13.0"
-val jsoupVersion = "1.23.1"
+val jsoupVersion = "1.23.2"
 val mockitoVersion = "5.23.0"
 val scalaMockVersion = "7.5.5"
 val wiremockVersion = "3.0.1"
@@ -29,30 +29,30 @@ scalacOptions ++= Seq(
 
 val compile = Seq(
   ws,
-  "uk.gov.hmrc" %% s"bootstrap-frontend-$playVersion" % bootstrapPlayVersion,
-  "uk.gov.hmrc" %% s"play-partials-$playVersion" % playPartialsVersion,
-  "org.typelevel" %% "cats-core" % catsVersion,
-  "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion" % hmrcMongoVersion,
-  "uk.gov.hmrc" %% s"play-frontend-hmrc-$playVersion" % playFrontendHMRCVersion
+  "uk.gov.hmrc"       %% s"bootstrap-frontend-$playVersion" % bootstrapPlayVersion,
+  "uk.gov.hmrc"       %% s"play-partials-$playVersion"      % playPartialsVersion,
+  "org.typelevel"     %% "cats-core"                        % catsVersion,
+  "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion"         % hmrcMongoVersion,
+  "uk.gov.hmrc"       %% s"play-frontend-hmrc-$playVersion" % playFrontendHMRCVersion
 )
 
 def test(scope: String = "test"): Seq[ModuleID] = Seq(
-  "org.scalamock" %% "scalamock" % scalaMockVersion % scope,
-  "org.jsoup" % "jsoup" % jsoupVersion % scope,
-  "org.mockito" % "mockito-core" % mockitoVersion % scope,
-  "uk.gov.hmrc.mongo" %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion % scope,
-  "org.scalacheck" %% "scalacheck" % "1.19.0" % scope,
-  "org.scalatestplus" %% "scalacheck-1-15" % "3.2.11.0" % scope,
-  "uk.gov.hmrc" %% s"bootstrap-test-$playVersion" % bootstrapPlayVersion % "test",
+  "org.scalamock"     %% "scalamock"                     % scalaMockVersion     % scope,
+  "org.jsoup"          % "jsoup"                         % jsoupVersion         % scope,
+  "org.mockito"        % "mockito-core"                  % mockitoVersion       % scope,
+  "uk.gov.hmrc.mongo" %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion     % scope,
+  "org.scalacheck"    %% "scalacheck"                    % "1.20.0"             % scope,
+  "org.scalatestplus" %% "scalacheck-1-15"               % "3.2.11.0"           % scope,
+  "uk.gov.hmrc"       %% s"bootstrap-test-$playVersion"  % bootstrapPlayVersion % "test",
   caffeine
 )
 
 def it(scope: String = "test"): Seq[ModuleID] = Seq(
-  "org.scalamock" %% "scalamock" % scalaMockVersion % scope,
-  "org.jsoup" % "jsoup" % jsoupVersion % scope,
-  "org.mockito" % "mockito-core" % mockitoVersion % scope,
-  "com.github.tomakehurst" % "wiremock" % wiremockVersion % scope,
-  "uk.gov.hmrc.mongo" %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion % scope,
+  "org.scalamock"         %% "scalamock"                     % scalaMockVersion % scope,
+  "org.jsoup"              % "jsoup"                         % jsoupVersion     % scope,
+  "org.mockito"            % "mockito-core"                  % mockitoVersion   % scope,
+  "com.github.tomakehurst" % "wiremock"                      % wiremockVersion  % scope,
+  "uk.gov.hmrc.mongo"     %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion % scope,
   caffeine
 )
 
