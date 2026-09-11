@@ -9,6 +9,10 @@ cp -r app/common/config/FrontendAppConfig.scala tmp/.
 cp app/common/models/incomeSourceDetails/IncomeSourceDetailsResponse.scala tmp/.
 cp app/common/models/liabilitycalculation/LiabilityCalculationResponse.scala tmp/.
 cp app/shared/enums/JourneyState.scala tmp/.
+cp app/common/config/Initialise.scala tmp/.
+cp app/financials/connectors/NrsConnectorTmp.scala tmp/.
+cp app/common/config/DIModule.scala tmp/.
+
 # ========== feature switch ==============
 cp app/common/models/admin/FeatureSwitchName.scala tmp/.
 cp app/common/connectors/FeatureSwitchConnector.scala tmp/.
@@ -44,6 +48,10 @@ cp tmp/FeatureSwitchConnector.scala app/common/connectors/.
 cp tmp/PoaAmendmentData.scala app/financials/models/claimToAdjustPoa/.
 cp tmp/AuditingService.scala app/common/services/.
 cp tmp/InternalUrlHelper.scala app/common/viewUtils/.
+
+cp tmp/Initialise.scala app/common/config/.
+cp tmp/NrsConnectorTmp.scala app/financials/connectors/NrsConnector.scala
+cp tmp/DIModule.scala app/common/config/.
 
 
 echo "Removing unused files"
