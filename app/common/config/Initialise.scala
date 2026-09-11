@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,13 @@
 
 package common.config
 
-import com.google.inject.AbstractModule
-import common.auth.FrontendAuthorisedFunctions
-import uk.gov.hmrc.auth.core.AuthorisedFunctions
+import com.google.inject.Inject
+import financials.connectors.NrsConnectorTmp
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.Await
 
-import java.time.{Clock, ZoneOffset}
+class Initialise @Inject ()(nrsConnectorTmp: NrsConnectorTmp) {
+  
+  Await.result(nrsConnectorTmp.invalidSubmit(), 20.seconds)
 
-class DIModule extends AbstractModule {
-  override def configure(): Unit = {
-    bind(classOf[Initialise]).asEagerSingleton()
-    bind(classOf[AuthorisedFunctions]).to(classOf[FrontendAuthorisedFunctions]).asEagerSingleton()
-    bind(classOf[Clock]).toInstance(Clock.systemDefaultZone.withZone(ZoneOffset.UTC))
-  }
 }
