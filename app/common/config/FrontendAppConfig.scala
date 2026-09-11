@@ -99,7 +99,7 @@ class FrontendAppConfig @Inject()(val servicesConfig: ServicesConfig, val config
   //Payment Redirect route
   lazy val paymentRedirectUrl: String = s"$baseUrl$basePath/what-you-owe"
   //Payment Redirect route
-  lazy val agentPaymentRedirectUrl: String = s"$baseUrl$agentBasePath/payments-owed"
+  lazy val agentPaymentRedirectUrl: String = s"$baseUrl$agentBasePath/what-you-owe"
   
   // Disagree with a tax decision
   lazy val taxAppealsUrl: String = servicesConfig.getString("tax-appeals.url")
