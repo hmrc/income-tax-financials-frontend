@@ -9,6 +9,7 @@ cp -r app/common/config/FrontendAppConfig.scala tmp/.
 cp app/common/models/incomeSourceDetails/IncomeSourceDetailsResponse.scala tmp/.
 cp app/common/models/liabilitycalculation/LiabilityCalculationResponse.scala tmp/.
 cp app/shared/enums/JourneyState.scala tmp/.
+
 # ========== feature switch ==============
 cp app/common/models/admin/FeatureSwitchName.scala tmp/.
 cp app/common/connectors/FeatureSwitchConnector.scala tmp/.
