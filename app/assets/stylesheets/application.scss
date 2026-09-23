@@ -37,6 +37,35 @@ $govuk-tag--default: #f8f8f8;
   font-weight: bold;
   }
 
+#what-you-owe-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #cecece;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+    span.what-you-owe-total-row__label,
+    span.what-you-owe-total-row__amount {
+        margin: 0;
+    }
+    .what-you-owe-total-row__label {
+        min-width: 0;
+        overflow-wrap: break-word;
+    }
+
+    .what-you-owe-total-row__amount {
+        text-align: right;
+        flex-shrink: 0;
+        margin-left: 10px;
+    }
+
+    .what-you-owe-total-row__amount {
+        text-align: right;
+        white-space: nowrap;
+    }
+}
+
 #amount-due{
    white-space:nowrap;
 }
@@ -47,6 +76,13 @@ $govuk-tag--default: #f8f8f8;
 
 #pre-mtd-digital{
     margin:0px;
+}
+
+#what-you-owe-standover-table {
+    margin-bottom: 0;
+}
+#suspended-charges-table {
+    margin-bottom: 30px;
 }
 
 .js-enabled .govuk-accordion__section-content {
