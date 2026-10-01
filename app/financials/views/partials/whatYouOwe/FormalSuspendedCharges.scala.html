@@ -43,7 +43,7 @@
         totalTableRow: TotalTableRow
 )
 
-@(chargesList: Seq[ChargeItem], viewModel: WhatYouOweViewModel, origin: Option[String] = None, isSelfServeTimeToPayEnabled: Boolean)(implicit messages: Messages, dateService: DateServiceInterface, user: MtdItUser[_])
+@(chargesList: Seq[ChargeItem], viewModel: WhatYouOweViewModel, origin: Option[String] = None, isSelfServeTimeToPayEnabled: Boolean, isStoodOverEnabled: Boolean)(implicit messages: Messages, dateService: DateServiceInterface, user: MtdItUser[_])
 
 @import implicitDateFormatter.longDate
 
@@ -51,9 +51,13 @@
     chargesList.zipWithIndex.map{ case (charge: ChargeItem, index: Int) =>
           Seq(
             TableRow(content = Text(charge.dueDate.getOrElse(charge.documentDate).toLongDateShort), classes = "govuk-table__cell no-wrap"),
-            TableRow(content = HtmlContent(chargeInfo(viewModel.lpp2Url, s"due-${index}", charge, index, viewModel.chargeSummaryUrl(charge.taxYear.endYear, charge.transactionId, charge.isOnlyInterest, origin), false)), classes = "govuk-table__cell"),
+            TableRow(content = HtmlContent(chargeInfo(viewModel.lpp2Url, s"due-$index", charge, index, viewModel.chargeSummaryUrl(charge.taxYear.endYear, charge.transactionId, charge.isOnlyInterest, origin), false)), classes = "govuk-table__cell"),
             TableRow(content = HtmlContent(taxYearSummaryLink(charge.taxYear.endYear, index, viewModel.taxYearSummaryUrl, suspendedCharge = true)), classes = "govuk-table__cell"),
-            TableRow(content = Text(charge.totalSoAmt.getOrElse(BigDecimal(0)).toCurrencyString), classes = "govuk-table__cell"))
+              if (isStoodOverEnabled && charge.isPartialStoodOver) {
+                  TableRow(content = Text(charge.collectableAmt.getOrElse(BigDecimal(0)).toCurrencyString), classes = "govuk-table__cell")
+              } else
+                  TableRow(content = Text(charge.totalSoAmt.getOrElse(BigDecimal(0)).toCurrencyString), classes = "govuk-table__cell")
+          )
     }
 }
 
