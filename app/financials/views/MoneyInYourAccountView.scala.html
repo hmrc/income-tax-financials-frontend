@@ -70,16 +70,16 @@
             @whereMoneyCameFromTable(viewModel)
         } else {}
 
-        @StandOverChargeContent()
+		@StandOverChargeContent()
 
         @if(viewModel.hasAvailableCredit) {
             @ClaimRefundButton()
         }
 
-        } else {
-            @NoMoneyInAccountCreditExplanation(viewModel)
-        }
+    } else {
+        @NoMoneyInAccountCreditExplanation(viewModel)
     }
+}
 
 @StandOverChargeContent() = {
 	@if(viewModel.dunningLock) {
@@ -146,10 +146,10 @@
     continueButton(
         Some(messages("money-in-your-account.claim-refund.button-text")),
         Some(if (user.isAgent)
-            s"${financialsRoutes.MoneyInYourAccountController.startRefundAgents().url}"
-        else
-            s"${financialsRoutes.MoneyInYourAccountController.startRefund().url}"
-        ),
+                s"${financialsRoutes.MoneyInYourAccountController.startRefundAgents().url}"
+            else
+                s"${financialsRoutes.MoneyInYourAccountController.startRefund().url}"
+            ),
         id = Some("claim-a-refund-button")
     )
 }
