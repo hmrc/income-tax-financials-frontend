@@ -72,6 +72,7 @@ class MoneyInYourAccountController @Inject()(val authActions: AuthActions,
       case creditsModel: CreditsModel =>
         val viewModel = MoneyInYourAccountViewModel.fromCreditsModel(creditsModel, appConfig.repaymentsUrl)
         auditClaimARefund(creditsModel)
+        
         Ok(moneyInYourAccountView(viewModel, whatYouOweUrl, backUrl))
     }
   }
