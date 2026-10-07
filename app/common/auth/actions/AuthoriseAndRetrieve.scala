@@ -57,7 +57,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @nowarn("cat=deprecation")
 @Singleton
 class AuthoriseAndRetrieve @Inject()(val authorisedFunctions: FrontendAuthorisedFunctions,
-                                     mcc: MessagesControllerComponents)(implicit val appConfig: FrontendAppConfig)
+                                     val appConfig: FrontendAppConfig,
+                                     mcc: MessagesControllerComponents)
   extends FeatureSwitching with ActionRefiner[Request, AuthorisedUserRequest] with Logging {
 
   implicit val executionContext: ExecutionContext = mcc.executionContext
