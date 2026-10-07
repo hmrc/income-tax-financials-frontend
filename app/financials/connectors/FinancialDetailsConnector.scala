@@ -298,7 +298,12 @@ class FinancialDetailsConnector @Inject()(
                 logger.error(s"[getFinancialDetailsByDocumentId] Json validation error parsing calculation response, error $invalid")
                 FinancialDetailsWithDocumentDetailsErrorModel(INTERNAL_SERVER_ERROR, "Json validation error parsing calculation response")
               },
-              valid => valid
+              valid => {
+                if (!valid.documentDetails.exists(_.transactionId == documentNumber))
+                  logger.warn(s"[getFinancialDetailsByDocumentId Requested document $documentNumber not found in response")
+
+                valid.filterByTransactionId(documentNumber)
+              }
             )
           case status if isErrorLevelStatus(status) =>
             logger.error(s"[getFinancialDetailsByDocumentId] Response status: ${response.status}, body: ${response.body}")

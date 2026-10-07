@@ -20,13 +20,13 @@ import common.helpers.{ComponentSpecBase, WiremockHelper}
 import common.models.core.Nino
 import common.models.incomeSourceDetails.TaxYear
 import common.testConstants.BaseTestConstants.{testPaymentLot, testPaymentLotItem}
-import financials.models.{Payment, Payments, PaymentsError}
 import financials.models.core.*
 import financials.models.core.ResponseModel.ResponseModel
 import financials.models.creditsandrefunds.CreditsModel
 import financials.models.paymentAllocationCharges.{FinancialDetailsWithDocumentDetailsErrorModel, FinancialDetailsWithDocumentDetailsModel}
 import financials.models.paymentAllocations.{PaymentAllocationsError, PaymentAllocationsResponse}
-import financials.testConstants.PaymentAllocationsTestConstants.{paymentAllocationChargesModelMultiplePayments, testValidPaymentAllocationsModel}
+import financials.models.{Payment, Payments, PaymentsError}
+import financials.testConstants.PaymentAllocationsTestConstants.*
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.Json
@@ -426,6 +426,27 @@ class FinancialDetailsConnectorISpec extends AnyWordSpec with ComponentSpecBase 
 
           result shouldBe response
           WiremockHelper.verifyGet(uri = url)
+        }
+
+        "return only the requested document when the response also contains a linked document" in {
+
+          val testUserNino = "AA123456A"
+          val documentNumber = "transactionId"
+          val url = s"/income-tax-financial-details/$testUserNino/financial-details/charges/documentId/$documentNumber"
+
+          val response = FinancialDetailsWithDocumentDetailsModel(
+            documentDetails = List(documentDetail2, lpiPaymentsDocumentDetail),
+            financialDetails = List(financialDetail2, financialDetail)
+          )
+
+          WiremockHelper.stubGet(url, OK, Json.toJson(response).toString())
+
+          val result = connector.getFinancialDetailsByDocumentId(
+            nino = Nino(testUserNino),
+            documentNumber = documentNumber
+          ).futureValue
+
+          result shouldBe FinancialDetailsWithDocumentDetailsModel(List(lpiPaymentsDocumentDetail), List(financialDetail))
         }
 
         "request request body is a bad incorrect" should {

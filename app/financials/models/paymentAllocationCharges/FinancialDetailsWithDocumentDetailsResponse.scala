@@ -31,6 +31,16 @@ case class FinancialDetailsWithDocumentDetailsModel(
   val filteredDocumentDetails = documentDetails.filter(_.paymentLot == financialDetails.head.items.get.head.paymentLot)
     .filter(_.paymentLotItem == financialDetails.head.items.get.head.paymentLotItem)
 
+  // ETMP can return linked documents like Repayment Interest alongside the one requested in any order
+  def filterByTransactionId(transactionId: String): FinancialDetailsWithDocumentDetailsModel = {
+    val matchedDocumentDetails = documentDetails.filter(_.transactionId == transactionId)
+    val matchedFinancialDetails = financialDetails.filter(_.transactionId.contains(transactionId))
+
+    if (matchedDocumentDetails.nonEmpty && matchedFinancialDetails.nonEmpty)
+      copy(documentDetails = matchedDocumentDetails, financialDetails = matchedFinancialDetails)
+    else
+      this
+  }
 }
 
 
