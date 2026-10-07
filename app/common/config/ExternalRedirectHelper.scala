@@ -92,32 +92,25 @@ trait ExternalRedirectHelper {
   lazy val returnsAgentBaseUrl: String = s"$returnsBaseUrl/agents"
 
   def returnsTaxYearSummaryIndividualUrl(taxYear: Int, origin: Option[String] = None,
-                                         fragment: Option[String] = None, returnsFrontendEnabled: Boolean): String = {
-    val baseUri = if (returnsFrontendEnabled) {
-      s"$returnsBaseUrl/tax-year-summary/$taxYear"
-    } else {
-      s"$vcFrontendBaseUrl/tax-year-summary/$taxYear"
-    }
+                                         fragment: Option[String] = None): String = {
+    val baseUri = s"$returnsBaseUrl/tax-year-summary/$taxYear"
+
     val baseUriWithOptOrigin = origin.fold(baseUri)(o => s"$baseUri?origin=$o")
     fragment.fold(baseUriWithOptOrigin)(f => s"$baseUriWithOptOrigin#$f")
   }
 
-  def returnsTaxYearSummaryAgentUrl(taxYear: Int, fragment: Option[String] = None, returnsFrontendEnabled: Boolean): String = {
-    val baseUri = if (returnsFrontendEnabled) {
-      s"$returnsAgentBaseUrl/tax-year-summary/$taxYear"
-    } else {
-      s"$vcFrontendAgentBaseUrl/tax-year-summary/$taxYear"
-    }
+  def returnsTaxYearSummaryAgentUrl(taxYear: Int, fragment: Option[String] = None): String = {
+    val baseUri = s"$returnsAgentBaseUrl/tax-year-summary/$taxYear"
     fragment.fold(baseUri)(f => s"$baseUri#$f")
   }
 
   def taxYearSummaryUrl(isAgent: Boolean, taxYear: Int,
-                        origin: Option[String] = None, fragment: Option[String] = None, returnsEnabled: Boolean = false): String = {
+                        origin: Option[String] = None, fragment: Option[String] = None): String = {
 
     if (isAgent) {
-      returnsTaxYearSummaryAgentUrl(taxYear, fragment, returnsEnabled)
+      returnsTaxYearSummaryAgentUrl(taxYear, fragment)
     } else {
-      returnsTaxYearSummaryIndividualUrl(taxYear, origin, fragment, returnsEnabled)
+      returnsTaxYearSummaryIndividualUrl(taxYear, origin, fragment)
     }
   }
 

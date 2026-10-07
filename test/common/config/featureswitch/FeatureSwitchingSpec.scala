@@ -50,9 +50,6 @@ class FeatureSwitchingSpec extends TestSupport with MockitoSugar {
     SubmitClaimToAdjustToNrs,
     TriggeredMigration,
     NoIncomeSourcesRedirect,
-    ObligationsFrontend,
-    NoIncomeSourcesRedirect,
-    ReturnsFrontend,
     NewHubContextRootEnabled,
     StoodOverCharges
   )

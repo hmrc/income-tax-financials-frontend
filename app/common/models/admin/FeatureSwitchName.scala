@@ -50,12 +50,8 @@ object FeatureSwitchName {
       JsSuccess(TriggeredMigration)
     case JsString(SubmitClaimToAdjustToNrs.name) =>
       JsSuccess(SubmitClaimToAdjustToNrs)
-    case JsString(ObligationsFrontend.name) =>
-      JsSuccess(ObligationsFrontend)
     case JsString(NoIncomeSourcesRedirect.name) =>
       JsSuccess(NoIncomeSourcesRedirect)
-    case JsString(ReturnsFrontend.name) =>
-      JsSuccess(ReturnsFrontend)
     case JsString(NewHubContextRootEnabled.name) =>
       JsSuccess(NewHubContextRootEnabled)
     case JsString(StoodOverCharges.name) =>
@@ -85,14 +81,12 @@ object FeatureSwitchName {
     Set(
       ChargeHistory,
       CreditsRefundsRepay,
-      ObligationsFrontend,
       PaymentHistoryRefunds,
       PenaltiesAndAppeals,
       SubmitClaimToAdjustToNrs,
       SelfServeTimeToPayR17,
       TriggeredMigration,
       NoIncomeSourcesRedirect,
-      ReturnsFrontend,
       NewHubContextRootEnabled,
       StoodOverCharges
     )
@@ -113,11 +107,6 @@ case object CreditsRefundsRepay extends FeatureSwitchName {
 case object InvalidFS extends FeatureSwitchName {
   override val name: String = "invalid-feature-switch"
   override def toString: String = "Invalid feature Switch"
-}
-
-case object ObligationsFrontend extends FeatureSwitchName {
-  override val name: String = "obligations-frontend"
-  override def toString: String = "Obligations Frontend"
 }
 
 case object PaymentHistoryRefunds extends FeatureSwitchName {
@@ -148,11 +137,6 @@ case object SubmitClaimToAdjustToNrs extends FeatureSwitchName {
 case object NoIncomeSourcesRedirect extends FeatureSwitchName {
   override val name: String = "no-income-sources-redirect"
   override def toString: String = "No Income Sources Redirect"
-}
-
-case object ReturnsFrontend extends FeatureSwitchName {
-  override val name: String = "returns-frontend"
-  override val toString: String = "Returns Frontend"
 }
 
 case object NewHubContextRootEnabled extends FeatureSwitchName {
