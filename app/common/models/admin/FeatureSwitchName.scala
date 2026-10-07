@@ -52,8 +52,6 @@ object FeatureSwitchName {
       JsSuccess(SubmitClaimToAdjustToNrs)
     case JsString(NoIncomeSourcesRedirect.name) =>
       JsSuccess(NoIncomeSourcesRedirect)
-    case JsString(NewHubContextRootEnabled.name) =>
-      JsSuccess(NewHubContextRootEnabled)
     case JsString(StoodOverCharges.name) =>
       JsSuccess(StoodOverCharges)
     case invalidName =>
@@ -87,7 +85,6 @@ object FeatureSwitchName {
       SelfServeTimeToPayR17,
       TriggeredMigration,
       NoIncomeSourcesRedirect,
-      NewHubContextRootEnabled,
       StoodOverCharges
     )
 
@@ -137,11 +134,6 @@ case object SubmitClaimToAdjustToNrs extends FeatureSwitchName {
 case object NoIncomeSourcesRedirect extends FeatureSwitchName {
   override val name: String = "no-income-sources-redirect"
   override def toString: String = "No Income Sources Redirect"
-}
-
-case object NewHubContextRootEnabled extends FeatureSwitchName {
-  override val name: String = "new-hub-context-root"
-  override val toString: String = "New Hub Context-root Enabled"
 }
 
 case object StoodOverCharges extends FeatureSwitchName {
