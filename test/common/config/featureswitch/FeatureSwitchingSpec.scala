@@ -51,7 +51,6 @@ class FeatureSwitchingSpec extends TestSupport with MockitoSugar {
     TriggeredMigration,
     NoIncomeSourcesRedirect,
     ObligationsFrontend,
-    BusinessDetailsFrontend,
     NoIncomeSourcesRedirect,
     ReturnsFrontend,
     NewHubContextRootEnabled,

@@ -54,8 +54,6 @@ object FeatureSwitchName {
       JsSuccess(ObligationsFrontend)
     case JsString(NoIncomeSourcesRedirect.name) =>
       JsSuccess(NoIncomeSourcesRedirect)
-    case JsString(BusinessDetailsFrontend.name) =>
-      JsSuccess(BusinessDetailsFrontend)
     case JsString(ReturnsFrontend.name) =>
       JsSuccess(ReturnsFrontend)
     case JsString(NewHubContextRootEnabled.name) =>
@@ -94,7 +92,6 @@ object FeatureSwitchName {
       SelfServeTimeToPayR17,
       TriggeredMigration,
       NoIncomeSourcesRedirect,
-      BusinessDetailsFrontend,
       ReturnsFrontend,
       NewHubContextRootEnabled,
       StoodOverCharges
@@ -151,11 +148,6 @@ case object SubmitClaimToAdjustToNrs extends FeatureSwitchName {
 case object NoIncomeSourcesRedirect extends FeatureSwitchName {
   override val name: String = "no-income-sources-redirect"
   override def toString: String = "No Income Sources Redirect"
-}
-
-case object BusinessDetailsFrontend extends FeatureSwitchName {
-  override val name: String = "business-details-frontend"
-  override val toString: String = "Business Details Frontend"
 }
 
 case object ReturnsFrontend extends FeatureSwitchName {
