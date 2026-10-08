@@ -21,7 +21,7 @@ import common.services.{DateService, DateServiceInterface}
 import financials.enums.ChargeType.NIC4_WALES
 import financials.models.*
 import financials.models.outstandingCharges.{OutstandingChargeModel, OutstandingChargesModel}
-import financials.testConstants.FinancialDetailsTestConstants.*
+import financials.testConstants.FinancialDetailsTestConstants.{outstandingChargesModel, *}
 
 import java.time.LocalDate
 import scala.annotation.unused
@@ -794,6 +794,12 @@ trait ChargeConstants {
     outstandingChargesModel = Some(outstandingChargesDueIn30Days)
   )
 
+  def whatYouOweDataWithOnlyTotalFormalAndInformalCharges(dunningLocks: List[Option[String]] = noDunningLocks)(implicit dateService: DateService): WhatYouOweChargesList = WhatYouOweChargesList(
+    balanceDetails = BalanceDetails(0.0, 0.0, 0.0, 0.0, Some(0.0), None, None, None, None, None, None, Some(50.00)),
+    chargesList = financialDetailsDueIn30DaysCi(dunningLocks),
+    outstandingChargesModel = Some(outstandingChargesDueIn30Days)
+  )
+
   val financialDetailsBalancingChargeNotOverdue: List[ChargeItem] = testFinancialDetailsChargeItems(
     transactionId = List(id1040000123, id1040000124),
     transactionTypes = List(BalancingCharge, BalancingCharge),
@@ -1210,9 +1216,9 @@ trait ChargeConstants {
   )
 
   def whatYouOweDataWithDataDueInMoreThan30DaysInformalStandover(dunningLocks: List[Option[String]] = noDunningLocks,
-                                                dueDates: List[Option[LocalDate]] = dueDateMoreThan30Days,
-                                                codedOutDetails: Option[CodingOutDetails] = None,
-                                                outstandingCharges: Option[OutstandingChargesModel] = Some(outstandingChargesDueInMoreThan30Days)): WhatYouOweChargesList = WhatYouOweChargesList(
+                                                                 dueDates: List[Option[LocalDate]] = dueDateMoreThan30Days,
+                                                                 codedOutDetails: Option[CodingOutDetails] = None,
+                                                                 outstandingCharges: Option[OutstandingChargesModel] = Some(outstandingChargesDueInMoreThan30Days)): WhatYouOweChargesList = WhatYouOweChargesList(
     balanceDetails = BalanceDetails(0.00, 2.00, 4.00, 2.00, Some(BigDecimal(100.00)), None, None, Some(BigDecimal(350.00)), None, None, Some(BigDecimal(100.00)), None),
     chargesList = testFinancialDetailsChargeItems(
       dueDate = dueDates,

@@ -49,5 +49,15 @@ class PaymentsAllocationChargesModelSpec extends UnitSpec with Matchers {
     "be able to parse a JSON into the Model" in {
       Json.fromJson[FinancialDetailsWithDocumentDetailsModel](validPaymentAllocationChargesJson) shouldBe JsSuccess(paymentAllocationChargesModel)
     }
+
+    "only keep the requested document when filtered by transaction id" in {
+      val model = FinancialDetailsWithDocumentDetailsModel(
+        documentDetails = List(documentDetail2, lpiPaymentsDocumentDetail),
+        financialDetails = List(financialDetail2, financialDetail)
+      )
+
+      model.filterByTransactionId("transactionId") shouldBe
+        FinancialDetailsWithDocumentDetailsModel(List(lpiPaymentsDocumentDetail), List(financialDetail))
+    }
   }
 }
