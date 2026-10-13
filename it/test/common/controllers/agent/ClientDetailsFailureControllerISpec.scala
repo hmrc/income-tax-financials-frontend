@@ -19,7 +19,6 @@ package common.controllers.agent
 import common.controllers.agent.errors.routes as agentErrorRoutes
 import common.controllers.agent.routes as agentRoutes
 import common.helpers.ComponentSpecBase
-import common.helpers.servicemocks.FeatureSwitchStub.stubGetFeatureSwitches
 import common.helpers.servicemocks.MTDAgentAuthStub
 import common.viewUtils.InternalUrlHelper
 import play.api.http.Status.*
@@ -32,7 +31,6 @@ class ClientDetailsFailureControllerISpec extends ComponentSpecBase {
   s"GET ${agentRoutes.ClientRelationshipFailureController.show().url}" should {
     s"redirect ($SEE_OTHER) to ${InternalUrlHelper.signinUrl}" when {
       "the user is not authenticated" in {
-        stubGetFeatureSwitches(List(), newHubContextRootEnabled)
         MTDAgentAuthStub.stubUnauthorised()
 
         val result: WSResponse = buildGETMTDClient(path, Map.empty).futureValue
@@ -45,7 +43,6 @@ class ClientDetailsFailureControllerISpec extends ComponentSpecBase {
     }
     s"redirect to agent error page" when {
       "the user is authenticated but doesn't have the agent enrolment" in {
-        stubGetFeatureSwitches(List(), newHubContextRootEnabled)
         MTDAgentAuthStub.stubNoAgentEnrolmentError()
 
         val result: WSResponse = buildGETMTDClient(path, Map.empty).futureValue
@@ -58,7 +55,6 @@ class ClientDetailsFailureControllerISpec extends ComponentSpecBase {
       }
     }
     s"return $OK with the enter client utr page" in {
-      stubGetFeatureSwitches(List(), newHubContextRootEnabled)
       MTDAgentAuthStub.stubAuthorisedWithAgentEnrolment()
 
       val result: WSResponse = buildGETMTDClient(path, Map.empty).futureValue

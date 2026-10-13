@@ -23,35 +23,28 @@ trait ExternalRedirectHelper {
 
   val servicesConfig: ServicesConfig
   val config: Configuration
-  lazy val hubContextRootEnabledConfig: Boolean = servicesConfig.getBoolean("feature-switch.enable-new-hub-context-root")
   
   lazy val vcFrontendBaseUrl: String = servicesConfig.getString("income-tax-view-change-frontend.baseUrl")
   lazy val vcFrontendAgentBaseUrl: String = s"${vcFrontendBaseUrl}/agents"
 
-  def hubBaseUrl(newHubContextRootEnabled: Boolean): String =
-    if (newHubContextRootEnabled) servicesConfig.getString("income-tax-view-change-frontend.hubBaseUrl") else vcFrontendBaseUrl
+  lazy val hubBaseUrl: String = servicesConfig.getString("income-tax-view-change-frontend.hubBaseUrl")
 
-  def hubAgentBaseUrl(newHubContextRootEnabled: Boolean): String =
-    s"${hubBaseUrl(newHubContextRootEnabled)}/agents"
+  lazy val hubAgentBaseUrl: String = s"$hubBaseUrl/agents"
 
-  def individualHomeUrl(newHubContextRootEnabled: Boolean = hubContextRootEnabledConfig): String =
-    s"${hubBaseUrl(newHubContextRootEnabled)}/income-tax"
+  lazy val individualHomeUrl: String = s"$hubBaseUrl/income-tax"
 
-  def individualHomeUrlWithOrigin(newHubContextRootEnabled: Boolean, origin: Option[String]): String =
-    origin.fold(individualHomeUrl(newHubContextRootEnabled))(o => s"${individualHomeUrl(newHubContextRootEnabled)}?origin=$o")
+  def individualHomeUrlWithOrigin(origin: Option[String]): String =
+    origin.fold(individualHomeUrl)(o => s"$individualHomeUrl?origin=$o")
 
-  def agentHomeUrl(newHubContextRootEnabled: Boolean): String =
-    s"${hubAgentBaseUrl(newHubContextRootEnabled)}/client-income-tax"
+  lazy val agentHomeUrl: String = s"$hubAgentBaseUrl/client-income-tax"
 
-  def homePageUrl(isAgent: Boolean, newHubContextRootEnabled: Boolean = hubContextRootEnabledConfig, origin: Option[String] = None): String =
-    if (isAgent) agentHomeUrl(newHubContextRootEnabled) else individualHomeUrlWithOrigin(newHubContextRootEnabled, origin)
+  def homePageUrl(isAgent: Boolean, origin: Option[String] = None): String =
+    if (isAgent) agentHomeUrl else individualHomeUrlWithOrigin(origin)
 
 
-  def enterClientsUTRUrl(newHubContextRootEnabled: Boolean = hubContextRootEnabledConfig): String =
-    s"${hubAgentBaseUrl(newHubContextRootEnabled)}/client-utr"
+  lazy val enterClientsUTRUrl: String = s"$hubAgentBaseUrl/client-utr"
 
-  def confirmClientUTRUrl(newHubContextRootEnabled: Boolean): String =
-    s"${hubAgentBaseUrl(newHubContextRootEnabled)}/confirm-client-details"
+  lazy val confirmClientUTRUrl: String = s"$hubAgentBaseUrl/confirm-client-details"
 
 
   //Obligation routes
@@ -76,24 +69,14 @@ trait ExternalRedirectHelper {
   lazy val businessDetailsBaseUrl: String = servicesConfig.getString("income-tax-business-details-frontend.baseUrl")
   lazy val businessDetailsAgentBaseUrl: String = s"$businessDetailsBaseUrl/agents"
 
-  def triggeredMigrationCheckHMRCRecordsUrl(isAgent: Boolean, businessDetailsFrontendEnabled: Boolean): String = {
-    if (businessDetailsFrontendEnabled) {
+  def triggeredMigrationCheckHMRCRecordsUrl(isAgent: Boolean): String = {
       val baseUri = if (isAgent) businessDetailsAgentBaseUrl else businessDetailsBaseUrl
       s"$baseUri/check-your-active-businesses/hmrc-record"
-    } else {
-      val baseUri = if (isAgent) vcFrontendAgentBaseUrl else vcFrontendBaseUrl
-      s"$baseUri/check-your-active-businesses/hmrc-record"
-    }
   }
 
-  def triggeredMigrationCompleteStepsUrl(isAgent: Boolean, businessDetailsFrontendEnabled: Boolean): String = {
-    if (businessDetailsFrontendEnabled) {
+  def triggeredMigrationCompleteStepsUrl(isAgent: Boolean): String = {
       val baseUri = if (isAgent) businessDetailsAgentBaseUrl else businessDetailsBaseUrl
       s"$baseUri/complete-steps"
-    } else {
-      val baseUri = if (isAgent) vcFrontendAgentBaseUrl else vcFrontendBaseUrl
-      s"$baseUri/complete-steps"
-    }
   }
 
   //Returns routes
@@ -102,32 +85,25 @@ trait ExternalRedirectHelper {
   lazy val returnsAgentBaseUrl: String = s"$returnsBaseUrl/agents"
 
   def returnsTaxYearSummaryIndividualUrl(taxYear: Int, origin: Option[String] = None,
-                                         fragment: Option[String] = None, returnsFrontendEnabled: Boolean): String = {
-    val baseUri = if (returnsFrontendEnabled) {
-      s"$returnsBaseUrl/tax-year-summary/$taxYear"
-    } else {
-      s"$vcFrontendBaseUrl/tax-year-summary/$taxYear"
-    }
+                                         fragment: Option[String] = None): String = {
+    val baseUri = s"$returnsBaseUrl/tax-year-summary/$taxYear"
+
     val baseUriWithOptOrigin = origin.fold(baseUri)(o => s"$baseUri?origin=$o")
     fragment.fold(baseUriWithOptOrigin)(f => s"$baseUriWithOptOrigin#$f")
   }
 
-  def returnsTaxYearSummaryAgentUrl(taxYear: Int, fragment: Option[String] = None, returnsFrontendEnabled: Boolean): String = {
-    val baseUri = if (returnsFrontendEnabled) {
-      s"$returnsAgentBaseUrl/tax-year-summary/$taxYear"
-    } else {
-      s"$vcFrontendAgentBaseUrl/tax-year-summary/$taxYear"
-    }
+  def returnsTaxYearSummaryAgentUrl(taxYear: Int, fragment: Option[String] = None): String = {
+    val baseUri = s"$returnsAgentBaseUrl/tax-year-summary/$taxYear"
     fragment.fold(baseUri)(f => s"$baseUri#$f")
   }
 
   def taxYearSummaryUrl(isAgent: Boolean, taxYear: Int,
-                        origin: Option[String] = None, fragment: Option[String] = None, returnsEnabled: Boolean = false): String = {
+                        origin: Option[String] = None, fragment: Option[String] = None): String = {
 
     if (isAgent) {
-      returnsTaxYearSummaryAgentUrl(taxYear, fragment, returnsEnabled)
+      returnsTaxYearSummaryAgentUrl(taxYear, fragment)
     } else {
-      returnsTaxYearSummaryIndividualUrl(taxYear, origin, fragment, returnsEnabled)
+      returnsTaxYearSummaryIndividualUrl(taxYear, origin, fragment)
     }
   }
 

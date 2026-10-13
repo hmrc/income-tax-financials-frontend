@@ -22,10 +22,8 @@ import play.api.mvc.Request
 import uk.gov.hmrc.auth.core.retrieve.{AgentInformation, LoginTimes}
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolments, MissingBearerToken}
 import uk.gov.hmrc.http.SessionKeys
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import java.time.Instant
-import scala.annotation.unused
 
 case class NrsMetadata(
   businessId:               String,
@@ -56,8 +54,6 @@ object NrsMetadata extends InstantFormatter {
       searchKeys:              SearchKeys,
       checkSum:                String
     ): NrsMetadata = {
-    @unused
-    val hc = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     NrsMetadata(
       businessId              = "income-tax-view-change",
       notableEvent            = "income-tax-view-change-adjust-payment-on-account",

@@ -22,7 +22,7 @@ import common.config.FrontendAppConfig
 import common.enums.{MTDIndividual, MTDUserRole}
 import common.helpers.servicemocks.AuditStub
 import common.implicits.ImplicitDateFormatterImpl
-import common.models.admin.{FeatureSwitch, NewHubContextRootEnabled}
+import common.models.admin.FeatureSwitch
 import common.models.incomeSourceDetails.{IncomeSourceDetailsModel, TaxYear}
 import common.services.{DateService, DateServiceInterface}
 import org.scalatest.*
@@ -84,9 +84,7 @@ trait ComponentSpecBase extends TestSuite with CustomMatchers
   with GuiceOneServerPerSuite with ScalaFutures with IntegrationPatience with Matchers
   with WiremockHelper with BeforeAndAfterEach with BeforeAndAfterAll with Eventually
   with SessionCookieBaker {
-
-  lazy val newHubContextRootEnabled = true
-  lazy val defaultFeatureSwitches: List[FeatureSwitch] = List(FeatureSwitch(NewHubContextRootEnabled, newHubContextRootEnabled))
+  
   val mockHost: String = WiremockHelper.wiremockHost
   val mockPort: String = WiremockHelper.wiremockPort.toString
   val mockUrl: String = s"http://$mockHost:$mockPort"
@@ -124,8 +122,7 @@ trait ComponentSpecBase extends TestSuite with CustomMatchers
       mtdUserRole,
       defaultAuthUserDetails(mtdUserRole),
       if(mtdUserRole == MTDIndividual) None else Some(defaultClientDetails),
-      incomeSources,
-      featureSwitches = defaultFeatureSwitches
+      incomeSources
     )(FakeRequest())
   }
 
@@ -134,8 +131,7 @@ trait ComponentSpecBase extends TestSuite with CustomMatchers
       testMtditid,
       mtdUserRole,
       defaultAuthUserDetails(mtdUserRole),
-      if(mtdUserRole == MTDIndividual) None else Some(defaultClientDetails),
-      featureSwitches
+      if(mtdUserRole == MTDIndividual) None else Some(defaultClientDetails)
     )(FakeRequest())
   }
 
@@ -176,7 +172,6 @@ trait ComponentSpecBase extends TestSuite with CustomMatchers
     "microservice.services.set-up-a-payment-plan.port" -> mockPort,
     "feature-switches.read-from-mongo" -> "true",
     "feature-switch.enable-time-machine" -> "false",
-    "feature-switch.enable-new-hub-context-root" -> s"$newHubContextRootEnabled",
     "time-machine.add-years" -> "0",
     "time-machine.add-days" -> "0"
   )
