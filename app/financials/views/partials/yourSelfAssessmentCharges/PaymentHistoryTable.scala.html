@@ -213,6 +213,8 @@
 
 
 @InformalSoTableRow(): Seq[TableRow] = @{
+
+// TODO needs to be removed when done
     Seq(
         TableRow(
             content = HtmlContent(viewModel.dunningLockSubItemDueDate.map(_.toLongDateShort.toNonBreaking).getOrElse(Html(messages("chargeSummary.noData"))))
@@ -230,6 +232,8 @@
 }
 
 @FormalSoTableRow(): Seq[TableRow] = @{
+
+            // TODO needs to be removed when done
     Seq(
         TableRow(
             content = HtmlContent(viewModel.dunningLockSubItemDueDate.map(_.toLongDateShort.toNonBreaking).getOrElse(Html(messages("chargeSummary.noData"))))

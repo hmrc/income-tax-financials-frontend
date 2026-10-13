@@ -57,6 +57,10 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
   val firstPaymentOnAccount1Text: String = messages("chargeSummary.chargeHistory.created.firstLatePaymentPenalty.text")
   val chargeSummaryNoDataText: String = messages("chargeSummary.noData")
 
+
+  def partialFormalAndInformalDunningLocksBannerHeading(stoodOverValue: BigDecimal): String =
+    s"${messages("chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note1", stoodOverValue)} ${messages("chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note1")}"
+
   def subItemWithClearingSapDocument(clearingSAPDocument: String): SubItem = SubItem(dueDate = Some(LocalDate.parse("2017-08-07")), clearingSAPDocument = Some(clearingSAPDocument), paymentLot = Some("lot"), paymentLotItem = Some("lotItem"))
 
   val defaultAdjustmentHistory: AdjustmentHistoryModel = AdjustmentHistoryModel(AdjustmentModel(1400, Some(LocalDate.of(2018, 3, 29)), AdjustmentReversalReason), List())
@@ -274,5 +278,77 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
         document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£1,400.00"
       }
     }
+// TODO finish with test
+    "partial informal charge is suspended with dunning lock 'Stand over order'" should {
+      "display the correct content" in new TestSetup(
+        chargeItem = chargeItemModel(
+          totalSoAmt = Some(BigDecimal(3500)),
+          collectableAmt = Some(BigDecimal(1250)),
+          dunningLock = true),
+        paymentBreakdown =
+          List(
+            FinancialDetail(
+              TaxYear.forYearEnd(2018).shortenTaxYearEnd,
+              Some("SA POA 1 Reconciliation Debit"),
+              Some("4920"),
+              Some(id1040000123),
+              Some(LocalDate.parse("2018-08-16")),
+              Some("POA1"),
+              Some("SA POA 1 Reconciliation Debit"),
+              Some(1400.00),
+              Some(1400.00),
+              Some(1400.00),
+              Some(0),
+              Some(ITSA_ENGLAND_AND_NI),
+              None,
+              Some(
+                Seq(
+                  SubItem(
+                    dueDate = Some(LocalDate.of(2019, 5, 15)),
+                    subItemId = Some("001"),
+                    amount = Some(BigDecimal("1400.00")),
+                    dunningLock = Some("Stand over order")
+                  )
+                )
+              )
+            )
+          )
+      ) {
+
+        document.select("#govuk-notification-banner-title").size() shouldBe 1
+        document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+        document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialFormalAndInformalDunningLocksBannerHeading(BigDecimal(3500))
+        document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
+        document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+        document.getElementsByClass("govuk-warning-text__text").text() shouldBe warningText
+        document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe createdYourFirstPaymentOnAccountText
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£1,400.00"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe "15 May 2019"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe createdFirstLatePaymentPenaltyStoodOverText
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£1,400.00"
+      }
+
+      "display the correct content when first lpp with dunningLock" in new TestSetup(
+        chargeItem = financialDetailsLatePaymentPenalties.head.copy(dunningLock = true)
+      ) {
+        document.select("#govuk-notification-banner-title").size() shouldBe 1
+        document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+        document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe dunningLocksBannerHeading
+        document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
+        document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+        document.getElementsByClass("govuk-warning-text__text").text() shouldBe warningText
+        document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2022 to 2023 tax bill."
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe firstLatePaymentPenaltyText
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£1,400.00"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe chargeSummaryNoDataText
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe createdFirstLatePaymentPenaltyStoodOverText
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£43.21"
+      }
+    }
+
+
   }
 }

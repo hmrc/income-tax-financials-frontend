@@ -42,11 +42,12 @@
 
 
 @html = {
-    @{(latePaymentInterestCharge, chargeItem.dunningLock, chargeItem.isFormalStandOverCharge) match {
-        case (_, _, true) => FormalSoContent()
-        case (false , true, _) if chargeHistoryEnabled => PaymentInformalSoContent()
-        case (true , true, _) if chargeHistoryEnabled => LpiInformalSoContent()
-        case (true, false, _) => LpiContent()
+    @{(latePaymentInterestCharge, chargeItem.dunningLock, chargeItem.isFormalStandOverCharge, chargeItem.isPartialStoodOver) match {
+        case (_, _, _, true) => PartialFormalAndInformalSoContent()
+        case (_, _, true, false) => FormalSoContent()
+        case (false , true, _, false) if chargeHistoryEnabled => PaymentInformalSoContent()
+        case (true , true, _, false) if chargeHistoryEnabled => LpiInformalSoContent()
+        case (true, false, _, false) => LpiContent()
         case _ => DefaultContent()
     }}
 }
@@ -70,6 +71,12 @@
 
 @LpiInformalSoContent() = {
     <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.informal.standover.banner.note1")</p>
+}
+
+@PartialFormalAndInformalSoContent() = {
+    @* TODO - update the content *@
+    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note1", chargeItem.totalSoAmt.getOrElse(BigDecimal(0)).toCurrencyString)</p>
+    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note2")</p>
 }
 
 @LpiContent() = {

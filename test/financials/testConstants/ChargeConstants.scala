@@ -52,7 +52,8 @@ trait ChargeConstants {
                       chargeClassification: Option[String] = None,
                       isRevenueAmendment: Boolean = false,
                       dunningLockValue: Option[String] = None,
-                      totalSoAmt: Option[BigDecimal] = None
+                      totalSoAmt: Option[BigDecimal] = None,
+                      collectableAmt: Option[BigDecimal] = None,
                      ): ChargeItem = ChargeItem(
     transactionId = transactionId,
     taxYear = taxYear,
@@ -76,6 +77,7 @@ trait ChargeConstants {
     chargeClassification = chargeClassification,
     isRevenueAmendment = isRevenueAmendment,
     totalSoAmt = totalSoAmt,
+    collectableAmt = collectableAmt,
     dunningLockValue = dunningLockValue
   )
 
