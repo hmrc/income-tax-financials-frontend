@@ -33,7 +33,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
-import scala.annotation.{nowarn, unused}
+import scala.annotation.nowarn
 import scala.concurrent.{ExecutionContext, Future}
 
 // Added @nowarn annotation to suppress compiler warning on line 69. As the filed name from Retrieval had been deprecated since 2024-02-26. But we are still using it (https://jira.tools.tax.service.gov.uk/browse/MISUV-11315)
@@ -118,8 +118,7 @@ class AuthoriseAndRetrieveAgentForNrs @Inject()(val authorisedFunctions: Fronten
       )
   }
 
-  private def redirectIfNonAgent[A]()(
-    implicit @unused request: Request[A]): PartialFunction[NrsAgentAuthRetrievals, Future[Either[Result, AuthorisedUserRequest[A]]]] = {
+  private def redirectIfNonAgent[A](): PartialFunction[NrsAgentAuthRetrievals, Future[Either[Result, AuthorisedUserRequest[A]]]] = {
     case _ ~ _ ~ _ ~ Some(ag@(Organisation | Individual)) ~ _ ~ _ ~ _ ~ _ ~ _ ~
       _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ =>
       logger.error(s"$ag on endpoint for agents")

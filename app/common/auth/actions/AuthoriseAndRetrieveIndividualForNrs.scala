@@ -22,7 +22,7 @@ import common.config.FrontendAppConfig
 import common.enums.MTDIndividual
 import common.models.audit.IvUpliftRequiredAuditModel
 import common.services.AuditingService
-import common.utils.AuthUtils.{ORIGIN, mtdEnrolmentName}
+import common.utils.AuthUtils.mtdEnrolmentName
 import common.viewUtils.InternalUrlHelper
 import play.api.Logging
 import play.api.mvc.*
@@ -37,7 +37,7 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import java.net.URLEncoder
 import javax.inject.Inject
-import scala.annotation.{nowarn, unused}
+import scala.annotation.nowarn
 import scala.concurrent.{ExecutionContext, Future}
 
 // Added @nowarn annotation to suppress compiler warning on line 73. As the filed name from Retrieval had been deprecated since 2024-02-26. But we are still using it (https://jira.tools.tax.service.gov.uk/browse/MISUV-11315)
@@ -77,14 +77,12 @@ class AuthoriseAndRetrieveIndividualForNrs @Inject()(val authorisedFunctions: Fr
   // this URL is incorrect in live - the completion and failure URLs must be URL encoded
   def ivUpliftRedirectUrl[A](implicit request: Request[A]):String = {
     val host = if (appConfig.relativeIVUpliftParams) "" else appConfig.baseUrl
-    @unused val origin = request.getQueryString(ORIGIN)
     val completionUrl: String = s"$host${InternalUrlHelper.upliftSuccessUrl}"
     val failureUrl: String = s"$host${InternalUrlHelper.upliftFailureUrl}"
     s"${appConfig.ivUrl}/uplift?origin=ITVC&confidenceLevel=$requiredConfidenceLevel&completionURL=${URLEncoder.encode(completionUrl, "UTF-8")}&failureURL=${URLEncoder.encode(failureUrl, "UTF-8")}"
   }
 
-  private def redirectIfAgentNrs[A]()(
-    implicit @unused request: Request[A]): PartialFunction[NrsIndividualAuthRetrievals, Future[Either[Result, AuthorisedAndEnrolledRequest[A]]]] = {
+  private def redirectIfAgentNrs[A](): PartialFunction[NrsIndividualAuthRetrievals, Future[Either[Result, AuthorisedAndEnrolledRequest[A]]]] = {
     case _ ~ _ ~ _ ~ Some(Agent) ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ ~ _ =>
       logger.error(s"Agent on endpoint for individuals")
       Future.successful(Left(Redirect(appConfig.enterClientsUTRUrl)))
