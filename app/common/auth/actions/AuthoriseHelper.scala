@@ -21,11 +21,11 @@ import common.config.FrontendAppConfig
 import common.config.featureswitch.FeatureSwitching
 import common.viewUtils.InternalUrlHelper
 import play.api.Logging
+import play.api.mvc.Result
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{Request, Result}
-import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core.*
-import uk.gov.hmrc.auth.core.retrieve.{AgentInformation, Credentials, ItmpAddress, ItmpName, LoginTimes, MdtpInformation, Name, ~}
+import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
+import uk.gov.hmrc.auth.core.retrieve.*
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -58,15 +58,13 @@ trait AuthoriseHelper extends FeatureSwitching with Logging {
   }
 
 
-  def redirectIfAgent[A]()(
-    implicit request: Request[A]): PartialFunction[AuthRetrievals, Future[Either[Result, AuthorisedAndEnrolledRequest[A]]]] = {
+  def redirectIfAgent[A](): PartialFunction[AuthRetrievals, Future[Either[Result, AuthorisedAndEnrolledRequest[A]]]] = {
     case _ ~ _ ~ _ ~ Some(Agent) ~ _ =>
       logger.error(s"Agent on endpoint for individuals")
       Future.successful(Left(Redirect(appConfig.enterClientsUTRUrl)))
   }
 
-  def redirectIfNotAgent[A]()(
-    implicit request: Request[A]): PartialFunction[AuthRetrievals, Future[Either[Result, AuthorisedAndEnrolledRequest[A]]]] = {
+  def redirectIfNotAgent[A](): PartialFunction[AuthRetrievals, Future[Either[Result, AuthorisedAndEnrolledRequest[A]]]] = {
     case _ ~ _ ~ _ ~ Some(ag@(Organisation | Individual)) ~ _ =>
       logger.error(s"$ag on endpoint for agents")
       Future.successful(Left(Redirect(appConfig.individualHomeUrl)))
