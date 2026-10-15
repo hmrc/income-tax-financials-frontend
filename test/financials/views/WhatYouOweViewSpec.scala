@@ -1120,9 +1120,10 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
         pageDocument.title() shouldBe whatYouOweTitle
         pageDocument.selectFirst("h1").text shouldBe whatYouOweHeading
         pageDocument.getElementsByTag("h2").text should include(saNote1Heading)
-        pageDocument.getElementById("payments-due-note").selectFirst("a").text.contains(saNote1_1)
-        pageDocument.getElementById("payments-due-note").selectFirst("a").text.contains(saNote1_2)
-        pageDocument.getElementById("payments-due-note").selectFirst("a").text.contains(saNote2)
+        val paragraphs = pageDocument.getElementById("payments-due-note").select("p")
+        paragraphs.get(0).text shouldBe saNote1_1
+        paragraphs.get(1).text shouldBe saNote1_2
+        paragraphs.get(2).text shouldBe saNote2
         pageDocument.getElementById("outstanding-charges-note-migrated").text shouldBe osChargesNote
 
       }
@@ -1147,8 +1148,8 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
         pageDocument.title() shouldBe whatYouOweTitle
         pageDocument.selectFirst("h1").text shouldBe whatYouOweHeading
         pageDocument.getElementById("no-payments-due").text shouldBe noPaymentsDue
-        pageDocument.getElementsByTag("h2").eq(1).text shouldBe preMtdHeading
-        pageDocument.getElementById("payments-due-note").selectFirst("a").text.contains(preMtdSaBody)
+        pageDocument.getElementsByTag("h2").get(1).text shouldBe preMtdHeading
+        pageDocument.getElementById("sa-note-2-migrated").text shouldBe preMtdSaBody
         pageDocument.getElementById("outstanding-charges-note-migrated").text shouldBe preMtdOsChargesNote
 
       }
@@ -1171,7 +1172,7 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
         findElementById("sa-note-1-migrated-1") shouldBe None
         findElementById("sa-note-1-migrated-2") shouldBe None
         pageDocument.getElementById("sa-note-1-migrated-3").text shouldBe saAdjustLink
-        pageDocument.getElementsByTag("h2").eq(1).text shouldBe preMtdHeading
+        pageDocument.getElementsByTag("h2").get(1).text shouldBe preMtdHeading
         pageDocument.getElementById("sa-note-2-migrated").text shouldBe preMtdSaBody
       }
     }
@@ -1229,7 +1230,7 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
     "have an HMRC adjustment payment due" in new TestSetup(charges = whatYouOweDataWithMFADebits) {
       pageDocument.title() shouldBe whatYouOweTitle
       pageDocument.selectFirst("h1").text shouldBe whatYouOweHeading
-      pageDocument.getElementById("due-0").text.contains(hmrcAdjustment)
+      pageDocument.getElementById("due-0").text should include(hmrcAdjustment)
       pageDocument.select("#due-0 a").get(0).text() shouldBe hmrcAdjustment + s" 1"
       pageDocument.select("#what-you-owe-payments-due-table tbody > tr").size() shouldBe 1
     }
@@ -1286,9 +1287,9 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
       s"have the title ${messages("agent.header.serviceName", messages("whatYouOwe.heading-agent"))} and page header and notes" in new AgentTestSetup(charges = noChargesButCodedOutModel) {
         pageDocument.title() shouldBe messages("htmlTitle", messages("whatYouOwe.heading"))
         pageDocument.selectFirst("h1").text shouldBe whatYouOweAgentHeading
-        pageDocument.getElementById("payments-due-note").selectFirst("a").text.contains(saNote1_1)
-        pageDocument.getElementById("payments-due-note").selectFirst("a").text.contains(saNote1_2)
-        pageDocument.getElementById("payments-due-note").selectFirst("a").text.contains(saNote2)
+        pageDocument.getElementById("sa-note-1-migrated-1").text shouldBe saNote1_1
+        pageDocument.getElementById("sa-note-1-migrated-2").text shouldBe saNote1_2
+        pageDocument.getElementById("sa-note-2-migrated").text shouldBe saNote2Agent
         pageDocument.getElementById("outstanding-charges-note-migrated").text shouldBe osChargesNote
       }
     }
@@ -1298,9 +1299,7 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
         pageDocument.title() shouldBe messages("htmlTitle", messages("whatYouOwe.heading"))
         pageDocument.selectFirst("h1").text shouldBe whatYouOweAgentHeading
         pageDocument.getElementById("no-payments-due").text shouldBe noPaymentsAgentDue
-        pageDocument.getElementById("payments-due-note").selectFirst("a").text.contains(saNote1_1)
-        pageDocument.getElementById("payments-due-note").selectFirst("a").text.contains(saNote1_2)
-        pageDocument.getElementById("payments-due-note").selectFirst("a").text.contains(saNote2)
+        pageDocument.getElementById("sa-note-2-migrated").text shouldBe saNote2Agent
         pageDocument.getElementById("outstanding-charges-note-migrated").text shouldBe osChargesNote
       }
     }

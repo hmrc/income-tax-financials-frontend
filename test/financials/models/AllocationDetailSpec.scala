@@ -137,7 +137,7 @@ class AllocationDetailSpec extends TestSupport with Matchers {
       }
       "return value" when {
         "value is present" in{
-          allocationDetails(Some("SA Payment on Account 1"), Some("NIC4"), None).amountActual.equals(BigDecimal(10000.0))
+          allocationDetails(Some("SA Payment on Account 1"), Some("NIC4"), None).amountActual shouldBe BigDecimal(10000.0)
         }
       }
     }

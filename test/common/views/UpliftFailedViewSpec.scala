@@ -19,8 +19,6 @@ package common.views
 import common.testUtils.ViewSpec
 import common.views.html.errorPages.UpliftFailedView
 import play.twirl.api.Html
-import play.twirl.api.TwirlHelperImports.twirlJavaCollectionToScala
-
 
 class UpliftFailedViewSpec extends ViewSpec {
 
@@ -29,36 +27,29 @@ class UpliftFailedViewSpec extends ViewSpec {
   "The Uplift Failed Error page" should {
 
     s"have the title: ${messages("htmlTitle.errorPage", messages("upliftFailure.title"))}" in new Setup(upliftFailedView) {
-
       document.title() shouldBe messages("htmlTitle.errorPage", messages("upliftFailure.title"))
     }
 
     s"have the heading: ${messages("upliftFailure.title")}" in new Setup(upliftFailedView) {
-
       document hasPageHeading messages("upliftFailure.title")
     }
 
     s"have the content ${messages("upliftFailure.content")}" in new Setup(upliftFailedView) {
-
       layoutContent.select(Selectors.p).text shouldBe messages("upliftFailure.content")
     }
 
     "not have a back link" in new Setup(upliftFailedView) {
-
       document doesNotHave Selectors.backLink
     }
 
     "have the list elements" in new Setup(upliftFailedView) {
-
       document.select("li").get(2).text() shouldBe messages("upliftFailure.bullet.1")
       document.select("li").get(3).text() shouldBe messages("upliftFailure.bullet.2")
       document.select("li").get(4).text() shouldBe messages("upliftFailure.bullet.3")
     }
 
     s"have the link ${messages("Return to Sign in")}" in new Setup(upliftFailedView){
-
-      document.select("a").eachText().toList.contains(messages("Return to Sign in"))
+      document.select("a").eachText().get(6) shouldBe messages("Return to Sign in")
     }
   }
-
 }

@@ -214,12 +214,12 @@ class PaymentAllocationViewSpec extends ViewSpec with ImplicitDateFormatter {
 
       "has a payment within the table right aligned" in new PaymentAllocationSetup() {
         val allTableData: Element = document.selectHead("tbody").selectHead("tr")
-        allTableData.selectNth("td", 4).hasClass("govuk-table__cell--numeric")
+        allTableData.selectNth("td", 4).className() should include("govuk-table__cell--numeric")
       }
 
       "has a payment headers right aligned" in new PaymentAllocationSetup() {
         val allTableData: Element = document.selectHead("thead").selectHead("tr")
-        allTableData.selectNth("th", 4).hasClass("govuk-table__header--numeric")
+        allTableData.selectNth("th", 4).className() should include("govuk-table__header--numeric")
       }
 
       "Show no data when there is no TaxPeriod End date supplied" in new PaymentAllocationSetup(viewModel = paymentAllocationViewModelWithNoTaxPeriodEndDate) {
@@ -289,7 +289,7 @@ class PaymentAllocationViewSpec extends ViewSpec with ImplicitDateFormatter {
 
       "has a payment within the table right aligned" in new PaymentAllocationSetup(paymentAllocationViewModelLpi) {
         val allTableData: Element = document.selectHead("tbody").selectHead("tr")
-        allTableData.selectNth("td", 3).hasClass("govuk-table__cell--numeric")
+        allTableData.selectNth("td", 4).className() should include("govuk-table__cell--numeric")
       }
     }
   }
