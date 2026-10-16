@@ -16,7 +16,7 @@
 
 package common.connectors
 
-import common.models.sessionData.SessionDataGetResponse.SessionDataGetSuccess
+import common.models.sessionData.SessionDataGetResponse.{SessionDataGetSuccess}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.http.Status.OK
@@ -45,9 +45,7 @@ class GetSessionDataConnectorSpec extends BaseConnectorSpec {
         when(mockRequestBuilder.execute(any[HttpReads[HttpResponse]], any()))
           .thenReturn(Future.successful(HttpResponse(OK, Json.toJson(successResponse), Map.empty)))
 
-        connector.getSessionData().map { result =>
-          result shouldBe successResponse
-        }
+        connector.getSessionData().futureValue shouldBe Right(successResponse)
       }
     }
   }
