@@ -97,9 +97,9 @@ class WhatYouOweController @Inject()(val authActions: AuthActions,
 
   private def getAdjustPoaUrl(implicit user: MtdItUser[_]): String = claimToAdjustPoaRoutes.AmendablePoaController.show(user.isAgent).url
 
-  private def getChargeSummaryUrl(implicit user: MtdItUser[_]): (Int, String, Boolean, Option[String]) => String = (taxYearEnd: Int, transactionId: String, isInterest: Boolean, origin: Option[String]) => {
-    if (user.isAgent) routes.ChargeSummaryController.showAgent(taxYearEnd, transactionId, isInterest).url
-    else routes.ChargeSummaryController.show(taxYearEnd, transactionId, isInterest, origin).url
+  private def getChargeSummaryUrl(implicit user: MtdItUser[_]): (Int, String, Boolean, Option[String], Boolean) => String = (taxYearEnd: Int, transactionId: String, isInterest: Boolean, origin: Option[String], isPartialSuspendedCharge: Boolean) => {
+    if (user.isAgent) routes.ChargeSummaryController.showAgent(taxYearEnd, transactionId, isInterest, isPartialSuspendedCharge).url
+    else routes.ChargeSummaryController.show(taxYearEnd, transactionId, isInterest, origin, isPartialSuspendedCharge).url
   }
 
   private def getInterstitialUrl(origin: Option[String], isAgent: Boolean): Long => String = {

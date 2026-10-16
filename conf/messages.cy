@@ -2760,7 +2760,6 @@ yourSelfAssessmentChargeSummary.itsaReturnAmendmentCredit.text.heading          
 yourSelfAssessmentChargeSummary.enquiryAmendmentCredit.text.heading                 = Credyd o ddiwygiad yn sgil ymholiad gan CThEF
 yourSelfAssessmentChargeSummary.hmrcCorrection.text.heading                         = Diwygiad CThEF: swm ychwanegol i’w dalu o ganlyniad i gywiro Ffurflen Dreth
 yourSelfAssessmentChargeSummary.unknown.heading                                     = Anhysbys
-yourSelfAssessmentChargeSummary.enquiryAmendment.text.heading                       = Swm ychwanegol i’w dalu oherwydd diwygiad yn sgil ymholiad gan CThEF
 
 yourSelfAssessmentChargeSummary.poa1CodedOut.text.heading                           = Taliad cyntaf ar gyfrif sy’n cael ei gasglu drwy’ch cod treth TWE
 yourSelfAssessmentChargeSummary.poa2CodedOut.text.heading                           = Ail daliad ar gyfrif sy’n cael ei gasglu drwy’ch cod treth TWE

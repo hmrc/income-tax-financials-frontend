@@ -2737,7 +2737,6 @@ yourSelfAssessmentChargeSummary.itsaReturnAmendmentCredit.text.heading          
 yourSelfAssessmentChargeSummary.enquiryAmendmentCredit.text.heading                 = Credit from HMRC enquiry amendment
 yourSelfAssessmentChargeSummary.hmrcCorrection.text.heading                         = HMRC amendment: extra amount to pay due to corrected tax return
 yourSelfAssessmentChargeSummary.unknown.heading                                     = Unknown
-yourSelfAssessmentChargeSummary.enquiryAmendment.text.heading                       = Extra amount to pay due to HMRC enquiry amendment
 
 yourSelfAssessmentChargeSummary.lpi.paymentOnAccount1.text.heading					= Late payment interest on first payment on account
 yourSelfAssessmentChargeSummary.lpi.paymentOnAccount2.text.heading					= Late payment interest on second payment on account

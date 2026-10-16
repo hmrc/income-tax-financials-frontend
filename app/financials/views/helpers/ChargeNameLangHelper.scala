@@ -22,9 +22,14 @@ import play.api.i18n.Messages
 
 object ChargeNameLangHelper {
 
-  def getHeading(chargeItem: ChargeItem, isInterestCharge: Boolean)(implicit messages: Messages): String = {
+  def getHeading(chargeItem: ChargeItem,
+                 isInterestCharge: Boolean,
+                 isPartialSuspendedCharge: Boolean,
+                 isStoodOverEnabled: Boolean)(implicit messages: Messages): String = {
     val messagePrefix = if (isInterestCharge) "lpi." else ""
-    if(chargeItem.isFormalStandOverCharge)
+    if(isStoodOverEnabled && chargeItem.isPartialStoodOver && chargeItem.isFormalStandOverCharge && !isPartialSuspendedCharge)
+      messages("yourSelfAssessmentChargeSummary.enquiryAmendment.text.heading")
+    else if(chargeItem.isFormalStandOverCharge)
       messages("chargeSummary.dunning.locks.formal.standover.heading")
     else
       messages(s"yourSelfAssessmentChargeSummary.$messagePrefix${chargeItem.getChargeTypeKey}.heading")

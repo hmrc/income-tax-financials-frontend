@@ -18,7 +18,7 @@ package financials.testConstants
 
 import common.models.incomeSourceDetails.TaxYear
 import common.services.{DateService, DateServiceInterface}
-import financials.enums.ChargeType.NIC4_WALES
+import financials.enums.ChargeType.{ITSA_ENGLAND_AND_NI, NIC4_WALES}
 import financials.models.*
 import financials.models.outstandingCharges.{OutstandingChargeModel, OutstandingChargesModel}
 import financials.testConstants.FinancialDetailsTestConstants.{outstandingChargesModel, *}
@@ -964,6 +964,39 @@ trait ChargeConstants {
     outstandingInterest = List(Some(100), Some(40)),
     interestEndDate = List(Some(LocalDate.of(2100, 1, 1)), Some(LocalDate.of(2100, 1, 1))),
     interestRate = List(Some(10), Some(10))
+  )
+
+  def financialDetailsWithDunningLock(dunningLock: Option[String] = Some("Stand over order")): List[FinancialDetail] = List(
+    FinancialDetail(
+      TaxYear.forYearEnd(2018).shortenTaxYearEnd,
+      Some("SA POA 1 Reconciliation Debit"),
+      Some("4920"),
+      Some(id1040000123),
+      Some(LocalDate.parse("2018-08-16")),
+      Some("POA1"),
+      Some("SA POA 1 Reconciliation Debit"),
+      Some(4750.00),
+      Some(4750.00),
+      Some(4750.00),
+      Some(0),
+      Some(ITSA_ENGLAND_AND_NI),
+      None,
+      Some(
+        Seq(
+          SubItem(
+            dueDate = Some(LocalDate.of(2019, 5, 15)),
+            subItemId = Some("001"),
+            amount = Some(BigDecimal("4750.00"))
+          ),
+          SubItem(
+            dueDate = Some(LocalDate.of(2019, 5, 15)),
+            subItemId = Some("001"),
+            amount = Some(BigDecimal("3500.00")),
+            dunningLock = dunningLock
+          ),
+        )
+      )
+    )
   )
 
   def whatYouOweDataWithMixedData1(codedOutDetails: Option[CodingOutDetails] = None): WhatYouOweChargesList = WhatYouOweChargesList(

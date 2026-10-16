@@ -20,7 +20,7 @@ import common.auth.{AuthActions, MtdItUser}
 import common.config.featureswitch.*
 import common.config.{AgentItvcErrorHandler, FrontendAppConfig, ItvcErrorHandler}
 import common.enums.GatewayPage.GatewayPage
-import common.models.admin.{ChargeHistory, CreditsRefundsRepay, PenaltiesAndAppeals, ReturnsFrontend}
+import common.models.admin.{ChargeHistory, CreditsRefundsRepay, PenaltiesAndAppeals, ReturnsFrontend, StoodOverCharges}
 import common.models.core.Nino
 import common.models.incomeSourceDetails.TaxYear
 import common.services.{AuditingService, DateServiceInterface}
@@ -83,7 +83,7 @@ class ChargeSummaryController @Inject()(val authActions: AuthActions,
     fdm.financialDetails.exists(fd => fd.transactionId.contains(id) && MfaDebitUtils.isMFADebitMainTransaction(fd.mainTransaction))
   }
 
-  def handleRequest(taxYear: Int, id: String, isInterestCharge: Boolean = false, isAgent: Boolean, origin: Option[String] = None)
+  def handleRequest(taxYear: Int, id: String, isInterestCharge: Boolean = false, isAgent: Boolean, origin: Option[String] = None, isPartialSuspendedCharge: Boolean = false)
                    (implicit user: MtdItUser[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Result] = {
     //TODO: Remove multi-year call
     financialDetailsService.getAllFinancialDetails.flatMap { financialResponses =>
@@ -126,8 +126,8 @@ class ChargeSummaryController @Inject()(val authActions: AuthActions,
             if (selectedTaxYear != taxYear) {
 
               val redirectCall =
-                if (isAgent) routes.ChargeSummaryController.showAgent(selectedTaxYear, id, isInterestCharge)
-                else routes.ChargeSummaryController.show(selectedTaxYear, id, isInterestCharge, origin)
+                if (isAgent) routes.ChargeSummaryController.showAgent(selectedTaxYear, id, isInterestCharge, isPartialSuspendedCharge)
+                else routes.ChargeSummaryController.show(selectedTaxYear, id, isInterestCharge, origin, isPartialSuspendedCharge)
 
               val redirectUrl =
                 codedOutParam match {
@@ -163,16 +163,16 @@ class ChargeSummaryController @Inject()(val authActions: AuthActions,
     }
   }
 
-  def show(taxYear: Int, id: String, isInterestCharge: Boolean = false, origin: Option[String] = None): Action[AnyContent] =
+  def show(taxYear: Int, id: String, isInterestCharge: Boolean = false, origin: Option[String] = None, isPartialSuspendedCharge: Boolean = false): Action[AnyContent] =
     authActions.asMTDIndividual().async {
       implicit user =>
-        handleRequest(taxYear, id, isInterestCharge, isAgent = false, origin)
+        handleRequest(taxYear, id, isInterestCharge, isAgent = false, origin, isPartialSuspendedCharge)
     }
 
-  def showAgent(taxYear: Int, id: String, isInterestCharge: Boolean = false): Action[AnyContent] =
+  def showAgent(taxYear: Int, id: String, isInterestCharge: Boolean = false, isPartialSuspendedCharge: Boolean = false): Action[AnyContent] =
     authActions.asMTDPrimaryAgent().async {
       implicit mtdItUser =>
-        handleRequest(taxYear, id, isInterestCharge, isAgent = true)
+        handleRequest(taxYear, id, isInterestCharge, isAgent = true, isPartialSuspendedCharge = isPartialSuspendedCharge)
     }
 
 
@@ -276,7 +276,7 @@ class ChargeSummaryController @Inject()(val authActions: AuthActions,
                     mandatoryViewDataPresent(isInterestCharge, documentDetailWithDueDate) match {
                       case Right(_) => Ok {
                         if (chargeItem.isIncludedInSACSummary) {
-                          yourSelfAssessmentChargeSummary(viewModel, allocationData, whatYouOweUrl)
+                          yourSelfAssessmentChargeSummary(viewModel, allocationData, whatYouOweUrl, isEnabled(StoodOverCharges))
                         } else
                           chargeSummaryView(viewModel, whatYouOweUrl)
                       }
