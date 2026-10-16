@@ -21,6 +21,7 @@ import common.testUtils.TestSupport
 import financials.connectors.NrsConnector
 import financials.models.nrs.NrsSubmissionFailure.NrsErrorResponse
 import financials.models.nrs.NrsSuccessResponse
+import org.mockito.ArgumentMatchers.{any, anyInt, eq as eqTo}
 import org.mockito.Mockito.*
 import play.api.http.Status.NOT_FOUND
 
@@ -41,20 +42,16 @@ class NrsServiceSpec extends TestSupport{
     "return Some(response) when connector returns Right" in {
       when(mockNrsConnector.submit(nrsSubmission)).thenReturn(Future.successful(Right(NrsSuccessResponse("submissionId"))))
 
-      TestNrsService.submit(nrsSubmission).map { result =>
-        result shouldBe Future.successful(Some(NrsSuccessResponse("submissionId")))
-        verify(mockNrsConnector, times(1)).submit(nrsSubmission)
-      }
+      TestNrsService.submit(nrsSubmission).futureValue shouldBe Some(NrsSuccessResponse("submissionId"))
+      verify(mockNrsConnector, times(1)).submit(eqTo(nrsSubmission), anyInt())(any())
     }
 
     "return None when connector returns Left" in {
       val error = NrsErrorResponse(NOT_FOUND)
       when(mockNrsConnector.submit(nrsSubmission)).thenReturn(Future.successful(Left(error)))
 
-      TestNrsService.submit(nrsSubmission).map { result =>
-        result shouldBe Future.successful(Some(NrsSuccessResponse("submissionId")))
-        verify(mockNrsConnector, times(1)).submit(nrsSubmission)
-      }
+      TestNrsService.submit(nrsSubmission).futureValue shouldBe None
+      verify(mockNrsConnector, times(1)).submit(eqTo(nrsSubmission), anyInt())(any())
     }
   }
 }

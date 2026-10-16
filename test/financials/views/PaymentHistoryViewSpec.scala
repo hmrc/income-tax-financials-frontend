@@ -79,7 +79,6 @@ class PaymentHistoryViewSpec extends ViewSpec with ImplicitDateFormatter {
 
     val info: String = s"${messages("PaymentHistory.classicSA")} ${messages("taxYears.oldSa.content.link")} ${messages("pagehelp.opensInNewTabText")}."
 
-    def button(year: Int): String = s"$year payments"
 
     val paymentToHmrc: String = messages("paymentHistory.paymentToHmrc")
 
@@ -90,7 +89,7 @@ class PaymentHistoryViewSpec extends ViewSpec with ImplicitDateFormatter {
     val paymentHeadingDescription: String = messages("paymentHistory.table.header.description")
     val paymentHeadingTaxYear: String = messages("paymentHistory.tableHead.taxYear")
     val paymentHeadingAmount: String = messages("paymentHistory.table.header.amount")
-    val partialH2Heading = "payments"
+    def getTableCaptionText(year: Int): String = messages("paymentHistory.button", year.toString)
     val saLink: String = s"${messages("credits.drop-down-list.sa-link")} ${messages("pagehelp.opensInNewTabText")}"
   }
 
@@ -218,7 +217,7 @@ class PaymentHistoryViewSpec extends ViewSpec with ImplicitDateFormatter {
       s"the user has has a payment history for multiple years" should {
         s"have the table caption" in new PaymentHistorySetup(paymentEntriesMFA) {
           layoutContent.selectHead("div").selectNth("div", 2).selectHead("table")
-            .selectHead("caption").text.contains(PaymentHistoryMessages.partialH2Heading)
+            .selectHead("caption").text shouldBe PaymentHistoryMessages.getTableCaptionText(paymentEntriesMFA.head._1)
         }
         s"have table headings for each table column" in new PaymentHistorySetup(paymentEntriesMFA) {
           val row: Element = layoutContent.selectHead("div").selectNth("div", 2).selectHead("table").selectHead("thead").selectHead("tr")
@@ -229,7 +228,7 @@ class PaymentHistoryViewSpec extends ViewSpec with ImplicitDateFormatter {
         }
         s"have table headings for amount column right aligned" in new PaymentHistorySetup(paymentEntriesMFA) {
           val row: Element = layoutContent.selectHead("div").selectNth("div", 2).selectHead("table").selectHead("thead").selectHead("tr")
-          row.selectNth("th", 3).hasClass("govuk-table__header--numeric")
+          row.selectNth("th", 3).className() shouldBe "govuk-table__header"
         }
 
         s"have the information  ${PaymentHistoryMessages.info}" in new PaymentHistorySetup(paymentEntriesMFA) {
@@ -284,10 +283,9 @@ class PaymentHistoryViewSpec extends ViewSpec with ImplicitDateFormatter {
 
       s"should have a amount column right aligned" in new PaymentHistorySetup(groupedRepayments) {
         val tbody: Element = layoutContent.selectHead("table > tbody")
-
-        tbody.selectNth("tr", 1).selectNth("td", 3).hasClass("govuk-table__cell--numeric")
-        tbody.selectNth("tr", 2).selectNth("td", 3).hasClass("govuk-table__cell--numeric")
-        tbody.selectNth("tr", 3).selectNth("td", 3).hasClass("govuk-table__cell--numeric")
+        tbody.selectNth("tr", 1).selectNth("td", 4).className() should include("govuk-table__cell--numeric")
+        tbody.selectNth("tr", 2).selectNth("td", 4).className() should include("govuk-table__cell--numeric")
+        tbody.selectNth("tr", 3).selectNth("td", 4).className() should include("govuk-table__cell--numeric")
       }
     }
 
