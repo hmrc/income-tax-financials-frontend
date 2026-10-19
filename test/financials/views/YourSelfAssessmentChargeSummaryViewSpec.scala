@@ -103,7 +103,8 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
                   adjustmentHistory: AdjustmentHistoryModel = defaultAdjustmentHistory,
                   poaExtraChargeLink: Option[String] = None,
                   whatYouOweUrl: String = financialsRoutes.WhatYouOweController.show().url,
-                  taxYearSummaryUrl: Int => String = (taxYear: Int) => appConfig.taxYearSummaryUrl(false, 2018, returnsEnabled = true),
+                  taxYearSummaryUrl: Int => String = (taxYear: Int) => appConfig.taxYearSummaryUrl(false, 2018)) {
+                  taxYearSummaryUrl: Int => String = (taxYear: Int) => appConfig.taxYearSummaryUrl(false, 2018),
                   isStoodOverEnabled: Boolean = false,
                   mockFakeRequest: FakeRequest[AnyContentAsEmpty.type] = fakeRequest) {
 

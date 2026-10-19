@@ -17,7 +17,6 @@
 package financials.controllers.agent.errors
 
 import common.controllers.ControllerISpecHelper
-import common.helpers.servicemocks.FeatureSwitchStub.stubGetFeatureSwitches
 import common.helpers.servicemocks.MTDAgentAuthStub
 import play.api.http.Status.*
 
@@ -29,7 +28,6 @@ class AgentNotFoundDocumentIDLookupControllerISpec extends ControllerISpecHelper
 
     "user is authorised" should {
       "respond with the correct page" in {
-        stubGetFeatureSwitches(List(), newHubContextRootEnabled)
         MTDAgentAuthStub.stubNoAgentEnrolmentRequiredSuccess()
 
         val res = buildGETMTDClient(agentErrorUri).futureValue
