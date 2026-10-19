@@ -126,7 +126,6 @@
     ))
 
   @if(!viewModel.chargeItem.isCredit && !viewModel.latePaymentInterestCharge) {
-@*      TODO Check if this needs to be changed for --  Amount suspended: -- to You Owe:  *@
      <h2 class="govuk-heading-m" id="charge-amount-heading"> @{
           s"${
               getMessage(
@@ -137,8 +136,9 @@
                   else if(viewModel.chargeItem.isOverdue() || viewModel.chargeItem.isPaid) "overDueCharge"
                   else "charge"
               )
-                      /*      TODO Check extract this logic  */
-          }\t${if (isStoodOverEnabled && !isPartialSuspendedCharge) viewModel.chargeItem.collectableAmt.map(_.toCurrencyString).getOrElse(0) else if (request.getQueryString("isPartialSuspendedCharge").contains("true")) viewModel.chargeItem.totalSoAmt.map(_.toCurrencyString).getOrElse(0) else viewModel.chargeItem.outstandingAmount.toCurrencyString}${
+          }\t${if (isStoodOverEnabled && !isPartialSuspendedCharge) viewModel.chargeItem.collectableAmt.map(_.toCurrencyString).getOrElse(0)
+                    else if (request.getQueryString("isPartialSuspendedCharge").contains("true")) viewModel.chargeItem.totalSoAmt.map(_.toCurrencyString).getOrElse(0)
+                    else viewModel.chargeItem.outstandingAmount.toCurrencyString}${
               if(viewModel.chargeItem.interestOutstandingAmount && viewModel.chargeItem.outstandingAmount > 0)
                   s"\t${
                       messages("yourSelfAssessmentChargeSummary.reviewAndReconcile.heading2.youOwe")
@@ -201,7 +201,6 @@
   }
 
     @if(viewModel.latePaymentInterestCharge) {
-        @*      TODO Check if this needs to be changed for --  Amount suspended: -- to You Owe:  *@
         <h2 class="govuk-heading-m" id="charge-amount-heading"> @{
             s"${
                 getMessage(
@@ -228,8 +227,8 @@
 
         @chargeDetails(viewModel)
     }
+    
     @if(viewModel.chargeItem.isCreditDrilldownPage) {
-@*       TODO chek if it's need to be updated *@
         <h2 class="govuk-heading-m" id="charge-amount-heading"> @{
             s"${getMessage("creditAmount")
             }\t${viewModel.chargeItem.originalAmount.abs.toCurrencyString}"
@@ -246,11 +245,9 @@
     }
 
     @if(viewModel.chargeHistoryEnabledOrPaymentAllocationWithNoIsBalancingChargeZeroAndIsNotCredit) {
-@*       TODO chek if it's need to be updated *@
         @paymentHistoryTable(viewModel, isStoodOverEnabled)
     }
     @if(viewModel.isCredit && paymentAllocations.isDefined) {
-@*       TODO chek if it's need to be updated  *@
         @chargeSummaryPaymentAllocationTable(paymentAllocations.get, viewModel.creditsRefundRepayEnabled)
     }
 }
