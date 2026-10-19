@@ -221,7 +221,7 @@
             content = Text(messages(s"chargeSummary.chargeHistory.created.firstLatePaymentPenaltyStoodOver.text"))
         ),
         TableRow(
-            content = if (viewModel.latePaymentInterestCharge && viewModel.chargeItem.dunningLock) {
+            content = if (viewModel.latePaymentInterestCharge && viewModel.chargeItem.dunningLock && !viewModel.chargeItem.isPartialStoodOver) {
                 HtmlContent(viewModel.chargeItem.latePaymentInterestAmount.map(_.toCurrencyString).getOrElse(messages("chargeSummary.noData")))
             } else if(isStoodOverEnabled && viewModel.chargeItem.isPartialStoodOver) HtmlContent(viewModel.chargeItem.totalSoAmt.map(_.toCurrencyString).getOrElse(messages("chargeSummary.noData")))
             else HtmlContent(viewModel.chargeItem.originalAmount.toCurrencyString),
