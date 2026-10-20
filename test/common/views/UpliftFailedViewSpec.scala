@@ -19,6 +19,7 @@ package common.views
 import common.testUtils.ViewSpec
 import common.views.html.errorPages.UpliftFailedView
 import play.twirl.api.Html
+import common.controllers.routes as commonRoutes
 
 class UpliftFailedViewSpec extends ViewSpec {
 
@@ -50,6 +51,7 @@ class UpliftFailedViewSpec extends ViewSpec {
 
     s"have the link ${messages("Return to Sign in")}" in new Setup(upliftFailedView){
       document.select("a").eachText().get(6) shouldBe messages("Return to Sign in")
+      document.select("a").eachAttr("href").get(6) shouldBe commonRoutes.SignOutController.signOut().url
     }
   }
 }
