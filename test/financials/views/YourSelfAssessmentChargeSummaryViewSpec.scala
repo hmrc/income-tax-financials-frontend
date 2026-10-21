@@ -60,6 +60,7 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
   val firstPaymentOnAccount1Text: String = messages("chargeSummary.chargeHistory.created.firstLatePaymentPenalty.text")
   val chargeSummaryNoDataText: String = messages("chargeSummary.noData")
   val chargeAmountOverDueChargeHeading: String = messages("yourSelfAssessmentChargeSummary.overDueCharge")
+  val createdBalancingPaymentText: String = messages("chargeSummary.chargeHistory.created.balancingCharge.text")
 
   def partialFormalAndInformalDunningLocksBannerHeading(stoodOverValue: String): String =
     s"${messages("chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note1", stoodOverValue)} ${messages("chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note2")}"
@@ -218,6 +219,64 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
         document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe "15 May 2019"
         document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe createdFirstLatePaymentPenaltyStoodOverText
         document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£1,400.00"
+      }
+
+      "display the correct content for the Balancing Payment" in new TestSetup(
+        chargeItem = chargeItemModel(
+          transactionType = BalancingCharge,
+          originalAmount = BigDecimal(2100.00),
+          outstandingAmount = BigDecimal(2100.00),
+          dunningLock = true,
+          totalSoAmt = Some(BigDecimal(2100.00))),
+        adjustmentHistory = AdjustmentHistoryModel(AdjustmentModel(2100, Some(LocalDate.of(2018, 3, 29)), AdjustmentReversalReason), List()),
+        paymentBreakdown =
+          List(
+            FinancialDetail(
+              TaxYear.forYearEnd(2018).shortenTaxYearEnd,
+              Some("Balancing Payment"),
+              Some("4910"),
+              Some(id1040000123),
+              Some(LocalDate.parse("2018-08-16")),
+              Some("Nics2"),
+              Some("ITSA England & NI"),
+              Some(2100.00),
+              Some(2100.00),
+              Some(2100.00),
+              Some(0),
+              Some(ITSA_ENGLAND_AND_NI),
+              None,
+              Some(
+                Seq(
+                  SubItem(
+                    dueDate = Some(LocalDate.of(2020, 1, 31)),
+                    subItemId = Some("001"),
+                    amount = Some(BigDecimal("2100.00"))
+                  ),
+                  SubItem(
+                    dueDate = Some(LocalDate.of(2019, 7, 31)),
+                    subItemId = Some("002"),
+                    amount = Some(BigDecimal("2100.00")),
+                    dunningLock = Some("Stand over order")
+                  )
+                )
+              )
+            )
+          )
+      ) {
+
+        document.select("#govuk-notification-banner-title").size() shouldBe 1
+        document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+        document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe dunningLocksBannerHeading
+        document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
+        document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+        document.getElementsByClass("govuk-warning-text__text").text() shouldBe warningText
+        document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe createdBalancingPaymentText
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£2,100.00"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe "31 Jul 2019"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe createdFirstLatePaymentPenaltyStoodOverText
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£2,100.00"
       }
 
       "display the correct content when first lpp with dunningLock" in new TestSetup(
