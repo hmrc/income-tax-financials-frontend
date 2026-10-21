@@ -132,12 +132,12 @@
                   if(isStoodOverEnabled && !isPartialSuspendedCharge && viewModel.chargeItem.collectableAmt.isDefined) "overDueCharge"
                   else if(viewModel.chargeItem.isCodingOutFullyCollected) "amountCollected"
                   else if(viewModel.chargeItem.isCodingOutAccepted) "toBeCollected"
-                  else if(viewModel.chargeHasDunningLock && viewModel.chargeHistoryEnabled || (viewModel.chargeItem.isFormalStandOverCharge || viewModel.chargeItem.isInformalStandoverCharge)) "stoodOverFullCharge"
+                  else if(viewModel.chargeHasDunningLock && viewModel.chargeHistoryEnabled || (isStoodOverEnabled && (viewModel.chargeItem.isFormalStandOverCharge || viewModel.chargeItem.isInformalStandoverCharge))) "stoodOverFullCharge"
                   else if(viewModel.chargeItem.isOverdue() || viewModel.chargeItem.isPaid) "overDueCharge"
                   else "charge"
               )
           }\t${if (isStoodOverEnabled && !isPartialSuspendedCharge && viewModel.chargeItem.collectableAmt.isDefined) viewModel.chargeItem.collectableAmt.map(_.toCurrencyString).getOrElse(0)
-                    else if (isPartialSuspendedCharge || (viewModel.chargeItem.isFormalStandOverCharge || viewModel.chargeItem.isInformalStandoverCharge)) viewModel.chargeItem.totalSoAmt.map(_.toCurrencyString).getOrElse(0)
+                    else if (isPartialSuspendedCharge || (isStoodOverEnabled && (viewModel.chargeItem.isFormalStandOverCharge || viewModel.chargeItem.isInformalStandoverCharge))) viewModel.chargeItem.totalSoAmt.map(_.toCurrencyString).getOrElse(0)
                     else viewModel.chargeItem.outstandingAmount.toCurrencyString}${
               if(viewModel.chargeItem.interestOutstandingAmount && viewModel.chargeItem.outstandingAmount > 0)
                   s"\t${
