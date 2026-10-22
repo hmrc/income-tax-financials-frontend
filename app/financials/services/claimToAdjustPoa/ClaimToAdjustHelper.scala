@@ -184,10 +184,10 @@ trait ClaimToAdjustHelper extends Logging {
   // TODO: re-write with the use of EitherT
   protected def toFinancialDetail(financialPoaDetails: Either[Throwable, FinancialDetailsAndPoaModel]): Either[Throwable, Option[FinancialDetail]] = {
     financialPoaDetails match {
-      case Right(FinancialDetailsAndPoaModel(Some(finDetails), _)) =>
-        finDetails.financialDetails.headOption match {
+      case Right(FinancialDetailsAndPoaModel(Some(finDetails), Some(poaViewModel))) =>
+        finDetails.financialDetails.find(_.transactionId.contains(poaViewModel.poaOneTransactionId)) match {
           case Some(detail) => Right(Some(detail))
-          case None => Left(new Exception("No financial details found for this charge"))
+          case None => Right(None)
         }
       case Right(_) => Right(None)
       case Left(ex) => Left(ex)

@@ -207,6 +207,7 @@ class EnterPoaAmountControllerISpec extends ControllerISpecHelper {
                 FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYear - 2}-04-06", s"${testTaxYear - 1}-04-05")(
                   OK, testValidFinancialDetailsModelJson(2000, 2000, (testTaxYear - 1).toString, testDate.toString, poaRelevantAmount = Some(3000))
                 )
+                FinancialDetailsStub.stubChargeHistoryResponse(testNino, "ABCD1234")(OK, testChargeHistoryJson(testMtditid, "1040000124", 1500))
                 await(sessionService.setMongoData(Some(PoaAmendmentData())))
 
                 val result = buildPOSTMTDPostClient(path, additionalCookies, formData(1234.56)).futureValue
@@ -231,6 +232,7 @@ class EnterPoaAmountControllerISpec extends ControllerISpecHelper {
                 FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYear - 2}-04-06", s"${testTaxYear - 1}-04-05")(
                   OK, testValidFinancialDetailsModelJson(2000, 2000, (testTaxYear - 1).toString, testDate.toString, poaRelevantAmount = Some(3000))
                 )
+                FinancialDetailsStub.stubChargeHistoryResponse(testNino, "ABCD1234")(OK, testChargeHistoryJson(testMtditid, "1040000124", 1500))
                 await(sessionService.setMongoData(Some(PoaAmendmentData())))
 
                 val result = buildPOSTMTDPostClient(path, additionalCookies, formData(2500.00)).futureValue
@@ -381,6 +383,7 @@ class EnterPoaAmountControllerISpec extends ControllerISpecHelper {
                 FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYear - 2}-04-06", s"${testTaxYear - 1}-04-05")(
                   OK, testValidFinancialDetailsModelJson(2000, 2000, (testTaxYear - 1).toString, testDate.toString, poaRelevantAmount = Some(3000))
                 )
+                FinancialDetailsStub.stubChargeHistoryResponse(testNino, "ABCD1234")(OK, testChargeHistoryJson(testMtditid, "1040000124", 1500))
                 await(sessionService.setMongoData(Some(PoaAmendmentData(Some(MainIncomeLower), Some(2500)))))
 
                 val result = buildPOSTMTDPostClient(changePath, additionalCookies, formData(2800)).futureValue
@@ -403,6 +406,7 @@ class EnterPoaAmountControllerISpec extends ControllerISpecHelper {
                 FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYear - 2}-04-06", s"${testTaxYear - 1}-04-05")(
                   OK, testValidFinancialDetailsModelJson(2000, 2000, (testTaxYear - 1).toString, testDate.toString, poaRelevantAmount = Some(3000))
                 )
+                FinancialDetailsStub.stubChargeHistoryResponse(testNino, "ABCD1234")(OK, testChargeHistoryJson(testMtditid, "1040000124", 1500))
                 await(sessionService.setMongoData(Some(PoaAmendmentData(Some(MainIncomeLower), Some(500)))))
 
                 val result = buildPOSTMTDPostClient(changePath, additionalCookies, formData(2800)).futureValue
@@ -424,6 +428,7 @@ class EnterPoaAmountControllerISpec extends ControllerISpecHelper {
                 FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYear - 2}-04-06", s"${testTaxYear - 1}-04-05")(
                   OK, testValidFinancialDetailsModelJson(2000, 2000, (testTaxYear - 1).toString, testDate.toString, poaRelevantAmount = Some(3000))
                 )
+                FinancialDetailsStub.stubChargeHistoryResponse(testNino, "ABCD1234")(OK, testChargeHistoryJson(testMtditid, "1040000124", 1500))
                 await(sessionService.setMongoData(Some(PoaAmendmentData(Some(MainIncomeLower), Some(500)))))
 
                 val result = buildPOSTMTDPostClient(changePath, additionalCookies, formData(1000)).futureValue
@@ -447,6 +452,7 @@ class EnterPoaAmountControllerISpec extends ControllerISpecHelper {
                 FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYear - 2}-04-06", s"${testTaxYear - 1}-04-05")(
                   OK, testValidFinancialDetailsModelJson(2000, 2000, (testTaxYear - 1).toString, testDate.toString, poaRelevantAmount = Some(3000))
                 )
+                FinancialDetailsStub.stubChargeHistoryResponse(testNino, "ABCD1234")(OK, testChargeHistoryJson(testMtditid, "1040000124", 1500))
                 await(sessionService.setMongoData(Some(PoaAmendmentData(Some(Increase), Some(2500)))))
 
                 val result = buildPOSTMTDPostClient(changePath, additionalCookies, formData(500)).futureValue
