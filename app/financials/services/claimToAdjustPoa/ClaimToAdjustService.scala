@@ -73,13 +73,13 @@ class ClaimToAdjustService @Inject()(val financialDetailsConnector: FinancialDet
       financialAndPoaModelMaybe <- getPoaModelAndFinancialDetailsForNonCrystallised(nino)
       adjustmentReasonMaybe <- getPoaAdjustmentReason(financialAndPoaModelMaybe)
     } yield (adjustmentReasonMaybe, financialAndPoaModelMaybe) match {
-      case (Right(None), Right(FinancialDetailsAndPoaModel(None, Some(value)))) =>
-        Right(generateZeroedPoas(taxYear = value.taxYear))
-      case (Right(None), Right(FinancialDetailsAndPoaModel(Some(_), Some(value)))) =>
-        Right(value.copy(previouslyAdjusted = Some(false)))
-      case (Right(reason), Right(FinancialDetailsAndPoaModel(_, Some(model)))) =>
+      case (Right(None), Right(FinancialDetailsAndPoaModel(None, Some(poaModel)))) =>
+        Right(generateZeroedPoas(taxYear = poaModel.taxYear))
+      case (Right(None), Right(FinancialDetailsAndPoaModel(Some(_), Some(poaModel)))) =>
+        Right(poaModel.copy(previouslyAdjusted = Some(false)))
+      case (Right(reason), Right(FinancialDetailsAndPoaModel(_, Some(poaModel)))) =>
         Right(
-          model.copy(previouslyAdjusted = Some(reason.isDefined))
+          poaModel.copy(previouslyAdjusted = Some(reason.isDefined))
         )
       case (Left(ex), _) => Left(ex)
       case (_, Left(ex)) => Left(ex)
