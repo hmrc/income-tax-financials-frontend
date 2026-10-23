@@ -26,7 +26,7 @@ import financials.mocks.connectors.{MockChargeHistoryConnector, MockFinancialDet
 import financials.mocks.services.MockFinancialDetailsService
 import financials.models.chargeHistory.{ChargeHistoryModel, ChargesHistoryModel}
 import financials.models.claimToAdjustPoa.viewModels.PaymentOnAccountViewModel
-import financials.models.{BalanceDetails, FinancialDetailsErrorModel, FinancialDetailsModel}
+import financials.models.{BalanceDetails, DocumentDetail, FinancialDetail, FinancialDetailsErrorModel, FinancialDetailsModel}
 import financials.services.claimToAdjustPoa.ClaimToAdjustService
 import financials.testConstants.ClaimToAdjustPoaTestConstants.*
 import financials.mocks.connectors.MockCalculationListConnector
@@ -63,7 +63,7 @@ class ClaimToAdjustServiceSpec extends TestSupport with MockFinancialDetailsConn
   val testUser: MtdItUser[_] = defaultMTDITUser(Some(Individual), IncomeSourceDetailsModel(testNino, "123", Some("2023"), List.empty, List.empty))
 
   val calculationListSuccessResponseModelCrystallised: CalculationListResponseModel = CalculationListModel(
-   
+
     crystallised = Some(true)
   )
 
@@ -73,9 +73,44 @@ class ClaimToAdjustServiceSpec extends TestSupport with MockFinancialDetailsConn
   )
 
   val financialDetailsModelBothPoas: FinancialDetailsModel = FinancialDetailsModel(
-    balanceDetails = BalanceDetails(0.0, 0.0, 0.0, 0.0, None, None, None, None, None, None, None, None),
-    documentDetails = List.empty,
-    financialDetails = List.empty
+    balanceDetails = BalanceDetails(0.0, 0.0, 0.0, 123456.80, None, None, None, None, None, None, None, None),
+    documentDetails = List(DocumentDetail(
+      taxYear = 2023,
+      documentDescription = Some("ITSA- POA 1"),
+      documentText = Some("Payment on Account 1 of 2"),
+      outstandingAmount = 150.00,
+      originalAmount = 250.00,
+      documentDate = LocalDate.of(2023, 2, 14),
+      transactionId = "DOCID01"),
+      DocumentDetail(
+        taxYear = 2023,
+        documentDescription = Some("ITSA- POA 2"),
+        documentText = Some("Payment on Account 2 of 2"),
+        outstandingAmount = 250.00,
+        originalAmount = 250.00,
+        documentDate = LocalDate.of(2023, 2, 14),
+        transactionId = "DOCID02"
+    )),
+    financialDetails = List(
+      FinancialDetail(
+      taxYear = "2023",
+      mainType = Some("POA1"),
+      mainTransaction = Some("4920"),
+      transactionId = Some("DOCID01"),
+      chargeReference = Some("1040000124"),
+      originalAmount = Some(2500.00),
+      items = None
+    ),
+      FinancialDetail(
+        taxYear = "2023",
+        mainType = Some("POA2"),
+        mainTransaction = Some("4930"),
+        transactionId = Some("DOCID02"),
+        chargeReference = Some("1040000124"),
+        originalAmount = Some(2500.00),
+        items = None
+      )
+    )
   )
 
   def financialDetailsModelBothPoasWithOutstandingAmount(taxYear: Int, outstandingAmount: BigDecimal): FinancialDetailsModel = {
@@ -408,7 +443,7 @@ class ClaimToAdjustServiceSpec extends TestSupport with MockFinancialDetailsConn
 
     }
 
-    "return a future left with an exception when an exception is thrown" in {
+    "return a zeroed PaymentOnAccountViewModel when FinancialDetailsModel doesn't contain any matched POAs" in {
 
       val taxYear: Int = 2023
 
@@ -418,7 +453,7 @@ class ClaimToAdjustServiceSpec extends TestSupport with MockFinancialDetailsConn
 
       setupMockGetFinancialDetails(taxYear, testNino)(financialDetailsModelWithoutDocumentDetails)
 
-      setupGetChargeHistory(testNino, Some("ABCD1234"))(ChargesHistoryModel(
+      setupGetChargeHistory(testNino, None)(ChargesHistoryModel(
         idType = "NINO",
         idValue = testNino,
         regimeType = "ITSA",
@@ -430,8 +465,7 @@ class ClaimToAdjustServiceSpec extends TestSupport with MockFinancialDetailsConn
 
       val result = futureResult.futureValue
 
-      result.isLeft shouldBe true
-      result.left.exists(_.getMessage == "No financial details found for this charge") shouldBe true
+      result shouldBe Right(PaymentOnAccountViewModel("", "", TaxYear(2022, 2023), 0, 0, 0, 0, Some(false), partiallyPaid = false, fullyPaid = false))
 
     }
 
