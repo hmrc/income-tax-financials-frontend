@@ -36,7 +36,7 @@ import financials.models.chargeSummary.{ChargeSummaryViewModel, PaymentHistoryAl
 import financials.models.paymentAllocationCharges.PaymentAllocationViewModel
 import financials.services.{ChargeHistoryService, FinancialDetailsService, PaymentAllocationsService}
 import financials.utils.FallBackBackLinks
-import financials.views.html.{ChargeSummaryView, YourSelfAssessmentChargeSummaryView}
+import financials.views.html.ChargeSummaryView
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
@@ -57,7 +57,6 @@ class ChargeSummaryController @Inject()(val authActions: AuthActions,
                                         val itvcErrorHandler: ItvcErrorHandler,
                                         val itvcErrorHandlerAgent: AgentItvcErrorHandler,
                                         val chargeSummaryView: ChargeSummaryView,
-                                        val yourSelfAssessmentChargeSummary: YourSelfAssessmentChargeSummaryView,
                                         val chargeHistoryService: ChargeHistoryService,
                                         val paymentAllocations: PaymentAllocationsService)
                                        (implicit val appConfig: FrontendAppConfig,
@@ -275,10 +274,7 @@ class ChargeSummaryController @Inject()(val authActions: AuthActions,
 
                     mandatoryViewDataPresent(isInterestCharge, documentDetailWithDueDate) match {
                       case Right(_) => Ok {
-                        if (chargeItem.isIncludedInSACSummary) {
-                          yourSelfAssessmentChargeSummary(viewModel, allocationData, whatYouOweUrl)
-                        } else
-                          chargeSummaryView(viewModel, whatYouOweUrl)
+                        chargeSummaryView(viewModel, allocationData, whatYouOweUrl)
                       }
                       case Left(ec) => onError(s"Invalid response from charge history: ${ec.message}", isAgent, showInternalServerError = true)
                     }
