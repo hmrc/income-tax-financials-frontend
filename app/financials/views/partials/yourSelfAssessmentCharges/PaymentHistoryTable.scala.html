@@ -38,7 +38,7 @@
     p: p
 )
 
-@(viewModel: ChargeSummaryViewModel)(implicit messages: Messages)
+@(viewModel: ChargeSummaryViewModel, isStoodOverEnabled: Boolean)(implicit messages: Messages)
 
 @import implicitDateFormatter.longDate
 @import shared.implicits.ImplicitCurrencyFormatter.CurrencyFormatter
@@ -221,9 +221,10 @@
             content = Text(messages(s"chargeSummary.chargeHistory.created.firstLatePaymentPenaltyStoodOver.text"))
         ),
         TableRow(
-            content = if (viewModel.latePaymentInterestCharge && viewModel.chargeItem.dunningLock) {
+            content = if (viewModel.latePaymentInterestCharge && viewModel.chargeItem.dunningLock && !viewModel.chargeItem.isPartialStoodOver) {
                 HtmlContent(viewModel.chargeItem.latePaymentInterestAmount.map(_.toCurrencyString).getOrElse(messages("chargeSummary.noData")))
-            } else HtmlContent(viewModel.chargeItem.originalAmount.toCurrencyString),
+            } else if(isStoodOverEnabled && viewModel.chargeItem.isPartialStoodOver) HtmlContent(viewModel.chargeItem.totalSoAmt.map(_.toCurrencyString).getOrElse(messages("chargeSummary.noData")))
+            else HtmlContent(viewModel.chargeItem.originalAmount.toCurrencyString),
             format = Some("numeric")
         )
     )

@@ -69,7 +69,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
   mtdAllRoles.foreach { mtdUserRole =>
     val isAgent = mtdUserRole != MTDIndividual
 
-    def action(id: String, isInterestCharge: Boolean = false) = if (isAgent) {
+    def action(id: String, isInterestCharge: Boolean = false, isPartialSuspendedCharge: Boolean = false) = if (isAgent) {
       testController.showAgent(testTaxYear, id, isInterestCharge)
     } else {
       testController.show(testTaxYear, id, isInterestCharge)

@@ -13,8 +13,8 @@ GET         /what-you-owe                                                 financ
 GET         /agents/what-you-owe                                         financials.controllers.WhatYouOweController.showAgent()
 
 #Charge summary
-GET         /tax-years/:taxYear/charge                                    financials.controllers.ChargeSummaryController.show(taxYear: Int, id: String, isInterestCharge: Boolean ?= false, origin: Option[String] ?= None)
-GET         /agents/tax-years/:taxYear/charge                             financials.controllers.ChargeSummaryController.showAgent(taxYear: Int, id: String, isInterestCharge: Boolean ?= false)
+GET         /tax-years/:taxYear/charge                                    financials.controllers.ChargeSummaryController.show(taxYear: Int, id: String, isInterestCharge: Boolean ?= false, origin: Option[String] ?= None, isPartialSuspendedCharge: Boolean ?= false)
+GET         /agents/tax-years/:taxYear/charge                             financials.controllers.ChargeSummaryController.showAgent(taxYear: Int, id: String, isInterestCharge: Boolean ?= false, isPartialSuspendedCharge: Boolean ?= false)
 
 #Payment history
 GET         /payment-refund-history                                       financials.controllers.PaymentHistoryController.show(origin: Option[String] ?= None)

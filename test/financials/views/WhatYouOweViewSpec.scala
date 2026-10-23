@@ -165,7 +165,7 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
       claimToAdjustViewModel = claimToAdjustViewModel.getOrElse(defaultClaimToAdjustViewModel),
       lpp2Url = LPP2Url,
       adjustPoaUrl = claimToAdjustPoaRoutes.AmendablePoaController.show(isAgent = false).url,
-      chargeSummaryUrl = (taxYearEnd: Int, transactionId: String, isInterest: Boolean, origin: Option[String]) =>
+      chargeSummaryUrl = (taxYearEnd: Int, transactionId: String, isInterest: Boolean, origin: Option[String], isPartialSuspendedCharge: Boolean) =>
         financialsRoutes.ChargeSummaryController.show(taxYearEnd, transactionId, isInterest, origin).url,
       interstitialUrl = financialsRoutes.PaymentController.makingPayment(_, None).url,
       paymentHandoffUrl = financialsRoutes.PaymentController.paymentHandoff(_).url,
@@ -226,7 +226,7 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
       claimToAdjustViewModel = claimToAdjustViewModel.getOrElse(defaultClaimToAdjustViewModel),
       lpp2Url = "",
       adjustPoaUrl = claimToAdjustPoaRoutes.AmendablePoaController.show(isAgent = true).url,
-      chargeSummaryUrl = (taxYearEnd: Int, transactionId: String, isInterest: Boolean, origin: Option[String]) =>
+      chargeSummaryUrl = (taxYearEnd: Int, transactionId: String, isInterest: Boolean, origin: Option[String], isPartialSuspendedCharge: Boolean) =>
         financialsRoutes.ChargeSummaryController.showAgent(taxYearEnd, transactionId, isInterest).url,
       interstitialUrl = financialsRoutes.PaymentController.agentMakingPayment(_).url,
       paymentHandoffUrl = financialsRoutes.PaymentController.agentPaymentHandoff(_).url,
