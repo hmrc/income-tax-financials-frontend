@@ -56,7 +56,7 @@
     notificationBanner: ChargeSummaryNotificationBanner
 )
 
-@(viewModel: ChargeSummaryViewModel, whatYouOweUrl: String)(implicit request : Request[_], messages: Messages, appConfig: FrontendAppConfig, dateService: DateServiceInterface)
+@(viewModel: ChargeSummaryViewModel, whatYouOweUrl: String, isStoodOverEnabled: Boolean)(implicit request : Request[_], messages: Messages, appConfig: FrontendAppConfig, dateService: DateServiceInterface)
 
 @import implicitDateFormatter.longDate
 
@@ -319,11 +319,18 @@
     }
 }
 
+@isPartialSuspendedCharge = @{
+    request.getQueryString("isPartialSuspendedCharge") match {
+        case Some("true") => true
+        case _ => false
+    }
+}
+
 @mainTemplate(pageTitle = messages(viewModel.pageTitle), backUrl = Some(viewModel.backUrl), isAgent = viewModel.isAgent,
     useFallbackBackLink = true, gatewayPage = viewModel.gatewayPage, btaAndPtaServiceNavigation = viewModel.serviceNavigationPartial) {
 
     @if(viewModel.hasDunningLocks || viewModel.chargeItem.hasLpiWithDunningLock){
-        @notificationBanner(viewModel.chargeItem, viewModel.dueDate, viewModel.latePaymentInterestCharge, appConfig, viewModel.chargeHistoryEnabled)
+        @notificationBanner(viewModel.chargeItem, viewModel.dueDate, viewModel.latePaymentInterestCharge, appConfig, viewModel.chargeHistoryEnabled, isPartialSuspendedCharge, isStoodOverEnabled)
     }
 
     @h1WithCaption(

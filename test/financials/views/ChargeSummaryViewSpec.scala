@@ -57,7 +57,8 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
                   isAgent: Boolean = false,
                   adjustmentHistory: AdjustmentHistoryModel = defaultAdjustmentHistory,
                   poaExtraChargeLink: Option[String] = None,
-                  whatYouOweUrl: String = financialsRoutes.WhatYouOweController.show().url) {
+                  whatYouOweUrl: String = financialsRoutes.WhatYouOweController.show().url,
+                  isStoodOverEnabled: Boolean = false) {
 
     val viewModel: ChargeSummaryViewModel = ChargeSummaryViewModel(
       currentDate = dateService.getCurrentDate,
@@ -81,7 +82,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       taxYearSummaryUrl = (taxYear: Int) => appConfig.taxYearSummaryUrl(isAgent, taxYear)
     )
 
-    val view: Html = chargeSummary(viewModel, whatYouOweUrl)
+    val view: Html = chargeSummary(viewModel, whatYouOweUrl, isStoodOverEnabled)
     val document: Document = Jsoup.parse(view.toString())
     def verifySummaryListRowNumeric(rowNumber: Int, expectedKeyText: String, expectedValueText: String): Assertion = {
       val summaryListRow = document.select(s".govuk-summary-list:nth-of-type(1) .govuk-summary-list__row:nth-of-type($rowNumber)")
@@ -1534,7 +1535,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       )
       val thrownException = intercept[MissingFieldException] {
 
-        chargeSummary(exceptionViewModel, financialsRoutes.WhatYouOweController.show().url)
+        chargeSummary(exceptionViewModel, financialsRoutes.WhatYouOweController.show().url, false)
       }
       thrownException.getMessage shouldBe "Missing Mandatory Expected Field: Due Date"
     }

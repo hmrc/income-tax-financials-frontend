@@ -115,7 +115,7 @@
     btaAndPtaServiceNavigation = viewModel.serviceNavigationPartial) {
 
     @if(viewModel.hasDunningLocks || viewModel.chargeItem.hasLpiWithDunningLock || (viewModel.chargeHasDunningLock && viewModel.chargeHistoryEnabled)) {
-        @notificationBanner(viewModel.chargeItem, viewModel.dueDate, viewModel.latePaymentInterestCharge, appConfig, viewModel.chargeHistoryEnabled)
+        @notificationBanner(viewModel.chargeItem, viewModel.dueDate, viewModel.latePaymentInterestCharge, appConfig, viewModel.chargeHistoryEnabled, isPartialSuspendedCharge, isStoodOverEnabled)
     }
 
     @hmrcPageHeading(PageHeading(

@@ -2209,8 +2209,10 @@ chargeSummary.dunning.locks.formal.standover.banner.note2		                     
 chargeSummary.dunning.locks.formal.standover.heading                                   = Wedi apelio: swm ychwanegol i’w dalu oherwydd diwygiad yn sgil ymholiad gan CThEF
 chargeSummary.dunning.locks.formal.standover.p1                                        = Swm wedi’i ohirio:
 chargeSummary.dunning.locks.formal.standover.history                                   = Swm wedi’i ohirio yn ystod apêl
-chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note1	       = Mae {0} o’r dreth hon wedi’i gohirio dros dro ar gyfer adolygiad, ac ni fydd CThEF yn ei chasglu tra bydd wedi’i gohirio.
-chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note2	       = Gallwch dalu’r cyfanswm sy’n ddyledus o hyd, oherwydd efallai y codir llog arnoch os na chaiff ei dalu erbyn y dyddiad dyledus gwreiddiol.
+chargeSummary.dunning.locks.partial.informal.collectable.standover.banner.note1	       = Mae {0} o’r dreth hon wedi’i gohirio dros dro ar gyfer adolygiad, ac ni fydd CThEF yn ei chasglu tra bydd wedi’i gohirio.
+chargeSummary.dunning.locks.partial.informal.collectable.standover.banner.note2	       = Gallwch dalu’r cyfanswm sy’n ddyledus o hyd, oherwydd efallai y codir llog arnoch os na chaiff ei dalu erbyn y dyddiad dyledus gwreiddiol.
+chargeSummary.dunning.locks.partial.formal.collectable.standover.banner.note1          = Mae {0} o’r dreth hon wedi’i gohirio dros dro oherwydd bod apêl ar y gweill. Ni fydd CThEF yn ei chasglu tra bydd wedi’i gohirio.
+chargeSummary.dunning.locks.partial.formal.collectable.standover.banner.note2          = Gallwch dalu’r cyfanswm sy’n ddyledus o hyd, oherwydd efallai y codir llog arnoch os na chaiff ei dalu erbyn y dyddiad dyledus gwreiddiol.
 
 
 chargeSummary.nic2TaxYear                                          = Dyma’r taliad Yswiriant Gwladol Dosbarth 2 ar gyfer blwyddyn dreth {0} i {1}.

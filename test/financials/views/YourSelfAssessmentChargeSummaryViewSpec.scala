@@ -62,8 +62,17 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
   val chargeAmountOverDueChargeHeading: String = messages("yourSelfAssessmentChargeSummary.overDueCharge")
   val createdBalancingPaymentText: String = messages("chargeSummary.chargeHistory.created.balancingCharge.text")
 
-  def partialFormalAndInformalDunningLocksBannerHeading(stoodOverValue: String): String =
-    s"${messages("chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note1", stoodOverValue)} ${messages("chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note2")}"
+  def partialInformalCollectableBannerHeading(stoodOverValue: String): String =
+    s"${messages("chargeSummary.dunning.locks.partial.informal.collectable.standover.banner.note1", stoodOverValue)} ${messages("chargeSummary.dunning.locks.partial.informal.collectable.standover.banner.note2")}"
+
+  def partialFormalCollectableBannerHeading(stoodOverValue: String): String =
+    s"${messages("chargeSummary.dunning.locks.partial.formal.collectable.standover.banner.note1", stoodOverValue)} ${messages("chargeSummary.dunning.locks.partial.formal.collectable.standover.banner.note2")}"
+
+  val partialInformalStoodOverBannerHeading: String =
+    s"${messages("chargeSummary.dunning.locks.informal.standover.banner.note1")} ${messages("chargeSummary.dunning.locks.informal.standover.banner.note2")}"
+
+  val partialFormalStoodOverBannerHeading: String =
+    s"${messages("chargeSummary.dunning.locks.formal.standover.banner.note1")} ${messages("chargeSummary.dunning.locks.formal.standover.banner.note2")}"
 
   def subItemWithClearingSapDocument(clearingSAPDocument: String): SubItem = SubItem(dueDate = Some(LocalDate.parse("2017-08-07")), clearingSAPDocument = Some(clearingSAPDocument), paymentLot = Some("lot"), paymentLotItem = Some("lotItem"))
 
@@ -353,19 +362,21 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
 
         "'isPartialSuspendedCharge' param is false" when {
 
-          "partial informal charge is suspended with dunning lock 'Stand over order'" should {
+          "partial 'informal' charge is suspended with dunning lock 'collectable breakdown page'" should {
             "display the correct content" in new TestSetup(
               chargeItem = chargeItemModel(
-              totalSoAmt = Some(BigDecimal(3500)),
-              collectableAmt = Some(BigDecimal(1250)),
-              dunningLock = true),
+                totalSoAmt = Some(BigDecimal(3500)),
+                collectableAmt = Some(BigDecimal(1250)),
+                dunningLock = true,
+                dunningLockValue = Some("Stand over order")
+              ),
               paymentBreakdown = financialDetailsWithDunningLock(),
               isStoodOverEnabled = true,
               mockFakeRequest = fakeRequestWithIsPartialSuspendedChargeFalse
             ) {
               document.select("#govuk-notification-banner-title").size() shouldBe 1
               document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
-              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialFormalAndInformalDunningLocksBannerHeading("£3,500.00")
+              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialInformalCollectableBannerHeading("£3,500.00")
               document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountOverDueChargeHeading
               document.getElementById("charge-amount-heading").text().split(" ").filter(_.startsWith("£")).head.trim shouldBe "£1,250.00"
               document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
@@ -380,7 +391,7 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
             }
           }
 
-          "partial formal charge is suspended with dunning lock 'Formal Standover'" should {
+          "partial 'formal' charge is suspended with dunning lock 'collectable breakdown page'" should {
             "display the correct content" in new TestSetup(
               chargeItem = chargeItemModel(
                 isRevenueAmendment = true,
@@ -395,7 +406,7 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
             ) {
               document.select("#govuk-notification-banner-title").size() shouldBe 1
               document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
-              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialFormalAndInformalDunningLocksBannerHeading("£3,500.00")
+              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialFormalCollectableBannerHeading("£3,500.00")
               document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountOverDueChargeHeading
               document.getElementById("charge-amount-heading").text().split(" ").filter(_.startsWith("£")).head.trim shouldBe "£1,250.00"
               document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
@@ -413,19 +424,21 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
 
         "'isPartialSuspendedCharge' param is true" when {
 
-          "partial informal charge is suspended with dunning lock 'Stand over order'" should {
+          "partial 'informal' charge is suspended with dunning lock 'stood over breakdown page'" should {
             "display the correct content" in new TestSetup(
               chargeItem = chargeItemModel(
                 totalSoAmt = Some(BigDecimal(3500)),
                 collectableAmt = Some(BigDecimal(1250)),
-                dunningLock = true),
+                dunningLock = true,
+                dunningLockValue = Some("Stand over order")
+              ),
               paymentBreakdown = financialDetailsWithDunningLock(),
               isStoodOverEnabled = true,
               mockFakeRequest = fakeRequestWithIsPartialSuspendedChargeTrue
             ) {
               document.select("#govuk-notification-banner-title").size() shouldBe 1
               document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
-              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialFormalAndInformalDunningLocksBannerHeading("£3,500.00")
+              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialInformalStoodOverBannerHeading
               document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
               document.getElementById("charge-amount-heading").text().split(" ").filter(_.startsWith("£")).head.trim shouldBe "£3,500.00"
               document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
@@ -440,7 +453,7 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
             }
           }
 
-          "partial formal charge is suspended with dunning lock 'Formal Standover'" should {
+          "partial 'formal' charge is suspended with dunning lock 'stood over breakdown page'" should {
             "display the correct content" in new TestSetup(
               chargeItem = chargeItemModel(
                 isRevenueAmendment = true,
@@ -456,7 +469,7 @@ class YourSelfAssessmentChargeSummaryViewSpec extends ViewSpec with ChargeConsta
 
               document.select("#govuk-notification-banner-title").size() shouldBe 1
               document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
-              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialFormalAndInformalDunningLocksBannerHeading("£3,500.00")
+              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialFormalStoodOverBannerHeading
               document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
               document.getElementById("charge-amount-heading").text().split(" ").filter(_.startsWith("£")).head.trim shouldBe "£3,500.00"
               document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading

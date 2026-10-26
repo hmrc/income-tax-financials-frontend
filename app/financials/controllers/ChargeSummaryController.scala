@@ -278,7 +278,7 @@ class ChargeSummaryController @Inject()(val authActions: AuthActions,
                         if (chargeItem.isIncludedInSACSummary) {
                           yourSelfAssessmentChargeSummary(viewModel, allocationData, whatYouOweUrl, isEnabled(StoodOverCharges))
                         } else
-                          chargeSummaryView(viewModel, whatYouOweUrl)
+                          chargeSummaryView(viewModel, whatYouOweUrl, isEnabled(StoodOverCharges))
                       }
                       case Left(ec) => onError(s"Invalid response from charge history: ${ec.message}", isAgent, showInternalServerError = true)
                     }

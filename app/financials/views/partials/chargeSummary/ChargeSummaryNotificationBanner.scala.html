@@ -35,19 +35,24 @@
     dueDate: Option[LocalDate],
     latePaymentInterestCharge: Boolean,
     appConfig: FrontendAppConfig,
-    chargeHistoryEnabled: Boolean
+    chargeHistoryEnabled: Boolean,
+    isPartialSuspendedCharge: Boolean,
+    isStoodOverEnabled: Boolean
 )(implicit messages: Messages)
 
 @import implicitDateFormatter.longDate
 
 
 @html = {
-    @{(latePaymentInterestCharge, chargeItem.dunningLock, chargeItem.isFormalStandOverCharge, chargeItem.isPartialStoodOver) match {
-        case (_, _, _, true) => PartialFormalAndInformalSoContent()
-        case (_, _, true, false) => FormalSoContent()
-        case (false , true, _, false) if chargeHistoryEnabled => PaymentInformalSoContent()
-        case (true , true, _, false) if chargeHistoryEnabled => LpiInformalSoContent()
-        case (true, false, _, false) => LpiContent()
+    @{(latePaymentInterestCharge, chargeItem.dunningLock, chargeItem.isFormalStandOverCharge, chargeItem.isInformalStandoverCharge, chargeItem.isPartialStoodOver, isPartialSuspendedCharge) match {
+        case (_, _, false, true, true, false) if isStoodOverEnabled => PartialInFormalCollectableSoContent()
+        case (_, _, false, true,  true, true) if isStoodOverEnabled => PartialInFormalStoodOverContent()
+        case (_, _, true, false, true, false) if isStoodOverEnabled => PartialFormalCollectableSoContent()
+        case (_, _, true, false, true, true) if isStoodOverEnabled => PartialFormalStoodOverContent()
+        case (_, _, true, _, _, _) => FormalSoContent()
+        case (false , true, _, _, _, _) if chargeHistoryEnabled => PaymentInformalSoContent()
+        case (true , true, _, _, _, _) if chargeHistoryEnabled => LpiInformalSoContent()
+        case (true, false, _, _, _, _) => LpiContent()
         case _ => DefaultContent()
     }}
 }
@@ -73,9 +78,24 @@
     <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.informal.standover.banner.note1")</p>
 }
 
-@PartialFormalAndInformalSoContent() = {
-    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note1", chargeItem.totalSoAmt.getOrElse(BigDecimal(0)).toCurrencyString)</p>
-    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note2")</p>
+@PartialInFormalCollectableSoContent() = {
+    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.partial.informal.collectable.standover.banner.note1", chargeItem.totalSoAmt.getOrElse(BigDecimal(0)).toCurrencyString)</p>
+    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.partial.informal.collectable.standover.banner.note2")</p>
+}
+
+@PartialInFormalStoodOverContent() = {
+    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.informal.standover.banner.note1")</p>
+    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.informal.standover.banner.note2")</p>
+}
+
+@PartialFormalCollectableSoContent() = {
+    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.partial.formal.collectable.standover.banner.note1", chargeItem.totalSoAmt.getOrElse(BigDecimal(0)).toCurrencyString)</p>
+    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.partial.formal.collectable.standover.banner.note2")</p>
+}
+
+@PartialFormalStoodOverContent() = {
+    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.formal.standover.banner.note1")</p>
+    <p class="govuk-notification-banner__heading">@messages("chargeSummary.dunning.locks.formal.standover.banner.note2")</p>
 }
 
 @LpiContent() = {

@@ -2225,8 +2225,10 @@ chargeSummary.dunning.locks.formal.standover.banner.note2		                     
 chargeSummary.dunning.locks.formal.standover.heading                                   = Appealed: extra amount to pay due to HMRC enquiry amendment
 chargeSummary.dunning.locks.formal.standover.p1                                        = Amount suspended:
 chargeSummary.dunning.locks.formal.standover.history                                   = Amount suspended during an appeal
-chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note1	       = {0} of this tax is temporarily suspended for review and HMRC will not collect it while it is suspended.
-chargeSummary.dunning.locks.partial.formal-and-informal.standover.banner.note2	       = You can still pay the total amount owed as you may be charged interest if not paid by the original due date.
+chargeSummary.dunning.locks.partial.informal.collectable.standover.banner.note1        = {0} of this tax is temporarily suspended for review and HMRC will not collect it while it is suspended.
+chargeSummary.dunning.locks.partial.informal.collectable.standover.banner.note2        = You can still pay the total amount owed as you may be charged interest if not paid by the original due date.
+chargeSummary.dunning.locks.partial.formal.collectable.standover.banner.note1          = {0} of this tax is temporarily suspended because there is an appeal. HMRC will not collect it while it is suspended.
+chargeSummary.dunning.locks.partial.formal.collectable.standover.banner.note2          = You will be charged interest if the tax is released for HMRC to collect and it has not been paid by the original due date.
 
 
 chargeSummary.nic2TaxYear                                          = This is the Class 2 National Insurance payment for the {0} to {1} tax year.

@@ -29,6 +29,7 @@ trait MockChargeSummary extends BeforeAndAfterEach {
   val chargeSummary: ChargeSummaryView = mock(classOf[ChargeSummaryView])
   val viewModel: ChargeSummaryViewModel
   val whatYouOweLink: String
+  val isStoodOverEnabled: Boolean
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -36,7 +37,7 @@ trait MockChargeSummary extends BeforeAndAfterEach {
   }
 
   def mockChargeSummary()(response: Html): Unit = {
-    when(chargeSummary.apply(viewModel, whatYouOweLink)(any(), any(), any(), any()))
+    when(chargeSummary.apply(viewModel, whatYouOweLink, isStoodOverEnabled)(any(), any(), any(), any()))
       .thenReturn(response)
   }
 
