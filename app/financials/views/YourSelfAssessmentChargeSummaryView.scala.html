@@ -68,7 +68,8 @@
 @(
     viewModel: ChargeSummaryViewModel,
     paymentAllocations: Option[PaymentAllocationViewModel] = None,
-    whatYouOweUrl: String
+    whatYouOweUrl: String,
+    isStoodOverEnabled: Boolean
 )(
     implicit request: Request[_],
     messages: Messages,
@@ -83,7 +84,14 @@
     messages(s"yourSelfAssessmentChargeSummary.$key", args: _*)
 }
 
-@pageHeading = @{ChargeNameLangHelper.getHeading(viewModel.chargeItem, viewModel.latePaymentInterestCharge)}
+@isPartialSuspendedCharge = @{
+    request.getQueryString("isPartialSuspendedCharge") match {
+        case Some("true") => true
+        case _ => false
+    }
+}
+
+@pageHeading = @{ChargeNameLangHelper.getHeading(viewModel.chargeItem, viewModel.latePaymentInterestCharge, isPartialSuspendedCharge, isStoodOverEnabled)}
 
 @WYOLinkContent = {
     @p() {
@@ -107,7 +115,7 @@
     btaAndPtaServiceNavigation = viewModel.serviceNavigationPartial) {
 
     @if(viewModel.hasDunningLocks || viewModel.chargeItem.hasLpiWithDunningLock || (viewModel.chargeHasDunningLock && viewModel.chargeHistoryEnabled)) {
-        @notificationBanner(viewModel.chargeItem, viewModel.dueDate, viewModel.latePaymentInterestCharge, appConfig, viewModel.chargeHistoryEnabled)
+        @notificationBanner(viewModel.chargeItem, viewModel.dueDate, viewModel.latePaymentInterestCharge, appConfig, viewModel.chargeHistoryEnabled, isPartialSuspendedCharge, isStoodOverEnabled)
     }
 
     @hmrcPageHeading(PageHeading(
@@ -118,16 +126,19 @@
     ))
 
   @if(!viewModel.chargeItem.isCredit && !viewModel.latePaymentInterestCharge) {
-      <h2 class="govuk-heading-m" id="charge-amount-heading"> @{
+     <h2 class="govuk-heading-m" id="charge-amount-heading"> @{
           s"${
               getMessage(
-                  if(viewModel.chargeItem.isCodingOutFullyCollected) "amountCollected"
+                  if(isStoodOverEnabled && !isPartialSuspendedCharge && viewModel.chargeItem.collectableAmt.isDefined) "overDueCharge"
+                  else if(viewModel.chargeItem.isCodingOutFullyCollected) "amountCollected"
                   else if(viewModel.chargeItem.isCodingOutAccepted) "toBeCollected"
-                  else if(viewModel.chargeHasDunningLock && viewModel.chargeHistoryEnabled) "stoodOverFullCharge"
+                  else if(viewModel.chargeHasDunningLock && viewModel.chargeHistoryEnabled || (isStoodOverEnabled && (viewModel.chargeItem.isFormalStandOverCharge || viewModel.chargeItem.isInformalStandoverCharge))) "stoodOverFullCharge"
                   else if(viewModel.chargeItem.isOverdue() || viewModel.chargeItem.isPaid) "overDueCharge"
                   else "charge"
               )
-          }\t${viewModel.chargeItem.outstandingAmount.toCurrencyString}${
+          }\t${if (isStoodOverEnabled && !isPartialSuspendedCharge && viewModel.chargeItem.collectableAmt.isDefined) viewModel.chargeItem.collectableAmt.map(_.toCurrencyString).getOrElse(0)
+                    else if (isPartialSuspendedCharge || (isStoodOverEnabled && (viewModel.chargeItem.isFormalStandOverCharge || viewModel.chargeItem.isInformalStandoverCharge))) viewModel.chargeItem.totalSoAmt.map(_.toCurrencyString).getOrElse(0)
+                    else viewModel.chargeItem.outstandingAmount.toCurrencyString}${
               if(viewModel.chargeItem.interestOutstandingAmount && viewModel.chargeItem.outstandingAmount > 0)
                   s"\t${
                       messages("yourSelfAssessmentChargeSummary.reviewAndReconcile.heading2.youOwe")
@@ -216,6 +227,7 @@
 
         @chargeDetails(viewModel)
     }
+
     @if(viewModel.chargeItem.isCreditDrilldownPage) {
         <h2 class="govuk-heading-m" id="charge-amount-heading"> @{
             s"${getMessage("creditAmount")
@@ -233,7 +245,7 @@
     }
 
     @if(viewModel.chargeHistoryEnabledOrPaymentAllocationWithNoIsBalancingChargeZeroAndIsNotCredit) {
-        @paymentHistoryTable(viewModel)
+        @paymentHistoryTable(viewModel, isStoodOverEnabled)
     }
     @if(viewModel.isCredit && paymentAllocations.isDefined) {
         @chargeSummaryPaymentAllocationTable(paymentAllocations.get, viewModel.creditsRefundRepayEnabled)

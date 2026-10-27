@@ -153,7 +153,7 @@ class WhatYouOweControllerSpec extends MockAuthActions
     claimToAdjustViewModel = claimToAdjustViewModel.getOrElse(ctaViewModel(adjustPaymentsOnAccountFSEnabled, poaTaxYear)),
     lpp2Url = LPP2Url,
     adjustPoaUrl = claimToAdjustPoaRoutes.AmendablePoaController.show(isAgent = isAgent).url,
-    chargeSummaryUrl = (taxYearEnd: Int, transactionId: String, isInterest: Boolean, origin: Option[String]) => if (isAgent)
+    chargeSummaryUrl = (taxYearEnd: Int, transactionId: String, isInterest: Boolean, origin: Option[String], isPartialSuspendedCharge: Boolean) => if (isAgent)
       ChargeSummaryController.showAgent(taxYearEnd, transactionId, isInterest).url
     else
       ChargeSummaryController.show(taxYearEnd, transactionId, isInterest, origin).url,
