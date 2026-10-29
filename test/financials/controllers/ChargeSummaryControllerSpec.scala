@@ -95,7 +95,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 document.select("h1").first().text() shouldBe "First payment on account"
                 document.getElementById("charge-amount-heading").text() shouldBe "You owe: £1,400.00 (not including estimated interest)"
                 document.getElementById("due-date-text").select("p").text() shouldBe "Due 1 January 2020"
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("charge-history-heading").text() shouldBe "History of this charge"
                 document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
               }
@@ -111,7 +111,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 document.select("h1").first().text() shouldBe "Second payment on account"
                 document.getElementById("charge-amount-heading").text() shouldBe "You owe: £1,400.00 (not including estimated interest)"
                 document.getElementById("due-date-text").select("p").text() shouldBe "Due 1 January 2020"
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("charge-history-heading").text() shouldBe "History of this charge"
                 document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
               }
@@ -126,7 +126,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 val document = JsoupParse(result).toHtmlDocument
                 document.select("h1").first().text() shouldBe "First payment on account"
                 document.getElementById("charge-amount-heading").text() shouldBe "You owe: £0.00"
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("charge-history-heading").text() shouldBe "History of this charge"
                 document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
               }
@@ -141,7 +141,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 val document = JsoupParse(result).toHtmlDocument
                 document.select("h1").first().text() shouldBe "Second payment on account"
                 document.getElementById("charge-amount-heading").text() shouldBe "You owe: £0.00"
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("charge-history-heading").text() shouldBe "History of this charge"
                 document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
               }
@@ -157,7 +157,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 document.select("h1").first().text() shouldBe "First payment on account collected through PAYE tax code"
                 document.getElementById("charge-amount-heading").text() shouldBe "Amount due to be collected: £12.34"
                 document.getElementById("codedOutPOAExplanation").text() shouldBe "This is the tax you owe for the 2020 to 2021 tax year. It will be collected in the 2022 to 2023 tax year through your PAYE tax code."
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("charge-history-heading").text() shouldBe "History of this charge"
                 document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2020 to 2021 tax bill."
               }
@@ -173,7 +173,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 document.select("h1").first().text() shouldBe "First payment on account collected through PAYE tax code"
                 document.getElementById("charge-amount-heading").text() shouldBe "Amount collected: £12.34"
                 document.getElementById("codedOutPOAExplanation").text() shouldBe "This was the tax you owed for the 2020 to 2021 tax year. It was collected in the 2022 to 2023 tax year through your PAYE tax code."
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("charge-history-heading").text() shouldBe "History of this charge"
                 document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2020 to 2021 tax bill."
               }
@@ -189,7 +189,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 document.select("h1").first().text() shouldBe "Second payment on account collected through PAYE tax code"
                 document.getElementById("charge-amount-heading").text() shouldBe "Amount due to be collected: £12.34"
                 document.getElementById("codedOutPOAExplanation").text() shouldBe "This is the tax you owe for the 2020 to 2021 tax year. It will be collected in the 2022 to 2023 tax year through your PAYE tax code."
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("charge-history-heading").text() shouldBe "History of this charge"
                 document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2020 to 2021 tax bill."
               }
@@ -205,7 +205,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 document.select("h1").first().text() shouldBe "Second payment on account collected through PAYE tax code"
                 document.getElementById("charge-amount-heading").text() shouldBe "Amount collected: £12.34"
                 document.getElementById("codedOutPOAExplanation").text() shouldBe "This was the tax you owed for the 2020 to 2021 tax year. It was collected in the 2022 to 2023 tax year through your PAYE tax code."
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("charge-history-heading").text() shouldBe "History of this charge"
                 document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2020 to 2021 tax bill."
               }
@@ -220,7 +220,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 val document = JsoupParse(result).toHtmlDocument
                 document.select("h1").first().text() shouldBe "First payment on account"
                 document.getElementById("charge-amount-heading").text() shouldBe "You owe: £1,400.00 (not including estimated interest)"
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("interest-on-your-charge-heading").text() shouldBe "Interest on this charge"
                 document.getElementById("interestOnCharge.p2").text() shouldBe "Interest will be estimated until the charge it is related to is paid in full."
                 document.getElementById("interest-on-your-charge-table").getAllElements.size().equals(0) shouldBe false
@@ -241,7 +241,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 val document = JsoupParse(result).toHtmlDocument
                 document.select("h1").first().text() shouldBe "First payment on account"
                 document.getElementById("charge-amount-heading").text() shouldBe "You owe: £0.00"
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("interest-on-your-charge-heading").text() shouldBe "Interest on this charge"
                 document.getElementById("interestOnCharge.p1").text() shouldBe "This payment was overdue and interest was increasing daily. Now that payment has been made, the interest has been finalised and charged separately."
                 document.select("#interest-on-your-charge-table").size().equals(0) shouldBe true
@@ -260,7 +260,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 val document = JsoupParse(result).toHtmlDocument
                 document.select("h1").first().text() shouldBe "Second payment on account"
                 document.getElementById("charge-amount-heading").text() shouldBe "You owe: £1,400.00 (not including estimated interest)"
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("interest-on-your-charge-heading").text() shouldBe "Interest on this charge"
                 document.getElementById("interestOnCharge.p2").text() shouldBe "Interest will be estimated until the charge it is related to is paid in full."
                 document.getElementById("interest-on-your-charge-table").getAllElements.size().equals(0) shouldBe false
@@ -281,7 +281,7 @@ class ChargeSummaryControllerSpec extends ChargeSummaryControllerHelper {
                 val document = JsoupParse(result).toHtmlDocument
                 document.select("h1").first().text() shouldBe "Second payment on account"
                 document.getElementById("charge-amount-heading").text() shouldBe "You owe: £0.00"
-                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What is payment on account?"
+                document.getElementsByClass("govuk-details__summary-text").first().text() shouldBe "What are payments on account?"
                 document.getElementById("interest-on-your-charge-heading").text() shouldBe "Interest on this charge"
                 document.getElementById("interestOnCharge.p1").text() shouldBe "This payment was overdue and interest was increasing daily. Now that payment has been made, the interest has been finalised and charged separately."
                 document.select("#interest-on-your-charge-table").size().equals(0) shouldBe true
