@@ -175,9 +175,7 @@ trait ComponentSpecBase extends TestSuite with CustomMatchers
     "time-machine.add-years" -> "0",
     "time-machine.add-days" -> "0"
   )
-
-  val btaPartialUrl = "/business-account/partial/service-info"
-
+  
   val getCurrentTaxYearEnd: LocalDate = {
     val currentDate: LocalDate = LocalDate.of(2023, 4, 4)
     if (currentDate.isBefore(LocalDate.of(currentDate.getYear, 4, 6)))
