@@ -2657,11 +2657,6 @@ yourSelfAssessmentChargeSummary.reviewAndReconcilePoa1and2.explanation.p2       
 yourSelfAssessmentChargeSummary.reviewAndReconcilePoa1.linkText                         = first payment on account
 yourSelfAssessmentChargeSummary.reviewAndReconcilePoa2.linkText                         = second payment on account
 yourSelfAssessmentChargeSummary.reviewAndReconcilePoa.p.textTwo                         = for the {0} to {1} tax year was too low.
-yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.linkText                         = What is payment on account?
-yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p1                               = ’Payments on account’ are two advance payments made towards your next tax bill.
-yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p2                               = HMRC estimates the total amount based on your previous year’s tax bill. Each payment is half of that amount.
-yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p3                               = If you make an amendment to the tax return and the tax bill changes, then each payment on account will be updated to half of the new total.
-yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p4.linkText                      = Help with understanding your Self Assessment tax bill
 yourSelfAssessmentChargeSummary.reviewAndReconcilePoa.warning.p1                        = Pay this charge to stop interest from increasing daily.
 yourSelfAssessmentChargeSummary.reviewAndReconcilePoa.warning.p2                        = If you pay later than the due date of {0} you may get a late payment penalty.
 yourSelfAssessmentChargeSummary.interestOnThisCharge.heading                            = Interest on this charge
@@ -2691,11 +2686,11 @@ yourSelfAssessmentChargeSummary.howIsInterestCalculated.p5          = 5,000 x 50
 yourSelfAssessmentChargeSummary.howIsInterestCalculated.p6          = 250,000 / 365 = 684.93
 yourSelfAssessmentChargeSummary.howIsInterestCalculated.p7          = 684.93 x 0.0725 = 49.66
 
-yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.linkText     = What is payment on account?
+yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.linkText     = What are payments on account?
+yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p1           = ’Payments on account’ are two advance payments made towards your next tax bill.
+yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p2           = HMRC estimates the total amount based on your previous year’s tax bill. Each payment is half of that amount.
 yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p3           = If you make an amendment to the tax return and the tax bill changes, then each payment on account will be updated to half of the new total.
-yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p4           = Help with understanding your Self Assessment tax bill
-yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p1           = Payments on account are two advance payments made towards your next tax bill. They pay for:
-yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p2           = HMRC estimates the total amount based on your previous years tax bill. Each payment is half of that amount.
+yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p4.linkText  = Help with understanding your Self Assessment tax bill
 yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.bullet1      = Income Tax
 yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.bullet2      = Class 4 National Insurance contributions (opens in new tab)
 yourSelfAssessmentChargeSummary.chargeHistory.poa1CodedOut.text.heading = First payment on account history
