@@ -101,6 +101,30 @@ class ChargeSummaryViewSpec extends ViewSpec with ChargeConstants with FeatureSw
   val fakeRequestWithIsPartialSuspendedChargeFalse = FakeRequest(GET, "/tax-years/:taxYear/charge?isPartialSuspendedCharge=false")
   val fakeRequestWithIsPartialSuspendedChargeTrue = FakeRequest(GET, "/tax-years/:taxYear/charge?isPartialSuspendedCharge=true")
 
+  def codedOutEmptyAdjustmentHistory(originalAmount: BigDecimal): AdjustmentHistoryModel =
+    AdjustmentHistoryModel(AdjustmentModel(originalAmount, Some(LocalDate.of(2018, 3, 29)), AdjustmentReversalReason), List())
+
+  def poa1Caption(year: Int) = s"${year - 1} to $year tax year"
+
+  val cancelledPayeTaxCodeInsetLink = "https://www.gov.uk/pay-self-assessment-tax-bill/through-your-tax-code"
+  val chargeSummaryPoa1CodedOutHeading: String = messages("chargeSummary.poa1CodedOut.text")
+  val insetPara: String = s"${messages("chargeSummary.codingOutInset-1")} ${messages("chargeSummary.codingOutInset-2")} ${messages("pagehelp.opensInNewTabText")} ${messages("chargeSummary.codingOutInset-3")}"
+
+  def codedOutAdjustmentHistory: AdjustmentHistoryModel =
+    AdjustmentHistoryModel(AdjustmentModel(2500.00, Some(LocalDate.of(2018, 3, 29)), AdjustmentReversalReason), List(AdjustmentModel(2000.00, Some(LocalDate.of(2019, 3, 30)), AmendedReturnReversalReason)))
+
+  val chargeSummaryCodingOutHeading2017To2018: String = s"${messages("chargeSummary.codingOut.text")}"
+
+  def cancelledSaPayeHeading = s"${messages("chargeSummary.cancelledPayeSelfAssessment.text")}"
+
+  val chargeSummaryPoa2CodedOutHeading: String = messages("chargeSummary.poa2CodedOut.text")
+
+  val poaTextParagraph = messages("chargeSummary.paymentsOnAccount")
+  val poaTextBullets = messages("chargeSummary.paymentsOnAccount.bullet1") + " " + messages("chargeSummary.paymentsOnAccount.bullet2")
+  val poaTextP2 = messages("chargeSummary.paymentsOnAccount.p2")
+
+  val cancelledPayeTaxCodeInsetText = s"${messages("chargeSummary.cancelledPayeInset-1")} ${messages("chargeSummary.cancelledPayeInset-2")} ${messages("pagehelp.opensInNewTabText")} ${messages("chargeSummary.cancelledPayeInset-3")}"
+
   class TestSetup(chargeItem: ChargeItem = chargeItemModel(),
                   dueDate: Option[LocalDate] = Some(LocalDate.of(2019, 5, 15)),
                   paymentBreakdown: List[FinancialDetail] = List(),
@@ -141,6 +165,110 @@ class ChargeSummaryViewSpec extends ViewSpec with ChargeConstants with FeatureSw
 
     val view: Html = chargeSummaryView(viewModel, None, whatYouOweUrl, isStoodOverEnabled = isStoodOverEnabled)(mockFakeRequest, implicitly, implicitly)
     val document: Document = Jsoup.parse(view.toString())
+  }
+
+  //Moved from old ChargeSummaryViewSpec
+  "user is an individual" when {
+    "charge is a POA1" when {
+      "charge is coded out" when {
+        "coding out is accepted" should {
+          "display the accepted coded out details" when {
+
+            val codedOutPoaItem = chargeItemModel(transactionType = PoaOneDebit, codedOutStatus = Some(Accepted), originalAmount = 2500.00)
+            val codedOutBCDItem = chargeItemModel(transactionType = BalancingCharge, codedOutStatus = Some(Accepted), originalAmount = 2500.00)
+
+            "Coding Out is Enabled" in new TestSetup(codedOutPoaItem, adjustmentHistory = codedOutEmptyAdjustmentHistory(2500.00)) {
+              document.select("h1").text() shouldBe chargeSummaryPoa1CodedOutHeading
+              document.select("#coding-out-notice").text() shouldBe insetPara
+              document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
+              document.select(".govuk-table").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").size() shouldBe 1
+              document.select(".govuk-table tbody tr").get(0).text() shouldBe "29 Mar 2018 to 15 Jun 2018 1.0% £80.00"
+            }
+            "Coding Out is Enabled for BCD" in new TestSetup(codedOutBCDItem, adjustmentHistory = codedOutAdjustmentHistory) {
+              document.select("h1").text() shouldBe chargeSummaryCodingOutHeading2017To2018
+              document.select("#coding-out-notice").text() shouldBe insetPara
+              document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
+              document.select(".govuk-table").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa1CodedOut.text", "2019", "2020")} £2,500.00"
+              document.select("#payment-history-table tbody tr").get(1).text() shouldBe s"30 Mar 2019 ${messages("chargeSummary.chargeHistory.amend.codingOut.text", "2019", "2020")} £2,000.00"
+            }
+          }
+        }
+        "coding out is fully collected" should {
+          "display the fully collected coded out details" when {
+
+            val codedOutPoaItem = chargeItemModel(transactionType = PoaOneDebit, codedOutStatus = Some(FullyCollected), originalAmount = 2500.00)
+            "Coding Out is Enabled" in new TestSetup(codedOutPoaItem, adjustmentHistory = codedOutEmptyAdjustmentHistory(2500.00)) {
+              document.select("h1").text() shouldBe chargeSummaryPoa1CodedOutHeading
+              document.getElementById("howIsInterestCalculated.p1").text() shouldBe "Payments on account are two advance payments made towards your next tax bill. They pay for:"
+              document.getElementById("howIsInterestCalculated.list").child(0).text() shouldBe "Income Tax"
+              document.getElementById("howIsInterestCalculated.list").child(1).text() shouldBe "Class 4 National Insurance contributions (opens in new tab)"
+              document.getElementById("howIsInterestCalculated.list").child(1).link.attr("href") shouldBe "https://www.gov.uk/self-employed-national-insurance-rates"
+              document.getElementById("howInterestIsCalculated.p2").text() shouldBe "HMRC estimates the total amount based on your previous years tax bill. Each payment is half of that amount."
+              document.select("#coding-out-notice").text() shouldBe insetPara
+              document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
+              document.select(".govuk-table").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").size() shouldBe 1
+              document.select("#payment-history-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa1CodedOut.text", "2019", "2020")} £2,500.00"
+            }
+          }
+        }
+      }
+    }
+
+    "charge is a POA2" when {
+      "coding out is accepted" should {
+        "display the coded out details" when {
+
+          val codedOutPoaItem = chargeItemModel(transactionType = PoaTwoDebit, codedOutStatus = Some(Accepted), originalAmount = 2500.00)
+          "Coding Out is Enabled" in new TestSetup(codedOutPoaItem, adjustmentHistory = codedOutEmptyAdjustmentHistory(2500.00)) {
+            document.select("h1").text() shouldBe chargeSummaryPoa2CodedOutHeading
+            document.select("#coding-out-notice").text() shouldBe insetPara
+            document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
+            document.select(".govuk-table").size() shouldBe 2
+            document.select("#payment-history-table tbody tr").size() shouldBe 1
+            document.select(".govuk-table tbody tr").get(0).text() shouldBe "29 Mar 2018 to 15 Jun 2018 1.0% £80.00"
+          }
+        }
+      }
+      "coding out is fully collected" should {
+        "display the fully collected coded out details" when {
+
+          val codedOutPoaItem = chargeItemModel(transactionType = PoaTwoDebit, codedOutStatus = Some(FullyCollected), originalAmount = 2500.00)
+          "Coding Out is Enabled" in new TestSetup(codedOutPoaItem, adjustmentHistory = codedOutEmptyAdjustmentHistory(2500.00)) {
+            document.select("h1").text() shouldBe chargeSummaryPoa2CodedOutHeading
+            document.getElementById("howIsInterestCalculated.p1").text() shouldBe "Payments on account are two advance payments made towards your next tax bill. They pay for:"
+            document.getElementById("howIsInterestCalculated.list").child(0).text() shouldBe "Income Tax"
+            document.getElementById("howIsInterestCalculated.list").child(1).text() shouldBe "Class 4 National Insurance contributions (opens in new tab)"
+            document.getElementById("howIsInterestCalculated.list").child(1).link.attr("href") shouldBe "https://www.gov.uk/self-employed-national-insurance-rates"
+            document.getElementById("howInterestIsCalculated.p2").text() shouldBe "HMRC estimates the total amount based on your previous years tax bill. Each payment is half of that amount."
+            document.select("#coding-out-notice").text() shouldBe insetPara
+            document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
+            document.select(".govuk-table").size() shouldBe 2
+            document.select("#payment-history-table tbody tr").size() shouldBe 1
+            document.select(".govuk-table tbody tr").get(0).text() shouldBe "29 Mar 2018 to 15 Jun 2018 1.0% £80.00"
+          }
+        }
+      }
+
+      "coding out is cancelled" should {
+        "display the coded out details" when {
+
+          val codedOutPoaItem = chargeItemModel(transactionType = PoaTwoDebit, codedOutStatus = Some(Cancelled))
+
+          "Coding Out is Enabled" in new TestSetup(codedOutPoaItem) {
+            document.select("h1").text() shouldBe cancelledSaPayeHeading
+            document.select("#cancelled-paye-notice").text() shouldBe cancelledPayeTaxCodeInsetText
+            document.select(".govuk-table").size() shouldBe 2
+            document.select("#payment-history-table tbody tr").size() shouldBe 1
+            document.select("#payment-history-table tbody tr").get(0).text() shouldBe
+              s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.cancelledPayeSelfAssessment.text", "2018", "2019")} £1,400.00"
+          }
+        }
+      }
+    }
   }
 
   "ChargeSummaryView" when {
