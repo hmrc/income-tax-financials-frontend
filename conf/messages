@@ -2276,7 +2276,7 @@ chargeSummary.definition.balancingcharge.p2                        = You’ll al
 chargeSummary.definition.hmrcadjustment                            = HMRC has added this charge after an adjustment to your tax return.
 
 chargeSummary.firstLatePaymentPenalty.p = You have received this penalty because you are late paying your Income Tax.
-chargeSummary.firstLatePaymentPenalty.link = View how your penalty was calculated
+chargeSummary.firstLatePaymentPenalty.link = View how your penalty was calculated.
 
 chargeSummary.lateSubmissionPenalty.penaltyPoints     = You will get a late submission penalty point every time you send a submission after the deadline. A submission can be a quarterly update or annual tax return.
 chargeSummary.lateSubmissionPenalty.fourPoints        = If you reach 4 points, you’ll have to pay a £200 penalty.
