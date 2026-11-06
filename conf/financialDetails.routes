@@ -20,6 +20,7 @@ GET         /agents/tax-years/:taxYear/charge                             financ
 GET         /payment-refund-history                                       financials.controllers.PaymentHistoryController.show(origin: Option[String] ?= None)
 GET         /agents/payment-refund-history                                financials.controllers.PaymentHistoryController.showAgent()
 GET         /refund-status                                                financials.controllers.PaymentHistoryController.refundStatus()
+GET         /agents/refund-status                                         financials.controllers.PaymentHistoryController.refundStatusAgent()
 
 
 #custom not found
