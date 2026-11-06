@@ -31,11 +31,11 @@
 @import financials.views.html.partials.yourSelfAssessmentCharges.ChargeDetails
 @import financials.views.html.partials.yourSelfAssessmentCharges.{WhatIsPaymentOnAccount, InterestOnChargeRARPoaSection}
 @import financials.views.html.partials.chargeSummary.ChargeSummaryNotificationBanner
-@import financials.views.html.partials.yourSelfAssessmentCharges.ChargeSummaryPaymentAllocationTable
+@import financials.views.html.partials.chargeSummary.ChargeSummaryPaymentAllocationTable
 @import financials.models.paymentAllocationCharges.PaymentAllocationViewModel
 @import _root_.shared.implicits.HtmlFormatter.EmspString
 @import java.time.LocalDate
-@import financials.models.{PoaOneReconciliationDebit, PoaTwoReconciliationDebit}
+@import financials.models.{PoaOneReconciliationDebit, PoaTwoReconciliationDebit, PoaOneReconciliationCredit, PoaTwoReconciliationCredit}
 @import common.viewUtils.ExternalUrlHelper
 @import common.exceptions.MissingFieldException
 @import common.config.FrontendAppConfig
@@ -247,7 +247,17 @@
     @if(viewModel.chargeHistoryEnabledOrPaymentAllocationWithNoIsBalancingChargeZeroAndIsNotCredit) {
         @paymentHistoryTable(viewModel, isStoodOverEnabled)
     }
-    @if(viewModel.isCredit && paymentAllocations.isDefined) {
-        @chargeSummaryPaymentAllocationTable(paymentAllocations.get, viewModel.creditsRefundRepayEnabled)
+    @if(viewModel.chargeItem.isCreditDrilldownPage) {
+        @chargeSummaryPaymentAllocationTable(
+            viewModel.chargeItem,
+            {
+                if (viewModel.chargeItem.transactionType == PoaOneReconciliationCredit) viewModel.poaOneChargeUrl
+                else viewModel.poaTwoChargeUrl
+            },
+            {
+                if (viewModel.chargeItem.transactionType == PoaOneReconciliationCredit) "chargeSummary.paymentOnAccount1.text"
+                else "chargeSummary.paymentOnAccount2.text"
+            }
+        )
     }
 }
