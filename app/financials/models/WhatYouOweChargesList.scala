@@ -37,15 +37,15 @@ case class WhatYouOweChargesList(
   def sortedChargesList: List[ChargeItem] = chargesList.sortWith((charge1, charge2) =>
     charge1.dueDate.exists(date1 => charge2.dueDate.exists(_.isAfter(date1))))
 
-  val (sortedChargesListWithDunningLock, sortedChargesListWithNoDunningLock) = 
-    sortedChargesList.partition(x => x.dunningLock || x.hasLpiWithDunningLock) 
+  val (sortedChargesListWithDunningLock, sortedChargesListWithNoDunningLock) =
+    sortedChargesList.partition(x => x.dunningLock || x.hasLpiWithDunningLock)
 
   def bcdChargeTypeDefinedAndGreaterThanZero: Boolean =
     if (outstandingChargesModel.isDefined && outstandingChargesModel.get.bcdChargeType.isDefined
       && outstandingChargesModel.get.bcdChargeType.get.chargeAmount > 0) true
     else false
 
-  def isPartialStoodOverCharge: Boolean = sortedChargesListWithDunningLock.exists(_.isPartialStoodOver) 
+  def isPartialStoodOverCharge: Boolean = sortedChargesListWithDunningLock.exists(_.isPartialStoodOver)
 
   def isChargesListEmpty: Boolean = chargesList.isEmpty && !bcdChargeTypeDefinedAndGreaterThanZero
 

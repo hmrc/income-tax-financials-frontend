@@ -1275,7 +1275,8 @@ trait ChargeConstants {
                                                                 outstandingCharges: Option[OutstandingChargesModel] = Some(outstandingChargesDueInMoreThan30Days),
                                                                 dunningLockValue: List[Option[String]] = List(Some("Standover order"), None),
                                                                 totalSoAmt: List[Option[BigDecimal]] = List(Some(BigDecimal(100.25)), None),
-                                                                collectableAmt: List[Option[BigDecimal]] = List(Some(BigDecimal(250.50)), None)): WhatYouOweChargesList = WhatYouOweChargesList(
+                                                                collectableAmt: List[Option[BigDecimal]] = List(Some(BigDecimal(250.50)), None),
+                                                                isRevenueAmendment: List[Boolean] = List(true, true)): WhatYouOweChargesList = WhatYouOweChargesList(
     balanceDetails = BalanceDetails(
       0.00,
       2.00,
@@ -1296,7 +1297,7 @@ trait ChargeConstants {
       interestEndDate = List(None, None),
       interestFromDate = List(None, None),
       dueDateForFinancialDetail = List(LocalDate.parse("2024-01-29"), LocalDate.parse("2024-02-03")),
-      isRevenueAmendment = List(true, true),
+      isRevenueAmendment = isRevenueAmendment,
       dunningLockValue = dunningLockValue,
       totalSoAmt = totalSoAmt,
       collectableAmt = collectableAmt
