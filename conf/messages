@@ -2809,6 +2809,8 @@ yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.1                 
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.link-text             = {0} to {1} tax calculation
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.2                     = was too high, and HMRC has added a credit to your account.
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p2                       = This credit may be used automatically by HMRC to cover your future tax bills when they become due.
+yourSelfAssessmentChargeSummary.reviewAndReconcilePoa2Credit.text.heading           = Second payment on account: credit from your tax return
+yourSelfAssessmentChargeSummary.reviewAndReconcilePoa1Credit.text.heading           = First payment on account: credit from your tax return
 
 
 
