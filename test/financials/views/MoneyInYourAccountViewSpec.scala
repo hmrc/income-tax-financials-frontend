@@ -189,6 +189,22 @@ class MoneyInYourAccountViewSpec extends TestSupport with FeatureSwitching with 
         document.selectById("claim-a-refund-button").attribute("href").getValue shouldBe financialsRoutes.MoneyInYourAccountController.startRefundAgents().url
         layoutContent.selectHead("h1").text shouldBe moneyInYourAccountHeading
       }
+      "the client has no credit and one refund" in new TestSetup(
+        isAgent = true,
+        creditAndRefundModel = ANewCreditAndRefundModel().firstRefundAmountRequested(100).get()
+      ) {
+        document.title() shouldBe agentTitle
+        document.selectById("credit-explanation").text() shouldBe "You do not have any money in your account at the moment, but you have a refund in progress."
+        document.selectById("refunds-link").attribute("href").getValue shouldBe financialsRoutes.PaymentHistoryController.refundStatusAgent().url
+      }
+      "the client has no credit and more than one refund" in new TestSetup(
+        isAgent = true,
+        creditAndRefundModel = ANewCreditAndRefundModel().firstRefundAmountRequested(100).secondRefundAmountRequested(200).get()
+      ) {
+        document.title() shouldBe agentTitle
+        document.selectById("credit-explanation").text() shouldBe "You do not have any money in your account at the moment, but you have refunds in progress."
+        document.selectById("refunds-link").attribute("href").getValue shouldBe financialsRoutes.PaymentHistoryController.refundStatusAgent().url
+      }
     }
   }
   "both the individual and agent page" should {

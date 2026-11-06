@@ -135,10 +135,16 @@ class WhereMoneyCameFromTableSpec extends TestSupport {
 
         val link = firstRow.select("a#where-the-money-came-from-link-0")
         link.text() shouldBe messages("money-in-your-account.where-from.refund-row.description")
-        link.attr("href") shouldBe refundRow.descriptionLink
+        link.attr("href") shouldBe refundRow.descriptionLink(isAgent = false)
 
         firstRow.select("td#tax-year-cell-0").text() shouldBe messages("chargeSummary.noData")
         firstRow.select("td").last().text() shouldBe s"−${CurrencyFormatter(refundRow.amount).toCurrencyString}"
+      }
+
+      "render the agent refund status link when the user is an agent" in new Setup(refundRow, isAgent = true) {
+        val link = firstRow.select("a#where-the-money-came-from-link-0")
+        link.text() shouldBe messages("money-in-your-account.where-from.refund-row.description")
+        link.attr("href") shouldBe refundRow.descriptionLink(isAgent = true)
       }
     }
   }

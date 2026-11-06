@@ -132,7 +132,7 @@
             content = HtmlContent(messages("chargeSummary.noData"))
         ),
         TableRow(
-            content = TableRowDescriptionLink("money-in-your-account.where-from.refund-row.description", refund.descriptionLink, index),
+            content = TableRowDescriptionLink("money-in-your-account.where-from.refund-row.description", refund.descriptionLink(user.isAgent), index),
             attributes = Map("id" -> s"payment-$index")
         ),
         TableRow(

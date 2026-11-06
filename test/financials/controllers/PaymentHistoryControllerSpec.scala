@@ -153,48 +153,57 @@ class PaymentHistoryControllerSpec extends MockAuthActions
     }
   }
 
-  s"refundStatus" when {
-    s"the is an authenticated Individual" should {
-      "redirect to next url" when {
-        "repayment service call is successful and PaymentHistoryRefunds Fs enabled" in {
-          setupMockSuccess(MTDIndividual, false, List(PaymentHistoryRefunds))
-          mockItsaStatusRetrievalAction()
-          mockSingleBISWithCurrentYearAsMigrationYear()
+  mtdAllRoles.foreach { case mtdUserRole =>
+    val isAgent = mtdUserRole != MTDIndividual
+    val action = if (isAgent) testController.refundStatusAgent() else testController.refundStatus()
+    val fakeRequest = fakeGetRequestBasedOnMTDUserType(mtdUserRole)
+    s"refundStatus${if (isAgent) "Agent" else ""}" when {
+      s"the $mtdUserRole is authenticated" should {
+        if (mtdUserRole == MTDSupportingAgent) {
+          testSupportingAgentDeniedAccess(action)(fakeRequest)
+        } else {
+          "redirect to next url" when {
+            "repayment service call is successful and PaymentHistoryRefunds Fs enabled" in {
+              setupMockSuccess(mtdUserRole, false, List(PaymentHistoryRefunds))
+              mockItsaStatusRetrievalAction()
+              mockSingleBISWithCurrentYearAsMigrationYear()
 
-          when(mockRepaymentService.view(any())(any()))
-            .thenReturn(Future.successful(Right("/test/url")))
+              when(mockRepaymentService.view(any())(any()))
+                .thenReturn(Future.successful(Right("/test/url")))
 
-          val result = testController.refundStatus(fakeRequestWithActiveSession)
-          status(result) shouldBe Status.SEE_OTHER
-          redirectLocation(result) shouldBe Some("/test/url")
+              val result = action(fakeRequest)
+              status(result) shouldBe Status.SEE_OTHER
+              redirectLocation(result) shouldBe Some("/test/url")
+            }
+          }
+
+          "render the custom not found view" when {
+            "PaymentHistoryRefunds Fs is disabled" in {
+              setupMockSuccess(mtdUserRole)
+              mockItsaStatusRetrievalAction()
+              mockSingleBISWithCurrentYearAsMigrationYear()
+              val result = action(fakeRequest)
+              status(result) shouldBe Status.OK
+              JsoupParse(result).toHtmlDocument.title() shouldBe s"There is a problem - Manage your Self Assessment - GOV.UK"
+            }
+          }
+
+          "render the error page" when {
+            "the repayment service returns an error" in {
+              setupMockSuccess(mtdUserRole, false, List(PaymentHistoryRefunds))
+              mockItsaStatusRetrievalAction()
+              mockSingleBISWithCurrentYearAsMigrationYear()
+
+              when(mockRepaymentService.view(any())(any()))
+                .thenReturn(Future.successful(Left(new Exception("ERROR"))))
+
+              val result = action(fakeRequest)
+              status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+            }
+          }
         }
       }
-
-      "render the custom not found view" when {
-        "PaymentHistoryRefunds Fs is disabled" in {
-          setupMockSuccess(MTDIndividual)
-          mockItsaStatusRetrievalAction()
-          mockSingleBISWithCurrentYearAsMigrationYear()
-          val result = testController.refundStatus(fakeRequestWithActiveSession)
-          status(result) shouldBe Status.OK
-          JsoupParse(result).toHtmlDocument.title() shouldBe s"There is a problem - Manage your Self Assessment - GOV.UK"
-        }
-      }
-
-      "render the error page" when {
-        "the repayment service returns an error" in {
-          setupMockSuccess(MTDIndividual, false, List(PaymentHistoryRefunds))
-          mockItsaStatusRetrievalAction()
-          mockSingleBISWithCurrentYearAsMigrationYear()
-
-          when(mockRepaymentService.view(any())(any()))
-            .thenReturn(Future.successful(Left(new Exception("ERROR"))))
-
-          val result = testController.refundStatus(fakeRequestWithActiveSession)
-          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        }
-      }
+      testMTDAuthFailuresForRole(action, mtdUserRole, false)(fakeRequest)
     }
-    testMTDAuthFailuresForRole(testController.refundStatus, MTDIndividual)(fakeRequestWithActiveSession)
   }
 }
