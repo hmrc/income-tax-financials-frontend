@@ -186,11 +186,16 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     isElementVisibleById("due-0")(expectedValue = true),
                     isElementVisibleById("due-1")(expectedValue = true),
                     isElementVisibleById("payment-button")(expectedValue = true),
-                    isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
                     isElementVisibleById("sa-note-2-migrated")(expectedValue = true),
                     isElementVisibleById("outstanding-charges-note-migrated")(expectedValue = true),
                     isElementVisibleById("no-payments-due")(expectedValue = false)
                   )
+
+                  if (!mtdUserRole.isAgent) {
+                    result should have(
+                      isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
+                    )
+                  }
                 }
               }
 
@@ -237,11 +242,16 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     isElementVisibleById("due-1")(expectedValue = true),
                     isElementVisibleById("charge-interest-1")(expectedValue = false),
                     isElementVisibleById(s"payment-button")(expectedValue = true),
-                    isElementVisibleById(s"sa-note-1-migrated-2")(expectedValue = true),
                     isElementVisibleById(s"sa-note-2-migrated")(expectedValue = true),
                     isElementVisibleById(s"outstanding-charges-note-migrated")(expectedValue = true),
                     isElementVisibleById("no-payments-due")(expectedValue = false)
                   )
+
+                  if (!mtdUserRole.isAgent) {
+                    result should have(
+                      isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
+                    )
+                  }
                 }
               }
 
@@ -286,11 +296,16 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     isElementVisibleById("due-0")(expectedValue = true),
                     isElementVisibleById("due-1")(expectedValue = true),
                     isElementVisibleById("due-2")(expectedValue = false),
-                    isElementVisibleById(s"sa-note-1-migrated-2")(expectedValue = true),
                     isElementVisibleById(s"sa-note-2-migrated")(expectedValue = true),
                     isElementVisibleById(s"outstanding-charges-note-migrated")(expectedValue = true),
                     isElementVisibleById("no-payments-due")(expectedValue = false)
                   )
+
+                  if (!mtdUserRole.isAgent) {
+                    result should have(
+                      isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
+                    )
+                  }
                 }
               }
 
@@ -558,11 +573,16 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                       isElementVisibleById("balancing-charge-type-0")(expectedValue = true),
                       isElementVisibleById("balancing-charge-type-1")(expectedValue = true),
                       isElementVisibleById(s"payment-button")(expectedValue = true),
-                      isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
                       isElementVisibleById("sa-note-2-migrated")(expectedValue = true),
                       isElementVisibleById("outstanding-charges-note-migrated")(expectedValue = true),
                       isElementVisibleById("no-payments-due")(expectedValue = false)
                     )
+
+                    if (!mtdUserRole.isAgent) {
+                      result should have(
+                        isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
+                      )
+                    }
                   }
                 }
               }
@@ -592,11 +612,16 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                       isElementVisibleById("balancing-charge-type-0")(expectedValue = false),
                       isElementVisibleById("balancing-charge-type-1")(expectedValue = false),
                       isElementVisibleById(s"payment-button")(expectedValue = true),
-                      isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
                       isElementVisibleById("sa-note-2-migrated")(expectedValue = true),
                       isElementVisibleById("outstanding-charges-note-migrated")(expectedValue = true),
                       isElementVisibleById("no-payments-due")(expectedValue = false)
                     )
+
+                    if (!mtdUserRole.isAgent) {
+                      result should have(
+                        isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
+                      )
+                    }
                   }
                 }
               }
@@ -625,11 +650,16 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                       isElementVisibleById("balancing-charge-type-0")(expectedValue = false),
                       isElementVisibleById("balancing-charge-type-1")(expectedValue = false),
                       isElementVisibleById(s"payment-button")(expectedValue = true),
-                      isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
                       isElementVisibleById("sa-note-2-migrated")(expectedValue = true),
                       isElementVisibleById("outstanding-charges-note-migrated")(expectedValue = true),
                       isElementVisibleById("no-payments-due")(expectedValue = false)
                     )
+
+                    if (!mtdUserRole.isAgent) {
+                      result should have(
+                        isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
+                      )
+                    }
                   }
                 }
               }
@@ -659,11 +689,16 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     isElementVisibleById("due-0")(expectedValue = true),
                     isElementVisibleById("due-1")(expectedValue = true),
                     isElementVisibleById("payment-button")(expectedValue = true),
-                    isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
                     isElementVisibleById("sa-note-2-migrated")(expectedValue = true),
                     isElementVisibleById("outstanding-charges-note-migrated")(expectedValue = true),
                     isElementVisibleById("no-payments-due")(expectedValue = false)
                   )
+
+                  if (!mtdUserRole.isAgent) {
+                    result should have(
+                      isElementVisibleById("sa-note-1-migrated-2")(expectedValue = true),
+                    )
+                  }
                 }
               }
 
