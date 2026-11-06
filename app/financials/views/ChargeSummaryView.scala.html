@@ -31,7 +31,8 @@
 @import financials.views.html.partials.yourSelfAssessmentCharges.ChargeDetails
 @import financials.views.html.partials.yourSelfAssessmentCharges.{WhatIsPaymentOnAccount, InterestOnChargeRARPoaSection}
 @import financials.views.html.partials.chargeSummary.ChargeSummaryNotificationBanner
-@import financials.views.html.partials.chargeSummary.ChargeSummaryPaymentAllocationTable
+@import financials.views.html.partials.chargeSummary.{ChargeSummaryPaymentAllocationTable as ChargeSummaryPaymentAllocationTable}
+@import financials.views.html.partials.yourSelfAssessmentCharges.{ChargeSummaryPaymentAllocationTable as YourSelfAssessmentChargeSummaryPaymentAllocationTable}
 @import financials.models.paymentAllocationCharges.PaymentAllocationViewModel
 @import _root_.shared.implicits.HtmlFormatter.EmspString
 @import java.time.LocalDate
@@ -60,6 +61,7 @@
         interestOnYourChargeTable: InterestOnYourChargeTable,
         paymentHistoryTable: PaymentHistoryTable,
         chargeSummaryPaymentAllocationTable: ChargeSummaryPaymentAllocationTable,
+        yourSelfAssessmentChargeSummaryPaymentAllocationTable: YourSelfAssessmentChargeSummaryPaymentAllocationTable,
         whatIsPaymentOnAccount: WhatIsPaymentOnAccount,
         interestOnChargeRARPoaSection: InterestOnChargeRARPoaSection,
         notificationBanner: ChargeSummaryNotificationBanner
@@ -247,7 +249,7 @@
     @if(viewModel.chargeHistoryEnabledOrPaymentAllocationWithNoIsBalancingChargeZeroAndIsNotCredit) {
         @paymentHistoryTable(viewModel, isStoodOverEnabled)
     }
-    @if(viewModel.chargeItem.isCreditDrilldownPage) {
+    @if(viewModel.chargeItem.isCreditDrilldownPage && !viewModel.chargeItem.isIncludedInSACSummary) {
         @chargeSummaryPaymentAllocationTable(
             viewModel.chargeItem,
             {
@@ -259,5 +261,9 @@
                 else "chargeSummary.paymentOnAccount2.text"
             }
         )
+    }
+
+    @if(viewModel.isCredit && paymentAllocations.isDefined && viewModel.chargeItem.isIncludedInSACSummary) {
+        @yourSelfAssessmentChargeSummaryPaymentAllocationTable(paymentAllocations.get, viewModel.creditsRefundRepayEnabled)
     }
 }
