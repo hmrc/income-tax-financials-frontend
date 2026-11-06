@@ -45,91 +45,75 @@
 
 @saNoteParagraphContent(utr: String, isOverdueCharge: Boolean) = {
 
-   @if(isOverdueCharge){
-    @if(isSelfServeTimeToPayEnabled){
-        @h2(msg = getMessage("sa-note-1-heading"))
-        @if(user.isAgent){
+@if(isOverdueCharge) {
+    @if(isSelfServeTimeToPayEnabled) {
+        @if(!user.isAgent) {
+            @h2(msg = getMessage("sa-note-1-heading"))
             @p(id = Some("sa-note-1-migrated-2"))(Html(getMessage("sa-note-1-body-2") +
-                    link(link = financials.controllers.routes.SelfServeTimeToPayController.agentFetchUrl().url,
+                    link(link = financials.controllers.routes.SelfServeTimeToPayController.fetchUrl().url,
                         messageKey = getMessage("sa-link-1-body-1"),
                         rel = Some("noreferrer noopener"),
                         target = Some("_blank")).toString() +
                     " " +
                     getMessage("sa-note-1-body-4")))
-        } else {
-            @p(id = Some("sa-note-1-migrated-2"))(Html(getMessage("sa-note-1-body-2") +
-                        link(link = financials.controllers.routes.SelfServeTimeToPayController.fetchUrl().url,
-                            messageKey = getMessage("sa-link-1-body-1"),
-                            rel = Some("noreferrer noopener"),
-                            target = Some("_blank")).toString() +
-                        " " +
-                        getMessage("sa-note-1-body-4")))
             @p(id = Some("sa-note-1-migrated-1"))(Html(getMessage("sa-note-1-body-1") +
-                        link(link = budgetPaymentPlanUrl,
-                            messageKey = getMessage("sa-link-1-body-2"),
-                            rel = Some("noreferrer noopener"),
-                            target = Some("_blank")).toString() +
-                        " " +
-                        getMessage("sa-note-1-body-3")))
+                    link(link = budgetPaymentPlanUrl,
+                        messageKey = getMessage("sa-link-1-body-2"),
+                        rel = Some("noreferrer noopener"),
+                        target = Some("_blank")).toString() +
+                    " " +
+                    getMessage("sa-note-1-body-3")))
         }
     }
-}else {
-       @if(!viewModel.hasOnlySuspendedCharges) {
-           @h2(msg = getMessage("sa-note-1-heading"))
-           @p(id = Some("sa-note-1-migrated-1"))(Html(getMessage("sa-note-1-body-1") +
-                   link(link = budgetPaymentPlanUrl,
-                       messageKey = getMessage("sa-link-1-body-2"),
-                       rel = Some("noreferrer noopener"),
-                       target = Some("_blank")).toString() +
-                   " " +
-                   getMessage("sa-note-1-body-3")))
-
-           @if(user.isAgent) {
-               @p(id = Some("sa-note-1-migrated-2"))(Html(getMessage("sa-note-1-body-2") +
-                       link(link = financials.controllers.routes.SelfServeTimeToPayController.agentFetchUrl().url,
-                           messageKey = getMessage("sa-link-1-body-1"),
-                           rel = Some("noreferrer noopener"),
-                           target = Some("_blank")).toString() +
-                       " " +
-                       getMessage("sa-note-1-body-4")))
-           } else {
-               @p(id = Some("sa-note-1-migrated-2"))(Html(getMessage("sa-note-1-body-2") +
-                       link(link = financials.controllers.routes.SelfServeTimeToPayController.fetchUrl().url,
-                           messageKey = getMessage("sa-link-1-body-1"),
-                           rel = Some("noreferrer noopener"),
-                           target = Some("_blank")).toString() +
-                       " " +
-                       getMessage("sa-note-1-body-4")))
-           }
-       }
-    }
-
-    @if(!user.isAgent) {
-            @h2(msg = getMessage("sa-note-2-heading"))
-            @p(id = Some("sa-note-2-migrated")){
-                @getMessage("sa-note-2-body")
-                @link(link = appConfig.saViewLandPService(utr),
-                        outerMessage = ".",
-                        messageKey = getMessage("sa-link-2"),
-                        id = Some("sa-note-2-migrated"),
+} else {
+    @if(!viewModel.hasOnlySuspendedCharges) {
+        @if(!user.isAgent) {
+            @h2(msg = getMessage("sa-note-1-heading"))
+            @p(id = Some("sa-note-1-migrated-1"))(Html(getMessage("sa-note-1-body-1") +
+                    link(link = budgetPaymentPlanUrl,
+                        messageKey = getMessage("sa-link-1-body-2"),
                         rel = Some("noreferrer noopener"),
-                        target = Some("_blank"))
-            }
-    } else {
-            @h2(msg = getMessage("sa-note-2-heading-agent"))
-            @p(id = Some("sa-note-2-migrated")){
-                @getMessage("sa-note-2-body-agent-1")
-                @link(link = ExternalUrlHelper.saForAgents,
-                        outerMessage = ".",
-                        messageKey = getMessage("sa-link-2-agent"),
-                        id = Some("sa-note-2-migrated-link"),
-                        rel = Some("noreferrer noopener"),
-                        target = Some("_blank"))
-                @getMessage("sa-note-2-body-agent-2")
-            }
-    }
+                        target = Some("_blank")).toString() +
+                    " " +
+                    getMessage("sa-note-1-body-3")))
 
-    @p(id=Some("outstanding-charges-note-migrated"))(content = Html(getMessage("outstanding-charges-note")))
+            @p(id = Some("sa-note-1-migrated-2"))(Html(getMessage("sa-note-1-body-2") +
+                    link(link = financials.controllers.routes.SelfServeTimeToPayController.fetchUrl().url,
+                        messageKey = getMessage("sa-link-1-body-1"),
+                        rel = Some("noreferrer noopener"),
+                        target = Some("_blank")).toString() +
+                    " " +
+                    getMessage("sa-note-1-body-4")))
+        }
+    }
+}
+
+@if(!user.isAgent) {
+    @h2(msg = getMessage("sa-note-2-heading"))
+    @p(id = Some("sa-note-2-migrated")) {
+        @getMessage("sa-note-2-body")
+        @link(link = appConfig.saViewLandPService(utr),
+            outerMessage = ".",
+            messageKey = getMessage("sa-link-2"),
+            id = Some("sa-note-2-migrated"),
+            rel = Some("noreferrer noopener"),
+            target = Some("_blank"))
+    }
+} else {
+    @h2(msg = getMessage("sa-note-2-heading-agent"))
+    @p(id = Some("sa-note-2-migrated")) {
+        @getMessage("sa-note-2-body-agent-1")
+        @link(link = ExternalUrlHelper.saForAgents,
+            outerMessage = ".",
+            messageKey = getMessage("sa-link-2-agent"),
+            id = Some("sa-note-2-migrated-link"),
+            rel = Some("noreferrer noopener"),
+            target = Some("_blank"))
+        @getMessage("sa-note-2-body-agent-2")
+    }
+}
+
+@p(id = Some("outstanding-charges-note-migrated"))(content = Html(getMessage("outstanding-charges-note")))
 }
 
 @utr.map { utr =>

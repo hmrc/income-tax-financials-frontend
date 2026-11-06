@@ -1278,8 +1278,6 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
       val amount: String = balancingCodedOut.amountCodedOut.toCurrencyString
       pageDocument.getElementById("payments-made-migrated").text shouldBe paymentsMadeBody(amount = amount)
       pageDocument.getElementById("payments-made-migrated-link").attr("href") shouldBe financialsRoutes.PaymentHistoryController.showAgent().url
-      pageDocument.getElementsByTag("h2").text should include(saNote1Heading)
-      pageDocument.getElementById("sa-note-1-migrated-2").text shouldBe saNote1_2
       pageDocument.getElementsByTag("h2").text should include(saNote2HeadingAgent)
       pageDocument.getElementById("sa-note-2-migrated").text shouldBe saNote2Agent
     }
@@ -1288,8 +1286,6 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
       s"have the title ${messages("agent.header.serviceName", messages("whatYouOwe.heading-agent"))} and page header and notes" in new AgentTestSetup(charges = noChargesButCodedOutModel) {
         pageDocument.title() shouldBe messages("htmlTitle", messages("whatYouOwe.heading"))
         pageDocument.selectFirst("h1").text shouldBe whatYouOweAgentHeading
-        pageDocument.getElementById("sa-note-1-migrated-1").text shouldBe saNote1_1
-        pageDocument.getElementById("sa-note-1-migrated-2").text shouldBe saNote1_2
         pageDocument.getElementById("sa-note-2-migrated").text shouldBe saNote2Agent
         pageDocument.getElementById("outstanding-charges-note-migrated").text shouldBe osChargesNote
       }
