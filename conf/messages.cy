@@ -2794,6 +2794,9 @@ yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.1                 
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.link-text             = ar gyfer {0} i {1}
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p1.2                     = yn rhy uchel, ac mae CThEF wedi ychwanegu credyd at eich cyfrif.
 yourSelfAssessmentChargeSummary.itsaEnquiryAmendmentCredit.p2                       = Efallai y bydd CThEF yn defnyddio’r credyd hwn yn awtomatig i dalu’ch biliau treth yn y dyfodol pan fydd y rhain yn dod yn ddyledus.
+yourSelfAssessmentChargeSummary.reviewAndReconcilePoa2Credit.text.heading           = Ail daliad ar gyfrif: credyd o’ch Ffurflen Dreth
+yourSelfAssessmentChargeSummary.reviewAndReconcilePoa1Credit.text.heading		    = Taliad cyntaf ar gyfrif: credyd o’ch Ffurflen Dreth
+
 
 #######################################################################################################################
 ## Business Details

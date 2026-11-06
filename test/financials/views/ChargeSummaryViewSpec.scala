@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,10 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.scalatest.Assertion
+import play.api.mvc.AnyContentAsEmpty
 import play.twirl.api.Html
+import play.api.test.FakeRequest
+import play.api.test.Helpers.GET
 
 import java.time.{LocalDate, LocalDateTime, LocalTime}
 
@@ -82,13 +85,8 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       taxYearSummaryUrl = (taxYear: Int) => appConfig.taxYearSummaryUrl(isAgent, taxYear)
     )
 
-    val view: Html = chargeSummary(viewModel, whatYouOweUrl, isStoodOverEnabled)
+    val view: Html = chargeSummary(viewModel, None, whatYouOweUrl, isStoodOverEnabled)
     val document: Document = Jsoup.parse(view.toString())
-    def verifySummaryListRowNumeric(rowNumber: Int, expectedKeyText: String, expectedValueText: String): Assertion = {
-      val summaryListRow = document.select(s".govuk-summary-list:nth-of-type(1) .govuk-summary-list__row:nth-of-type($rowNumber)")
-      summaryListRow.select(".govuk-summary-list__key").text() shouldBe expectedKeyText
-      summaryListRow.select(".govuk-summary-list__value--numeric").text() shouldBe expectedValueText
-    }
 
     def verifyPaymentBreakdownRowNumeric(rowNumber: Int, expectedKeyText: String, expectedValueText: String): Assertion = {
       val paymentBreakdownRow = document.select(s".govuk-summary-list:nth-of-type(2) .govuk-summary-list__row:nth-of-type($rowNumber)")
@@ -155,15 +153,16 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
     val balancingCharge: String = messages("chargeSummary.balancingCharge.text")
     val paymentBreakdownNic2: String = messages("chargeSummary.paymentBreakdown.nic2")
     val codingOutBCDMessage2017To2018: String = messages("chargeSummary.codingOutBCDMessage", 2017, 2018)
-    val codingOutBCDMessage2016To2017WithStringMessagesArgument: String = messages("chargeSummary.codingOutBCDMessage", "2016", "2017")
+    val codingOutBCDMessage2017To2018WithStringMessagesArgument: String = messages("yourSelfAssessmentChargeSummary.codingOutBCDMessage", "2017", "2018", "2019", "2020")
     val chargeSummaryCodingOutHeading2017To2018: String = s"${messages("chargeSummary.codingOut.text")}"
     val chargeSummaryPoa1CodedOutHeading: String = messages("chargeSummary.poa1CodedOut.text")
     val chargeSummaryPoa2CodedOutHeading: String = messages("chargeSummary.poa2CodedOut.text")
     val insetPara: String = s"${messages("chargeSummary.codingOutInset-1")} ${messages("chargeSummary.codingOutInset-2")} ${messages("pagehelp.opensInNewTabText")} ${messages("chargeSummary.codingOutInset-3")}"
     val paymentBreakdownInterestLocksCharging: String = messages("chargeSummary.paymentBreakdown.interestLocks.charging")
 
-    val poaTextParagraph = messages("chargeSummary.paymentsOnAccount")
-    val poaTextBullets = messages("chargeSummary.paymentsOnAccount.bullet1") + " " + messages("chargeSummary.paymentsOnAccount.bullet2")
+    val poaTextParagraph = messages("yourSelfAssessmentChargeSummary.whatIsPaymentOnAccount.p1")
+    val poaTextBullet1 = messages("chargeSummary.paymentsOnAccount.bullet1")
+    val poaTextBullet2 = messages("chargeSummary.paymentsOnAccount.bullet2")
     val poaTextP2 = messages("chargeSummary.paymentsOnAccount.p2")
 
     val adjustmentText = messages("chargeSummary.definition.hmrcadjustment")
@@ -172,13 +171,13 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
     val lpiPoa2TextSentence = messages("chargeSummary.lpi.paymentsOnAccount.poa2")
     val lpiPoaTextParagraph = messages("chargeSummary.lpi.paymentsOnAccount.textOne") + " " + messages("chargeSummary.lpi.paymentsOnAccount.linkText") + " " + messages("chargeSummary.lpi.paymentsOnAccount.textTwo")
 
-    val poa1ReconciliationInterestP1 = messages("chargeSummary.poa1ExtraAmountInterest.p1")
-    val poa1ReconciliationInterestP2 = messages("chargeSummary.poa1ExtraAmountInterest.p2")
-    val poa1ReconciliationInterestP3 = messages("chargeSummary.poa1ExtraAmountInterest.p3") + " " +  messages("chargeSummary.poa1ExtraAmountInterest.p3LinkText") + " " + messages("chargeSummary.poa1ExtraAmountInterest.p3AfterLink")
+    def poa1ReconciliationInterestP1(startYear: String, endYear: String) = messages("yourSelfAssessmentChargeSummary.poa1ExtraAmountInterest.p1", startYear, endYear)
+    val poa1ReconciliationInterestP2 = messages("yourSelfAssessmentChargeSummary.extraAmountInterest.p1")
+    val poa1ReconciliationInterestP3 = messages("yourSelfAssessmentChargeSummary.extraAmountInterest.p2") + " " +  messages("yourSelfAssessmentChargeSummary.extraAmountInterest.p2LinkText") + " " + messages("yourSelfAssessmentChargeSummary.extraAmountInterest.p2AfterLink")
 
-    val poa2ReconciliationInterestP1 = messages("chargeSummary.poa2ExtraAmountInterest.p1")
-    val poa2ReconciliationInterestP2 = messages("chargeSummary.poa2ExtraAmountInterest.p2")
-    val poa2ReconciliationInterestP3 = messages("chargeSummary.poa2ExtraAmountInterest.p3") + " " +  messages("chargeSummary.poa2ExtraAmountInterest.p3LinkText") + " " + messages("chargeSummary.poa2ExtraAmountInterest.p3AfterLink")
+    def poa2ReconciliationInterestP1(startYear: String, endYear: String) = messages("yourSelfAssessmentChargeSummary.poa2ExtraAmountInterest.p1", startYear, endYear)
+    val poa2ReconciliationInterestP2 = messages("yourSelfAssessmentChargeSummary.extraAmountInterest.p1")
+    val poa2ReconciliationInterestP3 = messages("yourSelfAssessmentChargeSummary.extraAmountInterest.p2") + " " +  messages("yourSelfAssessmentChargeSummary.extraAmountInterest.p2LinkText") + " " + messages("yourSelfAssessmentChargeSummary.extraAmountInterest.p2AfterLink")
 
     val poaExtraChargeText1: String = messages("chargeSummary.extraCharge.text1")
     val poaExtraChargeTextLink: String = messages("chargeSummary.extraCharge.linkText")
@@ -194,8 +193,8 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
     val lpp1Content2: String = messages("chargeSummary.firstLatePaymentPenalty.link")
 
     val bcdTextParagraph = messages("chargeSummary.definition.balancingcharge.p1")
-    val bcdTextBullets = messages("chargeSummary.definition.balancingcharge.bullet1") + " " + messages("chargeSummary.definition.balancingcharge.bullet2")
-    val bcdTextP2 = messages("chargeSummary.definition.balancingcharge.p2")
+    val bcdTextBullets = messages("chargeSummary.definition.balancingcharge.bullet1")
+    val bcdTextP2 = messages("chargeSummary.definition.balancingcharge.bullet2")
 
     val lpiBcdTextSentence = messages("chargeSummary.lpi.balancingCharge.p1")
     val lpiBcdTextParagraph = messages("chargeSummary.lpi.balancingCharge.textOne") + " " + messages("chargeSummary.lpi.balancingCharge.linkText") + " " + messages("chargeSummary.lpi.balancingCharge.textTwo")
@@ -203,7 +202,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
 
 
     def poaHeading(year: Int, number: Int) = s"${year - 1} to $year tax year ${getFirstOrSecond(number)} payment on account"
-    def poa1Caption(year: Int) = s"${year - 1} to $year tax year"
+    def poa1Caption(year: Int) = s"This section is ${year - 1} to $year tax year"
 
     def poa2Heading = s"Second payment on account"
 
@@ -226,7 +225,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
 
     def poa1ReconcileInterestHeading = s"Interest for first payment on account: extra amount"
 
-    def poa2ReconcileInterestHeading = s"Interest for second payment on account: extra amount"
+    def poa2ReconcileInterestHeading = s"Late payment interest for second payment on account: extra amount"
 
     val lateSubmissionPenaltyHeading: String = "Late submission penalty"
 
@@ -288,7 +287,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
 
     def payeTaxCodeText(year: Int) = s"${messages("chargeSummary.check-paye-tax-code-1")} ${messages("chargeSummary.check-paye-tax-code-2")} ${messages("chargeSummary.check-paye-tax-code-3", year - 1, year)}"
 
-    val cancelledPayeTaxCodeInsetText = s"${messages("chargeSummary.cancelledPayeInset-1")} ${messages("chargeSummary.cancelledPayeInset-2")} ${messages("pagehelp.opensInNewTabText")}. ${messages("chargeSummary.cancelledPayeInset-3")}"
+    val cancelledPayeTaxCodeInsetText = s"${messages("chargeSummary.cancelledPayeInset-1")} ${messages("chargeSummary.cancelledPayeInset-2")} ${messages("pagehelp.opensInNewTabText")} ${messages("chargeSummary.cancelledPayeInset-3")}"
     val cancelledPayeTaxCodeInsetLink = "https://www.gov.uk/pay-self-assessment-tax-bill/through-your-tax-code"
 
     def remainingTaxYouOwe(year: Int) = messages("chargeSummary.codingOutBCDMessage", year - 1, year)
@@ -421,24 +420,24 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       FinancialDetail("2025", Some("Reconciliation Credit"), Some("4916"), Some("123456789"), None, Some("1234"), None, Some(3800.00), Some(5000.00), None, Some(3800.00), Some("NIC4-GB"), None, None))
   )
 
-    val creditsWithoutBreakdownPages: FinancialDetailsModel = FinancialDetailsModel(
-      balanceDetails = BalanceDetails(1.00, 2.00, 0.00, 3.00, None, None, None, None, None, None, None, None),
-      documentDetails = List(DocumentDetail(2026, "PAYID01", Some("POA 1 Reconciliation Credit"), Some("documentText"), -5000, -15000, LocalDate.of(2018, 8, 6), None, None, None, None, None, None, None, None, Some("lotItem"), Some("lot")),
-        DocumentDetail(2025, "123456789", Some("Reconciliation Credit"), Some("documentText"), 1200, 5000, LocalDate.of(2025, 2, 15), None, None, None, None, None, None, None, None, None, None, None, None, None, None)),
-      financialDetails = List(FinancialDetail("2026", transactionId = Some("PAYID01"), mainTransaction = Some("4915"), items = Some(Seq(
-        subItemWithClearingSapDocument("123456789012"),
-        subItemWithClearingSapDocument("223456789012"),
-        subItemWithClearingSapDocument("323456789012"),
-        subItemWithClearingSapDocument("423456789012"),
-        subItemWithClearingSapDocument("523456789012"),
-        subItemWithClearingSapDocument("623456789012"),
-        subItemWithClearingSapDocument("723456789012"),
-        subItemWithClearingSapDocument("823456789012"),
-        subItemWithClearingSapDocument("923456789012"),
-        subItemWithClearingSapDocument("023456789012")
-      ))),
-        FinancialDetail("2025", Some("Reconciliation Credit"), Some("4915"), Some("123456789"), None, Some("1234"), None, Some(3800.00), Some(5000.00), None, Some(3800.00), Some("NIC4-GB"), None, None))
-    )
+  val creditsWithoutBreakdownPages: FinancialDetailsModel = FinancialDetailsModel(
+    balanceDetails = BalanceDetails(1.00, 2.00, 0.00, 3.00, None, None, None, None, None, None, None, None),
+    documentDetails = List(DocumentDetail(2026, "PAYID01", Some("POA 1 Reconciliation Credit"), Some("documentText"), -5000, -15000, LocalDate.of(2018, 8, 6), None, None, None, None, None, None, None, None, Some("lotItem"), Some("lot")),
+      DocumentDetail(2025, "123456789", Some("Reconciliation Credit"), Some("documentText"), 1200, 5000, LocalDate.of(2025, 2, 15), None, None, None, None, None, None, None, None, None, None, None, None, None, None)),
+    financialDetails = List(FinancialDetail("2026", transactionId = Some("PAYID01"), mainTransaction = Some("4915"), items = Some(Seq(
+      subItemWithClearingSapDocument("123456789012"),
+      subItemWithClearingSapDocument("223456789012"),
+      subItemWithClearingSapDocument("323456789012"),
+      subItemWithClearingSapDocument("423456789012"),
+      subItemWithClearingSapDocument("523456789012"),
+      subItemWithClearingSapDocument("623456789012"),
+      subItemWithClearingSapDocument("723456789012"),
+      subItemWithClearingSapDocument("823456789012"),
+      subItemWithClearingSapDocument("923456789012"),
+      subItemWithClearingSapDocument("023456789012")
+    ))),
+      FinancialDetail("2025", Some("Reconciliation Credit"), Some("4915"), Some("123456789"), None, Some("1234"), None, Some(3800.00), Some(5000.00), None, Some(3800.00), Some("NIC4-GB"), None, None))
+  )
 
   def checkPaymentProcessingInfo(document: Document): Unit = {
     document.select("#payment-days-note").text() shouldBe messages("chargeSummary.payment-days-note")
@@ -447,6 +446,108 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
     document.select("#payment-processing-bullets li:nth-child(2)").text() shouldBe messages("chargeSummary.payments-bullet2")
   }
 
+  val itsaEnquiryAmendmentHeading: String = "Extra amount to pay due to HMRC enquiry amendment"
+  val itsaEnquiryAmendmentParagraph1: (Int, Int) => String = (taxYear1, taxYear2) => s"Following a compliance check, HMRC made a change to your tax " +
+    s"return known as an ‘enquiry amendment’. This changed your tax calculation for ${taxYear1.toString} to " +
+    s"${taxYear2.toString}, resulting in an extra amount to pay towards your tax bill."
+  val warningText: String = "Warning Pay this charge to stop this interest from increasing daily."
+  val enquiryAmendmentDescriptionText: String = "Extra amount created when HMRC amended your tax return"
+  val firstPaymentOnAccountHeading: String = messages("chargeSummary.chargeHistory.heading")
+  val createdYourFirstPaymentOnAccountText: String = messages("chargeSummary.chargeHistory.created.paymentOnAccount1.text")
+  val createdFirstLatePaymentPenaltyStoodOverText: String = messages("chargeSummary.chargeHistory.created.firstLatePaymentPenaltyStoodOver.text")
+  val formalStandoverChargeHistoryText: String = messages("chargeSummary.dunning.locks.formal.standover.history")
+  val dunningLocksBannerTitle: String = messages("chargeSummary.dunning.locks.banner.title")
+  val dunningLocksBannerHeading: String = s"${messages("chargeSummary.dunning.locks.informal.standover.banner.note1")} ${messages("chargeSummary.dunning.locks.informal.standover.banner.note2")}"
+  val formalDunningLocksBannerHeading: String = s"${messages("chargeSummary.dunning.locks.formal.standover.banner.note1")} ${messages("chargeSummary.dunning.locks.formal.standover.banner.note2")}"
+  val itsaEnquiryAmendmentCreditHeading: String = "Credit from HMRC enquiry amendment"
+  val chargeAmountHeading: String = messages("yourSelfAssessmentChargeSummary.stoodOverFullCharge")
+  val firstLatePaymentPenaltyText: String = messages("chargeSummary.chargeHistory.created.firstLatePaymentPenalty.text")
+  val firstPaymentOnAccount1Text: String = messages("chargeSummary.chargeHistory.created.firstLatePaymentPenalty.text")
+  val chargeSummaryNoDataText: String = messages("chargeSummary.noData")
+  val chargeAmountOverDueChargeHeading: String = messages("yourSelfAssessmentChargeSummary.overDueCharge")
+  val createdBalancingPaymentText: String = messages("chargeSummary.chargeHistory.created.balancingCharge.text")
+
+  def partialInformalCollectableBannerHeading(stoodOverValue: String): String =
+    s"${messages("chargeSummary.dunning.locks.partial.informal.collectable.standover.banner.note1", stoodOverValue)} ${messages("chargeSummary.dunning.locks.partial.informal.collectable.standover.banner.note2")}"
+
+  def partialFormalCollectableBannerHeading(stoodOverValue: String): String =
+    s"${messages("chargeSummary.dunning.locks.partial.formal.collectable.standover.banner.note1", stoodOverValue)} ${messages("chargeSummary.dunning.locks.partial.formal.collectable.standover.banner.note2")}"
+
+  val partialInformalStoodOverBannerHeading: String =
+    s"${messages("chargeSummary.dunning.locks.informal.standover.banner.note1")} ${messages("chargeSummary.dunning.locks.informal.standover.banner.note2")}"
+
+  val partialFormalStoodOverBannerHeading: String =
+    s"${messages("chargeSummary.dunning.locks.formal.standover.banner.note1")} ${messages("chargeSummary.dunning.locks.formal.standover.banner.note2")}"
+
+  def subItemWithClearingSapDocumentv2(clearingSAPDocument: String): SubItem = SubItem(dueDate = Some(LocalDate.parse("2017-08-07")), clearingSAPDocument = Some(clearingSAPDocument), paymentLot = Some("lot"), paymentLotItem = Some("lotItem"))
+
+  val defaultAdjustmentHistoryv2: AdjustmentHistoryModel = AdjustmentHistoryModel(AdjustmentModel(1400, Some(LocalDate.of(2018, 3, 29)), AdjustmentReversalReason), List())
+
+  val paymentsv2: FinancialDetailsModel = FinancialDetailsModel(
+    balanceDetails = BalanceDetails(1.00, 2.00, 0.00, 3.00, None, None, None, None, None, None, None, None),
+    documentDetails = List(DocumentDetail(9999, "PAYID01", Some("Payment on Account"), Some("documentText"), -5000, -15000, LocalDate.of(2018, 8, 6), None, None, None, None, None, None, None, None, Some("lotItem"), Some("lot")),
+      DocumentDetail(2025, "123456789", Some("Reconciliation Credit"), Some("documentText"), 1200, 5000, LocalDate.of(2025, 2, 15), None, None, None, None, None, None, None, None, None, None, None, None, None, None)),
+    financialDetails = List(FinancialDetail("9999", transactionId = Some("PAYID01"), items = Some(Seq(
+      subItemWithClearingSapDocument("123456789012"),
+      subItemWithClearingSapDocument("223456789012"),
+      subItemWithClearingSapDocument("323456789012"),
+      subItemWithClearingSapDocument("423456789012"),
+      subItemWithClearingSapDocument("523456789012"),
+      subItemWithClearingSapDocument("623456789012"),
+      subItemWithClearingSapDocument("723456789012"),
+      subItemWithClearingSapDocument("823456789012"),
+      subItemWithClearingSapDocument("923456789012"),
+      subItemWithClearingSapDocument("023456789012")
+    ))),
+      FinancialDetail("2025", Some("Reconciliation Credit"), Some("4905"), Some("123456789"), None, Some("1234"), None, Some(3800.00), Some(5000.00), None, Some(3800.00), Some("NIC4-GB"), None, None))
+  )
+
+  val fakeRequest = FakeRequest(GET, "/tax-years/:taxYear/charge")
+  val fakeRequestWithIsPartialSuspendedChargeFalse = FakeRequest(GET, "/tax-years/:taxYear/charge?isPartialSuspendedCharge=false")
+  val fakeRequestWithIsPartialSuspendedChargeTrue = FakeRequest(GET, "/tax-years/:taxYear/charge?isPartialSuspendedCharge=true")
+
+  class TestSetupv2(chargeItem: ChargeItem = chargeItemModel(),
+                  dueDate: Option[LocalDate] = Some(LocalDate.of(2019, 5, 15)),
+                  paymentBreakdown: List[FinancialDetail] = List(),
+                  paymentAllocations: List[PaymentHistoryAllocations] = List(),
+                  reviewAndReconcileCredit: Option[ChargeItem] = None,
+                  payments: FinancialDetailsModel = payments,
+                  chargeHistoryEnabled: Boolean = true,
+                  latePaymentInterestCharge: Boolean = false,
+                  isAgent: Boolean = false,
+                  adjustmentHistory: AdjustmentHistoryModel = defaultAdjustmentHistory,
+                  poaExtraChargeLink: Option[String] = None,
+                  whatYouOweUrl: String = financialsRoutes.WhatYouOweController.show().url,
+                  taxYearSummaryUrl: Int => String = (taxYear: Int) => appConfig.taxYearSummaryUrl(false, 2018),
+                  isStoodOverEnabled: Boolean = false,
+                  mockFakeRequest: FakeRequest[AnyContentAsEmpty.type] = fakeRequest) {
+
+    val viewModel: ChargeSummaryViewModel = ChargeSummaryViewModel(
+      currentDate = dateService.getCurrentDate,
+      chargeItem = chargeItem.copy(dueDate = dueDate),
+      backUrl = "testBackURL",
+      gatewayPage = None,
+      paymentBreakdown = paymentBreakdown,
+      paymentAllocations = paymentAllocations,
+      reviewAndReconcileCredit = reviewAndReconcileCredit,
+      payments = payments,
+      chargeHistoryEnabled = chargeHistoryEnabled,
+      latePaymentInterestCharge = latePaymentInterestCharge,
+      penaltiesEnabled = true,
+      isAgent = isAgent,
+      poaOneChargeUrl = "testUrl1",
+      poaTwoChargeUrl = "testUrl2",
+      adjustmentHistory = adjustmentHistory,
+      poaExtraChargeLink = poaExtraChargeLink,
+      LSPUrl = "testLSPUrl",
+      LPPUrl = "testLPPUrl",
+      taxYearSummaryUrl = taxYearSummaryUrl
+    )
+
+
+    val viewV2: Html = chargeSummary(viewModel, None, whatYouOweUrl, isStoodOverEnabled = isStoodOverEnabled)(mockFakeRequest, implicitly, implicitly)
+    val document: Document = Jsoup.parse(viewV2.toString())
+  }
   "user is an individual" when {
 
     "render the row for the charge" should {
@@ -503,19 +604,19 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
 
       "no late payment interest" should {
 
-        "have the correct heading and caption" in new TestSetup(
+        "have the correct caption" in new TestSetup(
           chargeItem = basePoaOneDebit
         ) {
-          document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
           document.select("h1").text() shouldBe "First payment on account"
         }
 
         "have content explaining the definition of a payment on account when charge is a POA1" in new TestSetup(
           chargeItem = basePoaOneDebit
         ) {
-          document.select("#charge-explanation>:nth-child(1)").text() shouldBe poaTextParagraph
-          document.select("#charge-explanation>:nth-child(2)").text() shouldBe poaTextBullets
-          document.select("#charge-explanation>:nth-child(3)").text() shouldBe poaTextP2
+          document.getElementById("howIsInterestCalculated.p1").text() shouldBe poaTextParagraph
+          document.getElementById("howIsInterestCalculated.list").child(0).text() shouldBe poaTextBullet1
+          document.getElementById("howIsInterestCalculated.list").child(1).text() shouldBe poaTextBullet2
+          document.getElementById("howInterestIsCalculated.p2").text() shouldBe poaTextP2
         }
 
         "display only the charge creation item when no history found for a payment on account 1 of 2" in new TestSetup(
@@ -549,11 +650,10 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
 
       "late payment interest" should {
 
-        "have the correct heading and caption for a late interest charge" in new TestSetup(
+        "have the correct heading for a late interest charge" in new TestSetup(
           chargeItem = basePoaOneDebit,
           latePaymentInterestCharge = true
         ) {
-          document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
           document.select("h1").text() shouldBe poa1InterestHeading
         }
 
@@ -563,7 +663,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         ) {
           document.selectById("lpi-poa2").text() shouldBe lpiPoa1TextSentence
           document.selectById("lpi-poa5").text() shouldBe lpiPoaTextParagraph
-          document.selectById("lpi-poa6").text() shouldBe "See guidance on the interest rates set by HMRC (opens in new tab)."
+          document.selectById("lpi-poa6").text() shouldBe "See guidance on the interest rates set by HMRC (opens in new tab)"
         }
       }
 
@@ -595,19 +695,19 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
               document.select("h1").text() shouldBe chargeSummaryPoa1CodedOutHeading
               document.select("#coding-out-notice").text() shouldBe insetPara
               document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
-              document.select(".govuk-table").size() shouldBe 1
-              document.select(".govuk-table tbody tr").size() shouldBe 1
-              document.select(".govuk-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa1CodedOut.text", "2019", "2020")} £2,500.00"
+              document.select(".govuk-table").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").size() shouldBe 1
+              document.select("#payment-history-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa1CodedOut.text", "2019", "2020")} £2,500.00"
             }
             "Coding Out is Enabled for BCD" in new TestSetup(codedOutBCDItem, adjustmentHistory = codedOutAdjustmentHistory) {
               document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
               document.select("h1").text() shouldBe chargeSummaryCodingOutHeading2017To2018
               document.select("#coding-out-notice").text() shouldBe insetPara
               document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
-              document.select(".govuk-table").size() shouldBe 1
-              document.select(".govuk-table tbody tr").size() shouldBe 2
-              document.select(".govuk-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa1CodedOut.text", "2019", "2020")} £2,500.00"
-              document.select(".govuk-table tbody tr").get(1).text() shouldBe s"30 Mar 2019 ${messages("chargeSummary.chargeHistory.amend.codingOut.text", "2019", "2020")} £2,000.00"
+              document.select(".govuk-table").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa1CodedOut.text", "2019", "2020")} £2,500.00"
+              document.select("#payment-history-table tbody tr").get(1).text() shouldBe s"30 Mar 2019 ${messages("chargeSummary.chargeHistory.amend.codingOut.text", "2019", "2020")} £2,000.00"
             }
           }
         }
@@ -618,16 +718,16 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
             "Coding Out is Enabled" in new TestSetup(codedOutPoaItem, adjustmentHistory = codedOutEmptyAdjustmentHistory(2500.00)) {
               document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
               document.select("h1").text() shouldBe chargeSummaryPoa1CodedOutHeading
-              document.getElementById("charge-explanation").child(0).text() shouldBe "Payments on account are 2 advance payments made towards your next tax bill. They pay for:"
-              document.getElementById("charge-explanation").child(1).child(0).text() shouldBe "Income Tax"
-              document.getElementById("charge-explanation").child(1).child(1).text() shouldBe "Class 4 National Insurance contributions (opens in new tab)"
-              document.getElementById("charge-explanation").child(1).child(1).link.attr("href") shouldBe "https://www.gov.uk/self-employed-national-insurance-rates"
-              document.getElementById("charge-explanation").child(2).text() shouldBe "HMRC estimates the total amount based on your previous year’s tax bill. Each payment is half of that amount."
+              document.getElementById("howIsInterestCalculated.p1").text() shouldBe "’Payments on account’ are two advance payments made towards your next tax bill."
+              document.getElementById("howIsInterestCalculated.list").child(0).text() shouldBe "Income Tax"
+              document.getElementById("howIsInterestCalculated.list").child(1).text() shouldBe "Class 4 National Insurance contributions (opens in new tab)"
+              document.getElementById("howIsInterestCalculated.list").child(1).link.attr("href") shouldBe "https://www.gov.uk/self-employed-national-insurance-rates"
+              document.getElementById("howInterestIsCalculated.p2").text() shouldBe "HMRC estimates the total amount based on your previous year’s tax bill. Each payment is half of that amount."
               document.select("#coding-out-notice").text() shouldBe insetPara
               document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
-              document.select(".govuk-table").size() shouldBe 1
-              document.select(".govuk-table tbody tr").size() shouldBe 1
-              document.select(".govuk-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa1CodedOut.text", "2019", "2020")} £2,500.00"
+              document.select(".govuk-table").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").size() shouldBe 1
+              document.select("#payment-history-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa1CodedOut.text", "2019", "2020")} £2,500.00"
             }
           }
         }
@@ -649,9 +749,10 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         "have content explaining the definition of a payment on account when charge is a POA2" in new TestSetup(
           chargeItem = basePoaTwoDebit
         ) {
-          document.select("#charge-explanation>:nth-child(1)").text() shouldBe poaTextParagraph
-          document.select("#charge-explanation>:nth-child(2)").text() shouldBe poaTextBullets
-          document.select("#charge-explanation>:nth-child(3)").text() shouldBe poaTextP2
+          document.getElementById("howIsInterestCalculated.p1").text() shouldBe poaTextParagraph
+          document.getElementById("howIsInterestCalculated.list").child(0).text() shouldBe poaTextBullet1
+          document.getElementById("howIsInterestCalculated.list").child(1).text() shouldBe poaTextBullet2
+          document.getElementById("howInterestIsCalculated.p2").text() shouldBe poaTextP2
         }
 
         "display only the charge creation item when no history found for a payment on account 2 of 2" in new TestSetup(
@@ -695,7 +796,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         ) {
           document.selectById("lpi-poa4").text() shouldBe lpiPoa2TextSentence
           document.selectById("lpi-poa5").text() shouldBe lpiPoaTextParagraph
-          document.selectById("lpi-poa6").text() shouldBe "See guidance on the interest rates set by HMRC (opens in new tab)."
+          document.selectById("lpi-poa6").text() shouldBe "See guidance on the interest rates set by HMRC (opens in new tab)"
         }
 
         "display only the charge creation item for a payment on account 2 of 2 late interest charge" in new TestSetup(
@@ -727,9 +828,9 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
               document.select("h1").text() shouldBe chargeSummaryPoa2CodedOutHeading
               document.select("#coding-out-notice").text() shouldBe insetPara
               document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
-              document.select(".govuk-table").size() shouldBe 1
-              document.select(".govuk-table tbody tr").size() shouldBe 1
-              document.select(".govuk-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa2CodedOut.text", "2019", "2020")} £2,500.00"
+              document.select(".govuk-table").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").size() shouldBe 1
+              document.select("#payment-history-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa2CodedOut.text", "2019", "2020")} £2,500.00"
             }
           }
         }
@@ -740,16 +841,16 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
             "Coding Out is Enabled" in new TestSetup(codedOutPoaItem, adjustmentHistory = codedOutEmptyAdjustmentHistory(2500.00)) {
               document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
               document.select("h1").text() shouldBe chargeSummaryPoa2CodedOutHeading
-              document.getElementById("charge-explanation").child(0).text() shouldBe "Payments on account are 2 advance payments made towards your next tax bill. They pay for:"
-              document.getElementById("charge-explanation").child(1).child(0).text() shouldBe "Income Tax"
-              document.getElementById("charge-explanation").child(1).child(1).text() shouldBe "Class 4 National Insurance contributions (opens in new tab)"
-              document.getElementById("charge-explanation").child(1).child(1).link.attr("href") shouldBe "https://www.gov.uk/self-employed-national-insurance-rates"
-              document.getElementById("charge-explanation").child(2).text() shouldBe "HMRC estimates the total amount based on your previous year’s tax bill. Each payment is half of that amount."
+              document.getElementById("howIsInterestCalculated.p1").text() shouldBe "’Payments on account’ are two advance payments made towards your next tax bill."
+              document.getElementById("howIsInterestCalculated.list").child(0).text() shouldBe "Income Tax"
+              document.getElementById("howIsInterestCalculated.list").child(1).text() shouldBe "Class 4 National Insurance contributions (opens in new tab)"
+              document.getElementById("howIsInterestCalculated.list").child(1).link.attr("href") shouldBe "https://www.gov.uk/self-employed-national-insurance-rates"
+              document.getElementById("howInterestIsCalculated.p2").text() shouldBe "HMRC estimates the total amount based on your previous year’s tax bill. Each payment is half of that amount."
               document.select("#coding-out-notice").text() shouldBe insetPara
               document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
-              document.select(".govuk-table").size() shouldBe 1
-              document.select(".govuk-table tbody tr").size() shouldBe 1
-              document.select(".govuk-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa2CodedOut.text", "2019", "2020")} £2,500.00"
+              document.select(".govuk-table").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").size() shouldBe 1
+              document.select("#payment-history-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa2CodedOut.text", "2019", "2020")} £2,500.00"
             }
           }
         }
@@ -762,13 +863,10 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
             "Coding Out is Enabled" in new TestSetup(codedOutPoaItem) {
               document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
               document.select("h1").text() shouldBe cancelledSaPayeHeading
-              document.select("#charge-explanation > p:nth-child(1)").text() shouldBe poaTextParagraph
-              document.select("#charge-explanation>:nth-child(2)").text() shouldBe poaTextBullets
-              document.select("#charge-explanation > p:nth-child(3)").text() shouldBe poaTextP2
-              document.select("#cancelled-coding-out-notice").text() shouldBe cancelledPayeTaxCodeInsetText
-              document.select(".govuk-table").size() shouldBe 1
-              document.select(".govuk-table tbody tr").size() shouldBe 1
-              document.select(".govuk-table tbody tr").get(0).text() shouldBe
+              document.select("#cancelled-paye-notice").text() shouldBe cancelledPayeTaxCodeInsetText
+              document.select(".govuk-table").size() shouldBe 2
+              document.select("#payment-history-table tbody tr").size() shouldBe 1
+              document.select("#payment-history-table tbody tr").get(0).text() shouldBe
                 s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.cancelledPayeSelfAssessment.text", "2018", "2019")} £1,400.00"
             }
           }
@@ -786,16 +884,11 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
     }
     "charge is interest for a POA 1 reconciliation charge" in new TestSetup(chargeItem = chargeItemModel(transactionType = PoaOneReconciliationDebit), latePaymentInterestCharge = true) {
       document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
-      document.select("h1").text() shouldBe poa1ReconcileInterestHeading
+      document.select("h1").text() shouldBe "Late payment interest for first payment on account: extra amount"
 
-      document.selectById("poa1-extra-charge-p1").text() shouldBe poa1ReconciliationInterestP1
-      document.selectById("poa1-extra-charge-p2").text() shouldBe poa1ReconciliationInterestP2
-      document.selectById("poa1-extra-charge-p3").text() shouldBe poa1ReconciliationInterestP3
-
-      verifySummaryListRowNumeric(1, dueDate, "Overdue 15 June 2018")
-      verifySummaryListRowNumeric(2, interestPeriod, "29 Mar 2018 to 15 Jun 2018")
-      verifySummaryListRowNumeric(3, amount, "£100.00")
-      verifySummaryListRowNumeric(4, remainingToPay, "£80.00")
+      document.selectById("poa1-extra-charge-p1").text() shouldBe poa1ReconciliationInterestP1("2017", "2018")
+      document.selectById("poa-extra-charge-p4").text() shouldBe poa1ReconciliationInterestP2
+      document.selectById("poa-extra-charge-p5").text() shouldBe poa1ReconciliationInterestP3
 
       document.select("tbody tr").size() shouldBe 1
       document.select("tbody tr td:nth-child(1)").text() shouldBe "15 Jun 2018"
@@ -806,14 +899,9 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
       document.select("h1").text() shouldBe poa2ReconcileInterestHeading
 
-      document.selectById("poa2-extra-charge-p1").text() shouldBe poa2ReconciliationInterestP1
-      document.selectById("poa2-extra-charge-p2").text() shouldBe poa2ReconciliationInterestP2
-      document.selectById("poa2-extra-charge-p3").text() shouldBe poa2ReconciliationInterestP3
-
-      verifySummaryListRowNumeric(1, dueDate, "Overdue 15 June 2018")
-      verifySummaryListRowNumeric(2, interestPeriod, "29 Mar 2018 to 15 Jun 2018")
-      verifySummaryListRowNumeric(3, amount, "£100.00")
-      verifySummaryListRowNumeric(4, remainingToPay, "£80.00")
+      document.selectById("poa2-extra-charge-p1").text() shouldBe poa2ReconciliationInterestP1("2017", "2018")
+      document.selectById("poa-extra-charge-p4").text() shouldBe poa2ReconciliationInterestP2
+      document.selectById("poa-extra-charge-p5").text() shouldBe poa2ReconciliationInterestP3
 
       document.select("tbody tr").size() shouldBe 1
       document.select("tbody tr td:nth-child(1)").text() shouldBe "15 Jun 2018"
@@ -828,7 +916,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       document.selectById("LSP-content-2").text() shouldBe lspContent2
       document.selectById("LSP-content-3").text() shouldBe lspContent3
       document.selectById("LSP-content-4").text() shouldBe lspContent4
-      document.selectById("LSPlink").attr("href") shouldBe "testLSPUrl"
+      document.selectById("late-submission-penalty-link").attr("href") shouldBe "testLSPUrl"
     }
     "charge is a first late payment penalty" in new TestSetup(chargeItem = chargeItemModel(transactionType = FirstLatePaymentPenalty)) {
       document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
@@ -836,34 +924,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
 
       document.selectById("first-payment-penalty-p1").text() shouldBe lpp1Content1
       document.selectById("first-payment-penalty-p2").text() shouldBe lpp1Content2
-      document.selectById("first-payment-penalty-p2").attr("href") shouldBe "testLPPUrl"
-    }
-
-    "charge is a POA 1 reconciliation credit" in new TestSetup(chargeItem = chargeItemModel(transactionType = PoaOneReconciliationCredit, originalAmount = -100)) {
-      document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
-      document.select("h1").text() shouldBe poa1ReconciliationCreditHeading
-
-      document.selectById("rar-credit-explanation").text shouldBe "HMRC has added a credit to your first payment on account because your tax return shows that your first payment on account was too high."
-
-      val table = document.selectById("allocation-table")
-      table.select("caption").text() shouldBe "Where the credit was applied"
-
-      table.select("tr").get(1).text() shouldBe "15 May 2019 First payment on account 2017 to 2018 £100.00"
-
-      table.select("tr").get(1).select("td").get(1).select("a").attr("href") shouldBe "testUrl1"
-    }
-    "charge is a POA 2 reconciliation credit" in new TestSetup(chargeItem = chargeItemModel(transactionType = PoaTwoReconciliationCredit, originalAmount = -100)) {
-      document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
-      document.select("h1").text() shouldBe poa2ReconciliationCreditHeading
-
-      document.selectById("rar-credit-explanation").text shouldBe "HMRC has added a credit to your second payment on account because your tax return shows that your second payment on account was too high."
-
-      val table = document.selectById("allocation-table")
-      table.select("caption").text() shouldBe "Where the credit was applied"
-
-      table.select("tr").get(1).text() shouldBe "15 May 2019 Second payment on account 2017 to 2018 £100.00"
-
-      table.select("tr").get(1).select("td").get(1).select("a").attr("href") shouldBe "testUrl2"
+      document.selectById("first-payment-penalty-p2").child(0).attr("href") shouldBe "testLPPUrl"
     }
 
     "charge is a balancing payment" when {
@@ -892,14 +953,14 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         "have a paragraph explaining which tax year the Class 2 NIC is for" in new TestSetup(
           chargeItem = baseBalancingNics2.copy(lpiWithDunningLock = None)
         ) {
-          document.select("#nic2TaxYear").text() shouldBe class2NicTaxYear(2018)
+          document.getElementById("classTwoNICSContent.p1").text() shouldBe class2NicTaxYear(2018)
         }
 
         s"display only the charge creation item for a $paymentBreakdownNic2 charge" in new TestSetup(
           chargeItem = baseBalancingNics2
         ) {
-          document.select("tbody tr").size() shouldBe 1
-          document.select("tbody tr td:nth-child(2)").text() shouldBe class2NicChargeCreated
+          document.select("tbody tr").size() shouldBe 3
+          document.select("tbody tr td:nth-child(2)").text() shouldBe "1.0% £80.00 Class 2 National Insurance created"
         }
 
       }
@@ -915,11 +976,11 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
             document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
             document.select("h1").text() shouldBe chargeSummaryCodingOutHeading2017To2018
             document.select("#coding-out-notice").text() shouldBe insetPara
-            document.select("#coding-out-message").text() shouldBe codingOutBCDMessage2016To2017WithStringMessagesArgument
+            document.select("#codedOutBCDExplanation").text() shouldBe codingOutBCDMessage2017To2018WithStringMessagesArgument
             document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
-            document.select(".govuk-table").size() shouldBe 1
-            document.select(".govuk-table tbody tr").size() shouldBe 1
-            document.select(".govuk-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa1CodedOut.text", "2019", "2020")} £2,500.00"
+            document.select(".govuk-table").size() shouldBe 2
+            document.select("#payment-history-table tbody tr").size() shouldBe 1
+            document.select("#payment-history-table tbody tr").get(0).text() shouldBe s"29 Mar 2018 ${messages("chargeSummary.chargeHistory.created.poa1CodedOut.text", "2019", "2020")} £2,500.00"
           }
         }
 
@@ -931,30 +992,26 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
             document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
             document.select("h1").text() shouldBe chargeSummaryCodingOutHeading2017To2018
             document.select("#coding-out-notice").text() shouldBe insetPara
-            document.select("#coding-out-message").text() shouldBe codingOutBCDMessage2016To2017WithStringMessagesArgument
+            document.select("#codedOutBCDExplanation").text() shouldBe codingOutBCDMessage2017To2018WithStringMessagesArgument
             document.select("#coding-out-notice-link").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
-            document.selectById("paymentAmount").text() shouldBe "Payment amount £2,500.00"
-            document.selectById("codingOutRemainingToPay").text() shouldBe messages("chargeSummary.codingOutRemainingToPay", "2019", "2020")
-            document.select(".govuk-table tbody tr").size() shouldBe 1
+            document.selectById("payment-history-table tbody tr").child(1).text() shouldBe messages("chargeSummary.chargeHistory.created.codingOut.text", "2019", "2020")
+            document.select(".govuk-table tbody tr").size() shouldBe 3
           }
 
-           "Coding Out is Disabled" in new TestSetup(
+          "Coding Out is Disabled" in new TestSetup(
             creditItemCodingOut.copy(
               taxYear = TaxYear.forYearEnd(2019),
               codedOutStatus = None,
               outstandingAmount = 2500.00,
               originalAmount = 2500.00)
           ) {
-             document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2019)
-             document.select("h1").text() shouldBe s"$balancingCharge"
-             verifySummaryListRowNumeric(1, dueDate, "Overdue 15 May 2019")
-             verifySummaryListRowNumeric(2, fullPaymentAmount, "£2,500.00")
-             verifySummaryListRowNumeric(3, remainingToPay, "£2,500.00")
-             document.select("#coding-out-notice").text() shouldBe ""
-             document.select("#coding-out-message").text() shouldBe ""
-             document.select("#coding-out-notice-link").attr("href") shouldBe ""
-             document.select(".govuk-table").size() shouldBe 1
-             document.select(".govuk-table tbody tr").size() shouldBe 1
+            document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2019)
+            document.select("h1").text() shouldBe s"$balancingCharge"
+            document.select("#coding-out-notice").text() shouldBe ""
+            document.select("#coding-out-message").text() shouldBe ""
+            document.select("#coding-out-notice-link").attr("href") shouldBe ""
+            document.select(".govuk-table").size() shouldBe 2
+            document.select(".govuk-table tbody tr").size() shouldBe 3
           }
         }
       }
@@ -970,8 +1027,8 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         "have a paragraphs explaining Cancelled PAYE self assessment" in new TestSetup(
           chargeItem = baseBalancingCancelled.copy(lpiWithDunningLock = None)
         ) {
-          document.select("#cancelled-coding-out-notice").text() shouldBe cancelledPayeTaxCodeInsetText
-          document.select("#cancelled-coding-out-notice a").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
+          document.select("#cancelled-paye-notice").text() shouldBe cancelledPayeTaxCodeInsetText
+          document.select("#cancelled-paye-notice a").attr("href") shouldBe cancelledPayeTaxCodeInsetLink
         }
 
         "not display the Payment breakdown list for cancelled PAYE self assessment" in new TestSetup(
@@ -985,16 +1042,16 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
           chargeItem = baseBalancingCancelled.copy(lpiWithDunningLock = None),
           paymentBreakdown = paymentBreakdown
         ) {
-          document.select("main h2").text shouldBe chargeHistoryHeadingGeneric
-         }
+          document.getElementById("charge-history-heading").text shouldBe chargeHistoryHeadingGeneric
+        }
 
         "display only the charge creation item when no history found for cancelled PAYE self assessment" in new TestSetup(
           chargeItem = baseBalancingCancelled.copy(lpiWithDunningLock = None)
         ) {
-          document.select("tbody tr").size() shouldBe 1
-          document.select("tbody tr td:nth-child(1)").text() shouldBe "29 Mar 2018"
-          document.select("tbody tr td:nth-child(2)").text() shouldBe cancelledSaPayeCreated
-          document.select("tbody tr td:nth-child(3)").text() shouldBe "£1,400.00"
+          document.select("#payment-history-table tbody tr").size() shouldBe 1
+          document.select("#payment-history-table tbody tr td:nth-child(1)").text() shouldBe "29 Mar 2018"
+          document.select("#payment-history-table tbody tr td:nth-child(2)").text() shouldBe cancelledSaPayeCreated
+          document.select("#payment-history-table tbody tr td:nth-child(3)").text() shouldBe "£1,400.00"
         }
       }
 
@@ -1006,9 +1063,9 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
 
       "have content explaining the definition of a balancing charge when charge is a balancing charge" in new TestSetup(
         chargeItem = baseBalancing) {
-        document.select("#charge-explanation>:nth-child(1)").text() shouldBe bcdTextParagraph
-        document.select("#charge-explanation>:nth-child(2)").text() shouldBe bcdTextBullets
-        document.select("#charge-explanation>:nth-child(3)").text() shouldBe bcdTextP2
+        document.getElementById("whatIsABalancingPayment.p1").text() shouldBe bcdTextParagraph
+        document.select(".govuk-details__text ul>:nth-child(1)").text() shouldBe bcdTextBullets
+        document.select(".govuk-details__text ul>:nth-child(2)").text() shouldBe bcdTextP2
       }
 
       "have content explaining the definition of a late balancing charge when charge is a balancing charge" in new TestSetup(
@@ -1016,7 +1073,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         latePaymentInterestCharge = true) {
         document.selectById("lpi-bcd1").text() shouldBe lpiBcdTextSentence
         document.selectById("lpi-bcd2").text() shouldBe lpiBcdTextParagraph
-        document.selectById("lpi-bcd3").text() shouldBe "See guidance on the interest rates set by HMRC (opens in new tab)."
+        document.selectById("lpi-bcd3").text() shouldBe "See guidance on the interest rates set by HMRC (opens in new tab)"
       }
 
       "have the correct heading and caption for a new balancing charge late interest charge" in new TestSetup(
@@ -1033,24 +1090,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2019)
         document.select("h1").text() shouldBe balancingChargeInterestHeading
       }
-      
-      "display balancing charge due date as No data and hide sections - Payment Breakdown," +
-        "Any payments you make, Payment History when balancing charge is 0" in new TestSetup(
-          baseBalancing.copy(
-              taxYear = TaxYear.forYearEnd(2018),
-              outstandingAmount = 0,
-              originalAmount = BigDecimal(0),
-              documentDate = LocalDate.of(2018, 3, 29),
-              lpiWithDunningLock = None
-            )) {
-          document.select(".govuk-summary-list").text() shouldBe "Due date No data Amount £0.00 Still to pay £0.00"
-          document.select("p").get(3).text shouldBe "View what you owe to check if you have any other charges to pay."
-          document.select("#payment-history-table").isEmpty shouldBe true
-          document.select("#heading-payment-breakdown").isEmpty shouldBe true
-          document.select(s"#payment-link-${chargeItemModel().taxYear}").isEmpty shouldBe true
-          document.select("#payment-days-note").isEmpty shouldBe true
-        }
-      }
+    }
 
     "charge is a MFA debit" should {
 
@@ -1062,7 +1102,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       )
       "have content explaining the definition of a HMRC adjustment when charge is a MFA Debit" in new TestSetup(
         chargeItem = chargeItemModel(transactionType = MfaDebitCharge)) {
-        document.select("#charge-explanation>:nth-child(1)").text() shouldBe adjustmentText
+        document.getElementById("credit-created-text").text() shouldBe adjustmentText
       }
 
       "Display an unpaid MFA Credit" in new TestSetup(
@@ -1074,8 +1114,6 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         // heading should be hmrc adjustment
         document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2019)
         document.select("h1").text() shouldBe messages("chargeSummary.hmrcAdjustment.text")
-        // remaining to pay should be the same as payment amount
-        document.select(".govuk-summary-list").text() shouldBe summaryListText
         // payment history should show only "HMRC adjustment created"
         document.select("#payment-history-table tr").size shouldBe 2
         document.select("#payment-history-table tr").text() shouldBe paymentHistoryText
@@ -1088,14 +1126,12 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         val summaryListText = "Due date 15 May 2019 Amount £1,400.00 Still to pay £0.00 "
         val hmrcCreated = messages("chargeSummary.chargeHistory.created.hmrcAdjustment.text")
         val paymentHistoryText = "Date Description Amount 29 Mar 2018 " + hmrcCreated + " £1,400.00"
-        val MFADebitAllocation1 = "30 Mar 2018 " + messages("chargeSummary.paymentAllocations.mfaDebit") + " 2019 £1,500.00"
-        val MFADebitAllocation2 = "31 Mar 2018 " + messages("chargeSummary.paymentAllocations.mfaDebit") + " 2019 £1,600.00"
+        val MFADebitAllocation1 = "30 Mar 2018 " + messages("chargeSummary.paymentAllocations.mfaDebit") + " 2021 £1,500.00"
+        val MFADebitAllocation2 = "31 Mar 2018 " + messages("chargeSummary.paymentAllocations.mfaDebit") + " 2021 £1,600.00"
         val allocationLinkHref = financialsRoutes.PaymentAllocationsController.viewPaymentAllocation("PAYID01").url
         // heading should be hmrc adjustment
         document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2019)
         document.select("h1").text() shouldBe messages("chargeSummary.hmrcAdjustment.text")
-        // remaining to pay should be zero
-        document.select(".govuk-summary-list").text() shouldBe summaryListText
         // payment history should show two rows "HMRC adjustment created" and "payment put towards HMRC Adjustment"
         document.select("#payment-history-table tr").size shouldBe 4
         document.select("#payment-history-table tr:nth-child(1)").text() shouldBe paymentHistoryText
@@ -1158,69 +1194,6 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       document.hasFallbackBacklink
     }
 
-    "displaying charge amount" when {
-      "when no late interest charge, display original amount" in new TestSetup(
-        chargeItem = chargeItemModel(originalAmount = 1500),
-      ) {
-        verifySummaryListRowNumeric(2, fullPaymentAmount, "£1,500.00")
-      }
-
-      "when a late interest charge display accruing interest amount " in new TestSetup(
-        chargeItem = chargeItemModel(
-          originalAmount = 1500,
-          accruingInterestAmount = Some(100.0)),
-        latePaymentInterestCharge = true
-      ) {
-        verifySummaryListRowNumeric(3, fullPaymentAmount, "£100.00")
-      }
-    }
-
-    "displaying due date" when {
-
-      "when no interest charge, display due date" in new TestSetup(dueDate = Option(LocalDate.of(2019, 5, 15))) {
-        verifySummaryListRowNumeric(1, dueDate, "Overdue 15 May 2019")
-      }
-
-      "no due date, display as No data" in new TestSetup(
-        chargeItem = chargeItemModel(dueDate = None, lpiWithDunningLock = None),
-        dueDate = None)
-      {
-        verifySummaryListRowNumeric(1, dueDate, "No data")
-      }
-
-      "an interest charge, display interest end date" in new TestSetup(
-        chargeItem = chargeItemModel(interestEndDate = Option(LocalDate.of(2018, 6, 15))),
-        dueDate = Option(LocalDate.of(2019, 5, 15)),
-        latePaymentInterestCharge = true
-      ){
-        verifySummaryListRowNumeric(1, dueDate, "Overdue 15 June 2018")
-      }
-    }
-
-    "display remaining amount" when {
-      "there is an outstanding amount" in new TestSetup(
-        chargeItem = chargeItemModel(outstandingAmount = 1600)) {
-        verifySummaryListRowNumeric(3, remainingToPay, "£1,600.00")
-      }
-
-      "an outstanding amount on a late interest charge" in new TestSetup(
-        chargeItem = chargeItemModel(outstandingAmount = 1600),
-        latePaymentInterestCharge = true
-      ) {
-        verifySummaryListRowNumeric(4, remainingToPay, "£80.00")
-      }
-
-      "cleared amount == original amount and outstanding amount is not, display a remaining amount of 0" in new TestSetup(
-        chargeItem = chargeItemModel(outstandingAmount = 0)) {
-        verifySummaryListRowNumeric(3, remainingToPay, "£0.00")
-      }
-    }
-
-    "display an interest period for a late interest charge" in new TestSetup(
-      chargeItem = chargeItemModel(originalAmount = 1500),
-      latePaymentInterestCharge = true) {
-      verifySummaryListRowNumeric(2, interestPeriod, "29 Mar 2018 to 15 Jun 2018")
-    }
 
     "not display the Payment breakdown list when payments breakdown is empty" in new TestSetup(
       chargeItem = chargeItemModel(lpiWithDunningLock = None),
@@ -1235,69 +1208,8 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         paymentBreakdown = paymentBreakdown
       ) {
         document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
-        document.selectById("heading-payment-breakdown").text shouldBe paymentBreakdownHeading
       }
 
-      "has payment rows with charge types and original amounts" in new TestSetup(
-        chargeItem = chargeItemModel(),
-        paymentBreakdown = paymentBreakdown
-      ) {
-        verifyPaymentBreakdownRowNumeric(1, "Income Tax", "£123.45")
-        verifyPaymentBreakdownRowNumeric(2, paymentBreakdownNic2, "£2,345.67")
-        verifyPaymentBreakdownRowNumeric(3, "Voluntary Class 2 National Insurance", "£3,456.78")
-        verifyPaymentBreakdownRowNumeric(4, "Class 4 National Insurance", "£5,678.90")
-        verifyPaymentBreakdownRowNumeric(5, "Capital Gains Tax", "£9,876.54")
-        verifyPaymentBreakdownRowNumeric(6, "Student Loans", "£543.21")
-      }
-
-      "has payment rows with Under review note when there are dunning locks on a payment" in new TestSetup(
-        chargeItem = chargeItemModel(),
-        paymentBreakdown = paymentBreakdownWithDunningLocks
-      ) {
-        verifyPaymentBreakdownRowNumeric(1, "Income Tax", "£123.45")
-        verifyPaymentBreakdownRowNumeric(2, paymentBreakdownNic2, "£2,345.67 Under review")
-        verifyPaymentBreakdownRowNumeric(3, "Capital Gains Tax", "£9,876.54 Under review")
-        verifyPaymentBreakdownRowNumeric(4, "Student Loans", "£543.21")
-      }
-
-      "has a payment row with Under review note when there is a dunning lock on a lpi charge" in new TestSetup(
-        chargeItem = chargeItemModel(),
-        latePaymentInterestCharge = true
-      ) {
-        verifyPaymentBreakdownRowNumeric(1, "Late payment interest", "£100.00 Under review")
-        verifyPaymentBreakdownRowNumeric(2, "", "")
-      }
-
-      "has at least one record with an interest lock" which {
-
-        "has payment rows with Under review note when there are dunning locks on a payment" in new TestSetup(
-          chargeItem = chargeItemModel(),
-          paymentBreakdown = paymentBreakdownWithMixedLocks
-        ) {
-          verifyPaymentBreakdownRowNumeric(1, "Income Tax", s"£123.45 $paymentBreakdownInterestLocksCharging")
-          verifyPaymentBreakdownRowNumeric(2, paymentBreakdownNic2, s"£2,345.67 ${messages("chargeSummary.paymentBreakdown.dunningLocks.underReview")} ${messages("chargeSummary.paymentBreakdown.interestLocks.notCharging")}")
-        }
-
-        "has payment rows with appropriate messages for each row" in new TestSetup(
-          chargeItem = chargeItemModel(),
-          paymentBreakdown = paymentBreakdownWithInterestLocks
-        ) {
-          verifyPaymentBreakdownRowNumeric(1, "Income Tax", s"£123.45 $paymentBreakdownInterestLocksCharging")
-          verifyPaymentBreakdownRowNumeric(2, paymentBreakdownNic2, s"£2,345.67 ${messages("chargeSummary.paymentBreakdown.interestLocks.notCharging")}")
-          verifyPaymentBreakdownRowNumeric(3, "Capital Gains Tax", s"£9,876.54 ${messages("chargeSummary.paymentBreakdown.interestLocks.previouslyCharged")}")
-          verifyPaymentBreakdownRowNumeric(4, "Student Loans", s"£543.21 $paymentBreakdownInterestLocksCharging")
-        }
-
-      }
-      "has no records that have an interest lock applied" should {
-        "has payment rows but no interest lock message when there are no interest locks but there's accrued interest on a payment" in new TestSetup(
-          chargeItem = chargeItemModel(),
-          paymentBreakdown = paymentBreakdownWithOnlyAccruedInterest
-        ) {
-          verifyPaymentBreakdownRowNumeric(1, "Income Tax", "£123.45")
-          verifyPaymentBreakdownRowNumeric(2, paymentBreakdownNic2, "£2,345.67")
-        }
-      }
     }
 
 
@@ -1305,18 +1217,16 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       chargeItem = chargeItemModel(lpiWithDunningLock = None),
       paymentBreakdown = paymentBreakdownWhenInterestAccrues
     ) {
-      document.select("#what-you-owe-interest-link").text() shouldBe interestLinkText
-      document.select("#what-you-owe-interest-link").attr("href") shouldBe financialsRoutes.WhatYouOweController.show().url
-      document.select("#p-interest-locks-msg").text().contains(s"$interestLinkFirstWord $interestLinkText $interestLinkFullText") shouldBe true
+      document.select("#what-you-owe-link").text() shouldBe interestLinkText
+      document.select("#what-you-owe-link").attr("href") shouldBe financialsRoutes.WhatYouOweController.show().url
     }
 
     "have a interest lock payment link when the interest has previously" in new TestSetup(
       chargeItem = chargeItemModel(lpiWithDunningLock = None),
       paymentBreakdown = paymentBreakdownWithPreviouslyAccruedInterest
     ) {
-      document.select("#what-you-owe-interest-link").text() shouldBe interestLinkText
-      document.select("#what-you-owe-interest-link").attr("href") shouldBe financialsRoutes.WhatYouOweController.show().url
-      document.select("#p-interest-locks-msg").text() shouldBe s"$interestLinkFirstWord $interestLinkText $interestLinkFullText"
+      document.select("#what-you-owe-link").text() shouldBe interestLinkText
+      document.select("#what-you-owe-link").attr("href") shouldBe financialsRoutes.WhatYouOweController.show().url
     }
 
     "have no interest lock payment link when there is no accrued interest" in new TestSetup(
@@ -1339,35 +1249,35 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       "display a charge history heading as an h2 when there is no Payment Breakdown" in new TestSetup(
         chargeItem = chargeItemModel().copy(outstandingAmount = 0, lpiWithDunningLock = None)
       ) {
-        document.select("main h2").text shouldBe chargeHistoryHeadingGeneric
+        document.select("#charge-history-heading").text shouldBe chargeHistoryHeadingGeneric
       }
 
       "display a charge history heading as an h3 when there is a Payment Breakdown" in new TestSetup(
         chargeItem = chargeItemModel(),
         paymentBreakdown = paymentBreakdown
       ) {
-        document.select("main h3").text shouldBe chargeHistoryHeadingGeneric
+        document.select("#charge-history-heading").text shouldBe chargeHistoryHeadingGeneric
       }
 
       "display charge history heading as poa1 heading when charge is a poa1" in new TestSetup(
         chargeItem = chargeItemModel(),
         paymentBreakdown = paymentBreakdown
       ){
-        document.select("main h3").text shouldBe chargeHistoryHeadingGeneric
+        document.select("#charge-history-heading").text shouldBe chargeHistoryHeadingGeneric
       }
 
       "display charge history heading as poa2 heading when charge is a poa2" in new TestSetup(
         chargeItem = chargeItemModel(transactionType = PoaTwoDebit),
         paymentBreakdown = paymentBreakdown
       ){
-        document.select("main h3").text shouldBe chargeHistoryHeadingGeneric
+        document.select("#charge-history-heading").text shouldBe chargeHistoryHeadingGeneric
       }
 
       "display charge history heading as non-poa heading when charge is not a poa" in new TestSetup(
         chargeItem = chargeItemModel(transactionType = MfaDebitCharge),
         paymentBreakdown = paymentBreakdown
       ){
-        document.select("main h3").text shouldBe chargeHistoryHeadingGeneric
+        document.select("#charge-history-heading").text shouldBe chargeHistoryHeadingGeneric
       }
 
       "display charge history heading as late payment interest history when charge is a late payment interest" in new TestSetup(
@@ -1375,57 +1285,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         paymentBreakdown = paymentBreakdown,
         latePaymentInterestCharge = true
       ){
-        document.select("main h3").text shouldBe chargeHistoryHeadingGeneric
-      }
-
-      "show payment allocations in history table" when {
-
-        "allocations are present in the list" when {
-
-          val paymentAllocations = List(
-            paymentsForCharge(typePOA1, ITSA_NI, "2018-03-30", 1500.0, Some("123456789012"), Some("PAYID01")),
-            paymentsForCharge(typePOA1, NIC4_SCOTLAND, "2018-03-31", 1600.0, Some("223456789012"), Some("PAYID01")),
-
-            paymentsForCharge(typePOA2, ITSA_WALES, "2018-04-01", 2400.0, Some("323456789012"), Some("PAYID01")),
-            paymentsForCharge(typePOA2, NIC4_GB, "2018-04-15", 2500.0, Some("423456789012"), Some("PAYID01")),
-
-            paymentsForCharge(typeBalCharge, ITSA_ENGLAND_AND_NI, "2019-12-10", 3400.0, Some("523456789012"), Some("PAYID01")),
-            paymentsForCharge(typeBalCharge, NIC4_NI, "2019-12-11", 3500.0, Some("623456789012"), Some("PAYID01")),
-            paymentsForCharge(typeBalCharge, NIC2_WALES, "2019-12-12", 3600.0, Some("723456789012"), Some("PAYID01")),
-            paymentsForCharge(typeBalCharge, CGT, "2019-12-13", 3700.0, Some("823456789012"), Some("PAYID01")),
-            paymentsForCharge(typeBalCharge, SL, "2019-12-14", 3800.0, Some("923456789012"), Some("PAYID01")),
-            paymentsForCharge(typeBalCharge, VOLUNTARY_NIC2_GB, "2019-12-15", 3900.0, Some("023456789012"), Some("PAYID01")),
-          )
-
-          val expectedPaymentAllocationRows = List(
-            "30 Mar 2018 Payment allocated to Income Tax for first payment on account 2018 £1,500.00",
-            "31 Mar 2018 Payment allocated to Class 4 National Insurance for first payment on account 2018 £1,600.00",
-            "1 Apr 2018 Payment allocated to Income Tax for second payment on account 2018 £2,400.00",
-            "15 Apr 2018 Payment allocated to Class 4 National Insurance for second payment on account 2018 £2,500.00",
-            "10 Dec 2019 Payment allocated to Income Tax for Balancing payment 2018 £3,400.00",
-            "11 Dec 2019 Payment allocated to Class 4 National Insurance for Balancing payment 2018 £3,500.00",
-            "12 Dec 2019 Payment allocated to Class 2 National Insurance for Balancing payment 2018 £3,600.00",
-            "13 Dec 2019 Payment allocated to Capital Gains Tax for Balancing payment 2018 £3,700.00",
-            "14 Dec 2019 Payment allocated to Student Loans for Balancing payment 2018 £3,800.00",
-            "15 Dec 2019 Payment allocated to Voluntary Class 2 National Insurance for Balancing payment 2018 £3,900.00"
-          )
-
-          "chargeHistory enabled, having Payment created in the first row" in new TestSetup(chargeItem = chargeItemModel(),
-            chargeHistoryEnabled = true, paymentAllocations = paymentAllocations) {
-            verifyPaymentHistoryContent(historyRowPOA1Created :: expectedPaymentAllocationRows: _*)
-          }
-
-          "chargeHistory enabled with a matching link to the payment allocations page" in new TestSetup(chargeItem = chargeItemModel(),
-            chargeHistoryEnabled = true, paymentAllocations = paymentAllocations) {
-            document.select(Selectors.table).select("a").size shouldBe 10
-            document.select(Selectors.table).select("a").forall(_.attr("href") == financialsRoutes.PaymentAllocationsController.viewPaymentAllocation("PAYID01").url) shouldBe true
-          }
-
-          "chargeHistory disabled" in new TestSetup(chargeItem = chargeItemModel(),
-            chargeHistoryEnabled = false, paymentAllocations = paymentAllocations) {
-            verifyPaymentHistoryContent(expectedPaymentAllocationRows: _*)
-          }
-        }
+        document.select("#charge-history-heading").text shouldBe chargeHistoryHeadingGeneric
       }
 
       "show payment allocations in history table when allocations are credits" when {
@@ -1447,24 +1307,6 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
             paymentsForCharge(typeBalCharge, VOLUNTARY_NIC2_GB, "2019-12-15", -3900.0, Some("023456789012"), Some("PAYID01"), taxYear = Some("2026")),
           )
 
-          val expectedPaymentAllocationRows = List(
-            "30 Mar 2018 Payment allocated to Income Tax for first payment on account 2018 £1,500.00",
-            "31 Mar 2018 Payment allocated to Class 4 National Insurance for first payment on account 2018 £1,600.00",
-            "1 Apr 2018 Payment allocated to Income Tax for second payment on account 2018 £2,400.00",
-            "15 Apr 2018 Payment allocated to Class 4 National Insurance for second payment on account 2018 £2,500.00",
-            "10 Dec 2019 Payment allocated to Income Tax for Balancing payment 2018 £3,400.00",
-            "11 Dec 2019 Payment allocated to Class 4 National Insurance for Balancing payment 2018 £3,500.00",
-            "12 Dec 2019 Payment allocated to Class 2 National Insurance for Balancing payment 2018 £3,600.00",
-            "13 Dec 2019 Payment allocated to Capital Gains Tax for Balancing payment 2018 £3,700.00",
-            "14 Dec 2019 Payment allocated to Student Loans for Balancing payment 2018 £3,800.00",
-            "15 Dec 2019 Payment allocated to Voluntary Class 2 National Insurance for Balancing payment 2018 £3,900.00"
-          )
-
-          "chargeHistory enabled, having Payment created in the first row" in new TestSetup(chargeItem = chargeItemModel(),
-            chargeHistoryEnabled = true, paymentAllocations = paymentAllocations, payments = creditsWithBreakdownPages) {
-            verifyPaymentHistoryContent(historyRowPOA1Created :: expectedPaymentAllocationRows: _*)
-          }
-
           "chargeHistory enabled with a matching link to the credits summary page when there isn't a charge breakdown page for a credit" in new TestSetup(chargeItem = chargeItemModel(),
             chargeHistoryEnabled = true, paymentAllocations = paymentAllocations, payments = creditsWithoutBreakdownPages) {
             document.select(Selectors.table).select("a").size shouldBe 10
@@ -1476,31 +1318,12 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
             document.select(Selectors.table).select("a").size shouldBe 10
             document.select(Selectors.table).select("a").forall(_.attr("href") == financialsRoutes.ChargeSummaryController.show(2026, "PAYID01").url) shouldBe true
           }
-
-          "chargeHistory disabled" in new TestSetup(chargeItem = chargeItemModel(),
-            chargeHistoryEnabled = false, paymentAllocations = paymentAllocations, payments = creditsWithBreakdownPages) {
-            verifyPaymentHistoryContent(expectedPaymentAllocationRows: _*)
-          }
         }
       }
 
-
-      "hide payment allocations in history table" when {
-        "the allocations list is empty" when {
-          "chargeHistory enabled, having Payment created in the first row" in new TestSetup(chargeItem = chargeItemModel(),
-            chargeHistoryEnabled = true, paymentAllocations = Nil) {
-            verifyPaymentHistoryContent(historyRowPOA1Created)
-          }
-
-          "chargeHistory disabled, not showing the table at all" in new TestSetup(chargeItem = chargeItemModel(),
-            chargeHistoryEnabled = false, paymentAllocations = Nil) {
-            (document select Selectors.table).size shouldBe 0
-          }
-        }
-      }
     }
 
-    "on the YourSelfAssessmentChargeSummaryPage" should {
+    "on the ChargeSummary" should {
       "display the notification banner when there is a dunning lock present" in new TestSetup(
         isAgent = false,
         chargeItem = chargeItemModel(),
@@ -1535,7 +1358,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       )
       val thrownException = intercept[MissingFieldException] {
 
-        chargeSummary(exceptionViewModel, financialsRoutes.WhatYouOweController.show().url, false)
+        chargeSummary(exceptionViewModel, None, financialsRoutes.WhatYouOweController.show().url, false)
       }
       thrownException.getMessage shouldBe "Missing Mandatory Expected Field: Due Date"
     }
@@ -1596,16 +1419,14 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
 
       "have a interest lock payment link when the interest is accruing" in new TestSetup(chargeItem = chargeItemModel(lpiWithDunningLock = None), paymentBreakdown = paymentBreakdownWhenInterestAccrues, isAgent = true,
         whatYouOweUrl = financialsRoutes.WhatYouOweController.showAgent().url) {
-        document.select("#what-you-owe-interest-link-agent").text() shouldBe interestLinkTextAgent
-        document.select("#what-you-owe-interest-link-agent").attr("href") shouldBe whatYouOweAgentUrl
-        document.select("#p-interest-locks-msg").text() shouldBe s"$interestLinkFirstWordAgent $interestLinkTextAgent $interestLinkFullTextAgent"
+        document.select("#what-you-owe-link-agent").text() shouldBe interestLinkTextAgent
+        document.select("#what-you-owe-link-agent").attr("href") shouldBe whatYouOweAgentUrl
       }
 
       "have a interest lock payment link when the interest has previously" in new TestSetup(chargeItem = chargeItemModel(lpiWithDunningLock = None), paymentBreakdown = paymentBreakdownWithPreviouslyAccruedInterest, isAgent = true,
         whatYouOweUrl = financialsRoutes.WhatYouOweController.showAgent().url) {
-        document.select("#what-you-owe-interest-link-agent").text() shouldBe interestLinkTextAgent
-        document.select("#what-you-owe-interest-link-agent").attr("href") shouldBe whatYouOweAgentUrl
-        document.select("#p-interest-locks-msg").text() shouldBe s"$interestLinkFirstWordAgent $interestLinkTextAgent $interestLinkFullTextAgent"
+        document.select("#what-you-owe-link-agent").text() shouldBe interestLinkTextAgent
+        document.select("#what-you-owe-link-agent").attr("href") shouldBe whatYouOweAgentUrl
       }
 
       "have no interest lock payment link when there is no accrued interest" in new TestSetup(chargeItem = chargeItemModel(lpiWithDunningLock = None), paymentBreakdown = paymentBreakdownWithOnlyAccruedInterest, isAgent = true,
@@ -1656,8 +1477,6 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         // heading should be hmrc adjustment
         document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2019)
         document.select("h1").text() shouldBe messages("chargeSummary.hmrcAdjustment.text")
-        // remaining to pay should be the same as payment amount
-        document.select(".govuk-summary-list").text() shouldBe summaryListText
         // payment history should show only "HMRC adjustment created"
         document.select("#payment-history-table tr").size shouldBe 2
         document.select("#payment-history-table tr").text() shouldBe paymentHistoryText
@@ -1669,14 +1488,12 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         val summaryListText = "Due date 15 May 2019 Amount £1,400.00 Still to pay £0.00 "
         val hmrcCreated = messages("chargeSummary.chargeHistory.created.hmrcAdjustment.text")
         val paymentHistoryText = "Date Description Amount 29 Mar 2018 " + hmrcCreated + " £1,400.00"
-        val MFADebitAllocation1 = "30 Mar 2018 " + messages("chargeSummary.paymentAllocations.mfaDebit") + " 2019 £1,500.00"
-        val MFADebitAllocation2 = "31 Mar 2018 " + messages("chargeSummary.paymentAllocations.mfaDebit") + " 2019 £1,600.00"
+        val MFADebitAllocation1 = "30 Mar 2018 " + messages("chargeSummary.paymentAllocations.mfaDebit") + " 2021 £1,500.00"
+        val MFADebitAllocation2 = "31 Mar 2018 " + messages("chargeSummary.paymentAllocations.mfaDebit") + " 2021 £1,600.00"
         val allocationLinkHref = financialsRoutes.PaymentAllocationsController.viewPaymentAllocationAgent("PAYID01").url
         // heading should be hmrc adjustment
         document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2019)
         document.select("h1").text() shouldBe messages("chargeSummary.hmrcAdjustment.text")
-        // remaining to pay should be zero
-        document.select(".govuk-summary-list").text() shouldBe summaryListText
         // payment history should show two rows "HMRC adjustment created" and "payment put towards HMRC Adjustment"
         document.select("#payment-history-table tr").size shouldBe 4
 
@@ -1688,7 +1505,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       }
     }
 
-    "on the YourSelfAssessmentChargeSummary page" should {
+    "on the ChargeSummary page" should {
       "display the notification banner when there is a dunning lock present" in new TestSetup(
         isAgent = true,
         chargeItem = chargeItemModel(),
@@ -1696,6 +1513,352 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
       ) {
         document.selectById("govuk-notification-banner-title")
           .select(Selectors.h2).text() shouldBe dunningLockBannerHeader
+      }
+    }
+  }
+
+
+  "ChargeSummaryView" when {
+    "charge is an ITSAReturnAmendment type and has a charge classification of 'RA'" should {
+      "display the correct content" in new TestSetupv2(chargeItem = chargeItemModel(transactionType = ITSAReturnAmendment, chargeClassification = Some("RA"))) {
+        document.getElementsByClass("govuk-heading-xl").first().text() shouldBe itsaEnquiryAmendmentHeading
+        document.getElementById("itsaEnquiryAmendment.p1").text() shouldBe itsaEnquiryAmendmentParagraph1(2017, 2018)
+        document.getElementById("itsaEnquiryAmendment.link").attr("href") shouldBe viewModel.taxYearSummaryUrl(2018)
+        document.getElementsByClass("govuk-warning-text__text").text() shouldBe warningText
+        document.getElementById("charge-history-caption").text() shouldBe "This extra amount goes towards your 2017 to 2018 tax bill."
+        document.select("#payment-history-table > tbody > tr > td:nth-child(2)").text() shouldBe enquiryAmendmentDescriptionText
+      }
+    }
+    "charge is an ITSAReturnAmendmentCredit type and has a charge classification of 'RA'" should {
+      "display the correct content" in new TestSetupv2(chargeItem = chargeItemModel(transactionType = ITSAReturnAmendmentCredit, chargeClassification = Some("RA"))) {
+        document.getElementsByClass("govuk-heading-xl").first().text() shouldBe itsaEnquiryAmendmentCreditHeading
+        Option(document.getElementById("itsa-enquiry-amendment-credit-p1")).isDefined shouldBe true
+        Option(document.getElementById("itsa-enquiry-amendment-credit-p2")).isDefined shouldBe true
+      }
+    }
+
+    val correctionCreditHeading: String = "Credit from HMRC correction to your tax return"
+    "charge is an ITSAReturnAmendmentCredit type and has a charge classification of 'MC'" should {
+      "display the correct content" in new TestSetupv2(chargeItem = chargeItemModel(transactionType = ITSAReturnAmendmentCredit, chargeClassification = Some("MC"))) {
+        document.getElementsByClass("govuk-heading-xl").first().text() shouldBe correctionCreditHeading
+        Option(document.getElementById("itsa-return-correction-credit-p1")).isDefined shouldBe true
+        Option(document.getElementById("itsa-return-correction-credit-p2")).isDefined shouldBe true
+      }
+    }
+
+    "charge is an ITSAReturnAmendmentCredit type and has a charge classification of 'AC'" should {
+      "display the correct content" in new TestSetupv2(chargeItem = chargeItemModel(transactionType = ITSAReturnAmendmentCredit, chargeClassification = Some("AC"))) {
+        document.getElementsByClass("govuk-heading-xl").first().text() shouldBe correctionCreditHeading
+        val p1 = document.getElementById("itsa-return-correction-credit-p1").text()
+        p1 should include("HMRC corrected your tax return. This changed your tax calculation for")
+        p1 should include(", resulting in a credit being added to your account.")
+
+        document.getElementById("itsa-return-correction-credit-p2").text() shouldBe "This credit may be used automatically by HMRC to cover your future tax bills when they become due."
+      }
+    }
+
+    "charge is suspended with dunning lock 'Stand over order'" should {
+      "display the correct content" in new TestSetupv2(
+        chargeItem = chargeItemModel(dunningLock = true),
+        paymentBreakdown =
+          List(
+            FinancialDetail(
+              TaxYear.forYearEnd(2018).shortenTaxYearEnd,
+              Some("SA POA 1 Reconciliation Debit"),
+              Some("4920"),
+              Some(id1040000123),
+              Some(LocalDate.parse("2018-08-16")),
+              Some("POA1"),
+              Some("SA POA 1 Reconciliation Debit"),
+              Some(1400.00),
+              Some(1400.00),
+              Some(1400.00),
+              Some(0),
+              Some(ITSA_ENGLAND_AND_NI),
+              None,
+              Some(
+                Seq(
+                  SubItem(
+                    dueDate = Some(LocalDate.of(2019, 5, 15)),
+                    subItemId = Some("001"),
+                    amount = Some(BigDecimal("1400.00")),
+                    dunningLock = Some("Stand over order")
+                  )
+                )
+              )
+            )
+          )
+      ) {
+
+        document.select("#govuk-notification-banner-title").size() shouldBe 1
+        document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+        document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe dunningLocksBannerHeading
+        document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
+        document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+        document.getElementsByClass("govuk-warning-text__text").text() shouldBe warningText
+        document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe createdYourFirstPaymentOnAccountText
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£1,400.00"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe "15 May 2019"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe createdFirstLatePaymentPenaltyStoodOverText
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£1,400.00"
+      }
+
+      "display the correct content for the Balancing Payment" in new TestSetupv2(
+        chargeItem = chargeItemModel(
+          transactionType = BalancingCharge,
+          originalAmount = BigDecimal(2100.00),
+          outstandingAmount = BigDecimal(2100.00),
+          dunningLock = true,
+          totalSoAmt = Some(BigDecimal(2100.00))),
+        adjustmentHistory = AdjustmentHistoryModel(AdjustmentModel(2100, Some(LocalDate.of(2018, 3, 29)), AdjustmentReversalReason), List()),
+        paymentBreakdown =
+          List(
+            FinancialDetail(
+              TaxYear.forYearEnd(2018).shortenTaxYearEnd,
+              Some("Balancing Payment"),
+              Some("4910"),
+              Some(id1040000123),
+              Some(LocalDate.parse("2018-08-16")),
+              Some("Nics2"),
+              Some("ITSA England & NI"),
+              Some(2100.00),
+              Some(2100.00),
+              Some(2100.00),
+              Some(0),
+              Some(ITSA_ENGLAND_AND_NI),
+              None,
+              Some(
+                Seq(
+                  SubItem(
+                    dueDate = Some(LocalDate.of(2020, 1, 31)),
+                    subItemId = Some("001"),
+                    amount = Some(BigDecimal("2100.00"))
+                  ),
+                  SubItem(
+                    dueDate = Some(LocalDate.of(2019, 7, 31)),
+                    subItemId = Some("002"),
+                    amount = Some(BigDecimal("2100.00")),
+                    dunningLock = Some("Stand over order")
+                  )
+                )
+              )
+            )
+          )
+      ) {
+
+        document.select("#govuk-notification-banner-title").size() shouldBe 1
+        document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+        document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe dunningLocksBannerHeading
+        document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
+        document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+        document.getElementsByClass("govuk-warning-text__text").text() shouldBe warningText
+        document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe createdBalancingPaymentText
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£2,100.00"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe "31 Jul 2019"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe createdFirstLatePaymentPenaltyStoodOverText
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£2,100.00"
+      }
+
+      "display the correct content when first lpp with dunningLock" in new TestSetupv2(
+        chargeItem = financialDetailsLatePaymentPenalties.head.copy(dunningLock = true)
+      ) {
+        document.select("#govuk-notification-banner-title").size() shouldBe 1
+        document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+        document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe dunningLocksBannerHeading
+        document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
+        document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+        document.getElementsByClass("govuk-warning-text__text").text() shouldBe warningText
+        document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2022 to 2023 tax bill."
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe firstLatePaymentPenaltyText
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£1,400.00"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe chargeSummaryNoDataText
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe createdFirstLatePaymentPenaltyStoodOverText
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£43.21"
+      }
+    }
+
+    "charge is suspended with dunning lock 'Formal Standover'" should {
+      "display the correct content" in new TestSetupv2(
+        chargeItem = chargeItemModel(dunningLock = true, isRevenueAmendment = true, chargeClassification = Some("RA"), dunningLockValue = Some("Formal Standover"), totalSoAmt = Some(BigDecimal("1400.00"))),
+        paymentBreakdown =
+          List(
+            FinancialDetail(
+              TaxYear.forYearEnd(2018).shortenTaxYearEnd,
+              Some("ITSA Return Amendment Debit"),
+              Some("4915"),
+              Some(id1040000123),
+              Some(LocalDate.parse("2018-08-16")),
+              Some("POA1"),
+              Some("ITSA Return Amendment Debit"),
+              Some(1400.00),
+              Some(1400.00),
+              Some(1400.00),
+              Some(0),
+              Some(ITSA_ENGLAND_AND_NI),
+              None,
+              Some(
+                Seq(
+                  SubItem(
+                    dueDate = Some(LocalDate.of(2019, 5, 15)),
+                    subItemId = Some("001"),
+                    amount = Some(BigDecimal("1400.00")),
+                    dunningLock = Some("Formal Standover")
+                  )
+                )
+              )
+            )
+          )
+      ) {
+
+        document.select("#govuk-notification-banner-title").size() shouldBe 1
+        document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+        document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe formalDunningLocksBannerHeading
+        document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
+        document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+        document.doesNotHave("govuk-warning-text__text")
+        document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe createdYourFirstPaymentOnAccountText
+        document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£1,400.00"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe "15 May 2019"
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe formalStandoverChargeHistoryText
+        document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£1,400.00"
+      }
+    }
+
+    "ChargeSummaryView" when {
+
+      "'StoodOverCharges' FS is true " should {
+
+        "'isPartialSuspendedCharge' param is false" when {
+
+          "partial 'informal' charge is suspended with dunning lock 'collectable breakdown page'" should {
+            "display the correct content" in new TestSetupv2(
+              chargeItem = chargeItemModel(
+                totalSoAmt = Some(BigDecimal(3500)),
+                collectableAmt = Some(BigDecimal(1250)),
+                dunningLock = true,
+                dunningLockValue = Some("Stand over order")
+              ),
+              paymentBreakdown = financialDetailsWithDunningLock(),
+              isStoodOverEnabled = true,
+              mockFakeRequest = fakeRequestWithIsPartialSuspendedChargeFalse
+            ) {
+              document.select("#govuk-notification-banner-title").size() shouldBe 1
+              document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialInformalCollectableBannerHeading("£3,500.00")
+              document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountOverDueChargeHeading
+              document.getElementById("charge-amount-heading").text().split(" ").filter(_.startsWith("£")).head.trim shouldBe "£1,250.00"
+              document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+              document.getElementsByClass("govuk-warning-text__text").text() shouldBe warningText
+              document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe createdYourFirstPaymentOnAccountText
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£1,400.00"
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe "15 May 2019"
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe createdFirstLatePaymentPenaltyStoodOverText
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£3,500.00"
+            }
+          }
+
+          "partial 'formal' charge is suspended with dunning lock 'collectable breakdown page'" should {
+            "display the correct content" in new TestSetupv2(
+              chargeItem = chargeItemModel(
+                isRevenueAmendment = true,
+                chargeClassification = Some("RA"),
+                dunningLockValue = Some("Formal Standover"),
+                totalSoAmt = Some(BigDecimal(3500)),
+                collectableAmt = Some(BigDecimal(1250)),
+                dunningLock = true),
+              paymentBreakdown = financialDetailsWithDunningLock(Some("Formal Standover")),
+              isStoodOverEnabled = true,
+              mockFakeRequest = fakeRequestWithIsPartialSuspendedChargeFalse
+            ) {
+              document.select("#govuk-notification-banner-title").size() shouldBe 1
+              document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialFormalCollectableBannerHeading("£3,500.00")
+              document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountOverDueChargeHeading
+              document.getElementById("charge-amount-heading").text().split(" ").filter(_.startsWith("£")).head.trim shouldBe "£1,250.00"
+              document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+              document.doesNotHave("govuk-warning-text__text")
+              document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe createdYourFirstPaymentOnAccountText
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£1,400.00"
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe "15 May 2019"
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe formalStandoverChargeHistoryText
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£3,500.00"
+            }
+          }
+        }
+
+        "'isPartialSuspendedCharge' param is true" when {
+
+          "partial 'informal' charge is suspended with dunning lock 'stood over breakdown page'" should {
+            "display the correct content" in new TestSetupv2(
+              chargeItem = chargeItemModel(
+                totalSoAmt = Some(BigDecimal(3500)),
+                collectableAmt = Some(BigDecimal(1250)),
+                dunningLock = true,
+                dunningLockValue = Some("Stand over order")
+              ),
+              paymentBreakdown = financialDetailsWithDunningLock(),
+              isStoodOverEnabled = true,
+              mockFakeRequest = fakeRequestWithIsPartialSuspendedChargeTrue
+            ) {
+              document.select("#govuk-notification-banner-title").size() shouldBe 1
+              document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialInformalStoodOverBannerHeading
+              document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
+              document.getElementById("charge-amount-heading").text().split(" ").filter(_.startsWith("£")).head.trim shouldBe "£3,500.00"
+              document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+              document.doesNotHave("govuk-warning-text__text")
+              document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe createdYourFirstPaymentOnAccountText
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£1,400.00"
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe "15 May 2019"
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe createdFirstLatePaymentPenaltyStoodOverText
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£3,500.00"
+            }
+          }
+
+          "partial 'formal' charge is suspended with dunning lock 'stood over breakdown page'" should {
+            "display the correct content" in new TestSetupv2(
+              chargeItem = chargeItemModel(
+                isRevenueAmendment = true,
+                chargeClassification = Some("RA"),
+                dunningLockValue = Some("Formal Standover"),
+                totalSoAmt = Some(BigDecimal(3500)),
+                collectableAmt = Some(BigDecimal(1250)),
+                dunningLock = true),
+              paymentBreakdown = financialDetailsWithDunningLock(Some("Formal Standover")),
+              isStoodOverEnabled = true,
+              mockFakeRequest = fakeRequestWithIsPartialSuspendedChargeTrue
+            ) {
+
+              document.select("#govuk-notification-banner-title").size() shouldBe 1
+              document.getElementsByClass("govuk-notification-banner__title").first.text() shouldBe dunningLocksBannerTitle
+              document.getElementsByClass("govuk-notification-banner__content").first.text() shouldBe partialFormalStoodOverBannerHeading
+              document.getElementById("charge-amount-heading").text().split("£").head.trim shouldBe chargeAmountHeading
+              document.getElementById("charge-amount-heading").text().split(" ").filter(_.startsWith("£")).head.trim shouldBe "£3,500.00"
+              document.getElementById("charge-history-heading").text() shouldBe firstPaymentOnAccountHeading
+              document.doesNotHave("govuk-warning-text__text")
+              document.getElementById("charge-history-caption").text() shouldBe "This charge goes towards your 2017 to 2018 tax bill."
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(1)").text() shouldBe "29 Mar 2018"
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(2)").text() shouldBe createdYourFirstPaymentOnAccountText
+              document.select("#payment-history-table > tbody > tr:nth-child(1) > td:nth-child(3)").text() shouldBe "£1,400.00"
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(1)").text() shouldBe "15 May 2019"
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(2)").text() shouldBe formalStandoverChargeHistoryText
+              document.select("#payment-history-table > tbody > tr:nth-child(2) > td:nth-child(3)").text() shouldBe "£3,500.00"
+            }
+          }
+        }
       }
     }
   }
