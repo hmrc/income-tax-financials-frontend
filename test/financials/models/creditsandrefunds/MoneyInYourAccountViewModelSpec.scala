@@ -260,7 +260,8 @@ class MoneyInYourAccountViewModelSpec extends UnitSpec {
   "RefundRow" should {
     "have the correct description link url" in {
       val refundRow = RefundRow(refund20, dateInYear(2024))
-      refundRow.descriptionLink shouldBe financialsRoutes.PaymentHistoryController.refundStatus().url
+      refundRow.descriptionLink(false) shouldBe financialsRoutes.PaymentHistoryController.refundStatus().url
+      refundRow.descriptionLink(true) shouldBe financialsRoutes.PaymentHistoryController.refundStatusAgent().url
     }
   }
 

@@ -117,16 +117,24 @@ class PaymentHistoryController @Inject()(authActions: AuthActions,
       )
   }
 
+  def handleRefundStatusRequest()(implicit user: MtdItUser[_], hc: HeaderCarrier): Future[Result] =
+    if (isEnabled(PaymentHistoryRefunds)) {
+      repaymentService.view(user.nino).map {
+        case Right(nextUrl) => Redirect(nextUrl)
+        case Left(ex) => logAndHandleError(s"[refundStatus] ${ex.getMessage}")
+      }
+    } else {
+      Future.successful(Ok(customNotFoundErrorView()(user, user.messages)))
+    }
+
   def refundStatus: Action[AnyContent] =
     authActions.asMTDIndividual().async { implicit user =>
-      if (isEnabled(PaymentHistoryRefunds)) {
-        repaymentService.view(user.nino).map {
-          case Right(nextUrl) => Redirect(nextUrl)
-          case Left(ex) => logAndHandleError(s"[refundStatus] ${ex.getMessage}")
-        }
-      } else {
-        Future.successful(Ok(customNotFoundErrorView()(user, user.messages)))
-      }
+      handleRefundStatusRequest()
+    }
+
+  def refundStatusAgent: Action[AnyContent] =
+    authActions.asMTDPrimaryAgent().async { implicit mtdItUser =>
+      handleRefundStatusRequest()
     }
 
   def logAndHandleError(message: String)

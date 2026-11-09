@@ -79,7 +79,8 @@ case class PaymentCreditRow(transaction: Transaction, date: LocalDate, effective
 }
 
 case class RefundRow(transaction: Transaction, date: LocalDate) extends CreditRow {
-  def descriptionLink: String = routes.PaymentHistoryController.refundStatus().url
+  def descriptionLink(isAgent: Boolean): String =
+    if (isAgent) routes.PaymentHistoryController.refundStatusAgent().url else routes.PaymentHistoryController.refundStatus().url
 }
 
 case class CorrectionRow(transaction: Transaction, date: LocalDate) extends CreditRow {

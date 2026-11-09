@@ -19,14 +19,17 @@ package financials.controllers
 import common.auth.MtdItUser
 import common.controllers.ControllerISpecHelper
 import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import common.helpers.WiremockHelper
 import common.helpers.servicemocks.AuditStub.verifyAuditContainsDetail
 import common.models.admin.PaymentHistoryRefunds
 import common.testConstants.BaseIntegrationTestConstants.*
 import financials.helpers.FinancialDetailsStub
 import financials.models.Payment
 import financials.models.audit.PaymentHistoryResponseAuditModel
+import financials.models.core.RepaymentJourneyResponseModel.RepaymentJourneyModel
 import financials.testConstants.FinancialDetailsIntegrationTestConstants.*
 import play.api.http.Status.*
+import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 
 import java.time.LocalDate
@@ -114,6 +117,73 @@ class PaymentHistoryControllerISpec extends ControllerISpecHelper {
 
                     verifyAuditContainsDetail(PaymentHistoryResponseAuditModel(testUser(mtdUserRole), payments).detail)
                   }
+                }
+              }
+            }
+          }
+        }
+        testAuthFailures(path, mtdUserRole)
+      }
+    }
+  }
+
+  val viewRefundHistoryUrl = "/self-assessment-refund-backend/itsa-viewer/journey/view-history"
+  val refundTrackerUrl = "/track-a-self-assessment-refund/refund-request-tracker/start"
+
+  def getRefundStatusPath(mtdRole: MTDUserRole): String = {
+    val pathStart = if(mtdRole == MTDIndividual) "" else "/agents"
+    pathStart + "/refund-status"
+  }
+
+  mtdAllRoles.foreach { case mtdUserRole =>
+    val path = getRefundStatusPath(mtdUserRole)
+    val additionalCookies = getAdditionalCookies(mtdUserRole)
+    s"GET $path" when {
+      s"a user is a $mtdUserRole" that {
+        "is authenticated, with a valid enrolment" should {
+          if (mtdUserRole == MTDSupportingAgent) {
+            testSupportingAgentAccessDenied(path, additionalCookies)
+          } else {
+            "redirect to the refund tracker" when {
+              "the PaymentHistoryRefunds FS is enabled and the refund journey starts" in {
+                stubAuthorised(mtdUserRole, List(PaymentHistoryRefunds))
+                GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
+                WiremockHelper.stubPost(viewRefundHistoryUrl, ACCEPTED, Json.toJson(RepaymentJourneyModel(nextUrl = refundTrackerUrl)).toString())
+
+                whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
+                  result should have(
+                    httpStatus(SEE_OTHER),
+                    redirectURI(refundTrackerUrl)
+                  )
+                  WiremockHelper.verifyPostContaining(viewRefundHistoryUrl, Some(testNino))
+                }
+              }
+            }
+
+            "render the custom not found page" when {
+              "the PaymentHistoryRefunds FS is disabled" in {
+                stubAuthorised(mtdUserRole)
+                GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
+
+                whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
+                  result should have(
+                    httpStatus(OK),
+                    pageTitle(mtdUserRole, "error.custom.heading")
+                  )
+                }
+              }
+            }
+
+            "render the error page" when {
+              "the refund journey fails to start" in {
+                stubAuthorised(mtdUserRole, List(PaymentHistoryRefunds))
+                GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
+                WiremockHelper.stubPost(viewRefundHistoryUrl, INTERNAL_SERVER_ERROR, "")
+
+                whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
+                  result should have(
+                    httpStatus(INTERNAL_SERVER_ERROR)
+                  )
                 }
               }
             }
