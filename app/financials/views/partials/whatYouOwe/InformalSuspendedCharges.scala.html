@@ -51,7 +51,7 @@
     <p class="govuk-body">@getMessage("suspended-charges-informalOnly.p2")</p>
 }
 
-@if(isStoodOverEnabled && viewModel.whatYouOweChargesList.isPartialStoodOverCharge) {
+@if(isStoodOverEnabled && viewModel.totalFormalAndInformal.nonEmpty) {
     <table class="govuk-table" aria-labelledby="suspended-charges-in-order-due" id="suspended-charges-table" style="margin-bottom: 0px;">
 } else {
     <table class="govuk-table" aria-labelledby="suspended-charges-in-order-due" id="suspended-charges-table">
@@ -94,7 +94,7 @@
                 </td>
                 <td class="govuk-table__cell govuk-table__cell--numeric" id="susupended-due-charge-amount-due-@{index}">
                     @if(isStoodOverEnabled){
-                        @viewModel.totalFormalAndInformal.getOrElse(BigDecimal(0)).toCurrency
+                        @charge.totalSoAmt.getOrElse(BigDecimal(0)).toCurrency
                     }else {
                         @charge.remainingToPayOnCharge.toCurrency
                     }
@@ -105,7 +105,7 @@
     </tbody>
 </table>
 
-@if(isStoodOverEnabled && viewModel.whatYouOweChargesList.isPartialStoodOverCharge) {
+@if(isStoodOverEnabled && viewModel.totalFormalAndInformal.nonEmpty) {
     @totalTableRow(viewModel.totalFormalAndInformal.getOrElse(0), hasChargeWithAccruingInterest = false)
 }
 
