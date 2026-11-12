@@ -26,10 +26,10 @@
     messages(s"yourSelfAssessmentChargeSummary.$key", args: _*)
 }
 
-@p(){
+@p(id = Some("itsa-over-repayment-p1")) {
     @getMessage("itsaOverRepayment.p1")
 }
 
-@p() {
+@p(id = Some("itsa-over-repayment-p2")) {
     @getMessage("itsaOverRepayment.p2", viewModel.chargeItem.originalAmount.toCurrencyString, viewModel.chargeItem.taxYear.startYear.toString, viewModel.chargeItem.taxYear.endYear.toString)
 }
