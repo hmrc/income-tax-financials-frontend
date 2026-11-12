@@ -72,6 +72,10 @@ case object MfaDebitCharge extends ChargeType {
   override val key = "MfaDebit"
 }
 
+case object ITSAOverRepayment extends ChargeType {
+  override val key: String = "ITSAOverRepayment"
+}
+
 // Credit Types
 
 case object MfaCreditType extends CreditType {
@@ -137,6 +141,7 @@ object TransactionType {
     case SecondLatePaymentPenalty.key => SecondLatePaymentPenalty
     case ITSAReturnAmendment.key => ITSAReturnAmendment
     case MfaDebitCharge.key => MfaDebitCharge
+    case ITSAOverRepayment.key => ITSAOverRepayment
   }
 
   implicit val format: Format[TransactionType] = Format( read, write)
@@ -152,6 +157,7 @@ object TransactionType {
       ChargeType.poaOneReconciliationCredit -> PoaOneReconciliationCredit,
       ChargeType.poaTwoReconciliationCredit -> PoaTwoReconciliationCredit,
       ChargeType.itsaReturnAmendment        -> ITSAReturnAmendment,
+      ChargeType.overRepaymentCharge        -> ITSAOverRepayment,
       CreditType.cutOver                    -> CutOverCreditType,
       CreditType.balancingCharge            -> BalancingChargeCreditType,
       CreditType.repaymentInterest          -> RepaymentInterest,
@@ -191,12 +197,14 @@ object ChargeType {
 
   val itsaReturnAmendment = "4915"
 
+  val overRepaymentCharge = "5070"
+
   lazy val penaltyMainTransactions = List(lateSubmissionPenalty) ++ firstLatePaymentPenalty ++ secondLatePaymentPenalty
 
   val mfaDebit = Range.inclusive(4000, 4003)
     .map(_.toString).toList
 
-  val allChargeMainTransactions = List(balancingCharge, poaOneDebit, poaTwoDebit, poaOneReconciliationDebit, poaTwoReconciliationDebit, itsaReturnAmendment)++
+  val allChargeMainTransactions = List(balancingCharge, poaOneDebit, poaTwoDebit, poaOneReconciliationDebit, poaTwoReconciliationDebit, itsaReturnAmendment, overRepaymentCharge)++
     penaltyMainTransactions ++ mfaDebit
 
 

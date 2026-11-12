@@ -261,7 +261,8 @@ object ChargeItem {
       FirstLatePaymentPenalty,
       SecondLatePaymentPenalty,
       ITSAReturnAmendment,
-      MfaDebitCharge
+      MfaDebitCharge,
+      ITSAOverRepayment
     )
 
   val isAKnownTypeOfCharge: ChargeItem => Boolean = chargeItem => {
