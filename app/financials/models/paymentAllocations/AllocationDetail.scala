@@ -18,7 +18,7 @@ package financials.models.paymentAllocations
 
 import common.exceptions.MissingFieldException
 import common.models.core.AccountingPeriodModel
-import financials.models.FinancialDetail
+import financials.models.{ChargeType, FinancialDetail}
 import play.api.Logging
 import play.api.libs.json.{Format, Json}
 
@@ -33,14 +33,19 @@ case class AllocationDetail(
                              mainType: Option[String],
                              amount: Option[BigDecimal],
                              clearedAmount: Option[BigDecimal],
-                             chargeReference: Option[String]
+                             chargeReference: Option[String],
+                             mainTransaction: Option[String] = None
                            ) extends Logging {
 
   def getPaymentAllocationKeyInPaymentAllocations: String = {
-    FinancialDetail.getMessageKeyByTypes(mainType, chargeType)
-      .map(typesKey => s"paymentAllocation.paymentAllocations.$typesKey")
+    val typesKey =
+      if (mainTransaction.contains(ChargeType.overRepaymentCharge)) FinancialDetail.getOverRepaymentMessageKey(chargeType)
+      else FinancialDetail.getMessageKeyByTypes(mainType, chargeType)
+
+    typesKey
+      .map(key => s"paymentAllocation.paymentAllocations.$key")
       .getOrElse {
-        logger.error(s"Non-matching document/charge found with main charge: $mainType and sub-charge: $chargeType")
+        logger.error(s"Non-matching document/charge found with main charge: $mainType, main transaction: $mainTransaction and sub-charge: $chargeType")
         ""
       }
   }

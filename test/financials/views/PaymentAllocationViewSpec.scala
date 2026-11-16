@@ -291,6 +291,11 @@ class PaymentAllocationViewSpec extends ViewSpec with ImplicitDateFormatter {
         val allTableData: Element = document.selectHead("tbody").selectHead("tr")
         allTableData.selectNth("td", 4).className() should include("govuk-table__cell--numeric")
       }
+
+      "describes late payment interest on an over-repayment charge" in new PaymentAllocationSetup(paymentAllocationViewModelLpiOverRepayment) {
+        val allTableData: Element = document.selectHead("tbody").selectHead("tr")
+        allTableData.selectNth("td", 2).text() shouldBe "Late payment interest on a refund to pay back"
+      }
     }
   }
 
@@ -440,6 +445,43 @@ class PaymentAllocationViewSpec extends ViewSpec with ImplicitDateFormatter {
              |27 Aug 2019 ${messages("paymentAllocation.paymentAllocations.bcd.cgt")} $paymentAllocationTaxYearFrom2018to2019Hidden $paymentAllocationTaxYearFrom2018to2019 £9,876.54
              |28 Aug 2019 ${messages("paymentAllocation.paymentAllocations.bcd.sl")} $paymentAllocationTaxYearFrom2018to2019Hidden $paymentAllocationTaxYearFrom2018to2019 £8,765.43
              |29 Aug 2019 ${messages("paymentAllocation.paymentAllocations.bcd.vcnic2")} $paymentAllocationTaxYearFrom2019to2020Hidden $paymentAllocationTaxYearFrom2019to2020 £7,654.32
+             |$dueDate $moneyOnAccountMessage $notApplicable £200.00
+             |""".stripMargin.trim.linesIterator.mkString(" ")
+
+        layoutContent.selectById("payment-allocation-table").select(Selectors.tableRow).select(Selectors.link)
+          .eachAttr("href").asScala shouldBe expectedLinkUrls
+      }
+
+      val OVER_REPAYMENT = "ITSA Over-repayment"
+      val overRepaymentAllocations = Seq(
+        allocationDetail("orc_1", "2018-03-15", OVER_REPAYMENT, ITSA_ENGLAND_AND_NI, 1234.56).copy(mainTransaction = Some("5070")) -> "2019-06-27",
+        allocationDetail("orc_2", "2018-04-05", OVER_REPAYMENT, NIC4_GB, 2345.67).copy(mainTransaction = Some("5070")) -> "2019-06-28",
+        allocationDetail("orc_3", "2018-04-06", OVER_REPAYMENT, NIC2_GB, 3456.78).copy(mainTransaction = Some("5070")) -> "2019-06-29",
+        allocationDetail("orc_4", "2019-01-01", OVER_REPAYMENT, CGT, 9876.54).copy(mainTransaction = Some("5070")) -> "2019-08-27",
+        allocationDetail("orc_5", "2019-04-05", OVER_REPAYMENT, SL, 8765.43).copy(mainTransaction = Some("5070")) -> "2019-08-28",
+        allocationDetail("orc_6", "2019-04-06", OVER_REPAYMENT, VOLUNTARY_NIC2_NI, 7654.32).copy(mainTransaction = Some("5070")) -> "2019-08-29")
+
+      "an over-repayment charge" in new PaymentAllocationSetup(viewModel(overRepaymentAllocations: _*)) {
+
+        val expectedLinkUrls: Seq[String] = Seq(
+          financialsRoutes.ChargeSummaryController.show(2018, "orc_1").url,
+          financialsRoutes.ChargeSummaryController.show(2018, "orc_2").url,
+          financialsRoutes.ChargeSummaryController.show(2019, "orc_3").url,
+          financialsRoutes.ChargeSummaryController.show(2019, "orc_4").url,
+          financialsRoutes.ChargeSummaryController.show(2019, "orc_5").url,
+          financialsRoutes.ChargeSummaryController.show(2020, "orc_6").url,
+          financialsRoutes.MoneyInYourAccountController.show().url
+        )
+        document.getElementById("payment-allocation-table").getElementsByTag("caption").text() shouldBe paymentAllocationHeading
+        layoutContent.selectById("payment-allocation-table").text() shouldBe
+          s"""
+             |$allocationsTableHeadersText
+             |27 Jun 2019 Income Tax for refund to pay back $paymentAllocationTaxYearFrom2017to2018Hidden $paymentAllocationTaxYearFrom2017to2018 £1,234.56
+             |28 Jun 2019 Class 4 National Insurance for refund to pay back $paymentAllocationTaxYearFrom2017to2018Hidden $paymentAllocationTaxYearFrom2017to2018 £2,345.67
+             |29 Jun 2019 Class 2 National Insurance for refund to pay back $paymentAllocationTaxYearFrom2018to2019Hidden $paymentAllocationTaxYearFrom2018to2019 £3,456.78
+             |27 Aug 2019 Capital Gains Tax for refund to pay back $paymentAllocationTaxYearFrom2018to2019Hidden $paymentAllocationTaxYearFrom2018to2019 £9,876.54
+             |28 Aug 2019 Student Loans for refund to pay back $paymentAllocationTaxYearFrom2018to2019Hidden $paymentAllocationTaxYearFrom2018to2019 £8,765.43
+             |29 Aug 2019 Voluntary Class 2 National Insurance for refund to pay back $paymentAllocationTaxYearFrom2019to2020Hidden $paymentAllocationTaxYearFrom2019to2020 £7,654.32
              |$dueDate $moneyOnAccountMessage $notApplicable £200.00
              |""".stripMargin.trim.linesIterator.mkString(" ")
 

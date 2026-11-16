@@ -65,9 +65,16 @@ case class PaymentAllocationsResponseAuditModel(mtdItUser: MtdItUser[_],
     case "paymentAllocation.paymentAllocations.bcd.sl" => "Student Loans for remaining balance"
     case "paymentAllocation.paymentAllocations.bcd.cgt" => "Capital Gains Tax for remaining balance"
     case "paymentAllocation.paymentAllocations.hmrcAdjustment.text" => "HMRC adjustment"
+    case "paymentAllocation.paymentAllocations.overRepayment.incomeTax" => "Income Tax for refund to pay back"
+    case "paymentAllocation.paymentAllocations.overRepayment.nic2" => "Class 2 National Insurance for refund to pay back"
+    case "paymentAllocation.paymentAllocations.overRepayment.vcnic2" => "Voluntary Class 2 National Insurance for refund to pay back"
+    case "paymentAllocation.paymentAllocations.overRepayment.nic4" => "Class 4 National Insurance for refund to pay back"
+    case "paymentAllocation.paymentAllocations.overRepayment.sl" => "Student Loans for refund to pay back"
+    case "paymentAllocation.paymentAllocations.overRepayment.cgt" => "Capital Gains Tax for refund to pay back"
     case "paymentOnAccount1.text" => "Late payment interest for first payment on account"
     case "paymentOnAccount2.text" => "Late payment interest for second payment on account"
     case "balancingCharge.text" => "Late payment interest for remaining balance"
+    case "overRepaymentInterest.text" => "Late payment interest on a refund to pay back"
     case other =>
       logger.warn("key not found: " + other)
       "allocation"
@@ -85,7 +92,7 @@ case class PaymentAllocationsResponseAuditModel(mtdItUser: MtdItUser[_],
       Json.obj("paymentAllocations" -> Json.arr(
         paymentAllocations.latePaymentInterestPaymentAllocationDetails.map { lpiad =>
           Json.obj() ++
-            Json.obj("paymentAllocationDescription"-> Some(getAllocationDescriptionFromKey(lpiad.documentDetail.getDocumentChargeTypeKey))) ++
+            Json.obj("paymentAllocationDescription"-> Some(getAllocationDescriptionFromKey(lpiad.chargeTypeKey))) ++
             Json.obj("amount"-> Some(lpiad.amount)) ++
             Json.obj("taxYear"-> Some(getTaxYearString(LocalDate.parse(s"${lpiad.documentDetail.taxYear}-04-05"))))
         }

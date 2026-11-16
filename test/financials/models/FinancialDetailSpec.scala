@@ -18,7 +18,7 @@ package financials.models
 
 import common.testUtils.UnitSpec
 import financials.enums.ChargeType.*
-import FinancialDetail.{getMessageKeyByTypes, getMessageKeyForChargeType, getMessageKeyForMainType}
+import financials.models.FinancialDetail.{getMessageKeyByTypes, getMessageKeyForChargeType, getMessageKeyForMainType, getOverRepaymentMessageKey}
 import financials.testConstants.FinancialDetailsTestConstants.financialDetail
 
 class FinancialDetailSpec extends UnitSpec {
@@ -173,6 +173,30 @@ class FinancialDetailSpec extends UnitSpec {
 
       "return None for an absent chargeType" in {
         getMessageKeyForChargeType(None) shouldBe None
+      }
+    }
+
+    "calling .getOverRepaymentMessageKey with an optional value of a chargeType" should {
+
+      "return Some over-repayment message key for a supported chargeType" in {
+        getOverRepaymentMessageKey(Some(ITSA_ENGLAND_AND_NI)) shouldBe Some("overRepayment.incomeTax")
+        getOverRepaymentMessageKey(Some(ITSA_WALES)) shouldBe Some("overRepayment.incomeTax")
+        getOverRepaymentMessageKey(Some(NIC4_GB)) shouldBe Some("overRepayment.nic4")
+        getOverRepaymentMessageKey(Some(NIC2_GB)) shouldBe Some("overRepayment.nic2")
+        getOverRepaymentMessageKey(Some(VOLUNTARY_NIC2_NI)) shouldBe Some("overRepayment.vcnic2")
+        getOverRepaymentMessageKey(Some(SL)) shouldBe Some("overRepayment.sl")
+        getOverRepaymentMessageKey(Some(CGT)) shouldBe Some("overRepayment.cgt")
+      }
+
+
+      "return None for an unsupported chargeType" in {
+        getOverRepaymentMessageKey(Some("rubbish")) shouldBe None
+        getOverRepaymentMessageKey(Some("Cancelled")) shouldBe None
+        getOverRepaymentMessageKey(Some("ITSA POA(Payment On Account)")) shouldBe None
+      }
+
+      "return None for an absent chargeType" in {
+        getOverRepaymentMessageKey(None) shouldBe None
       }
     }
 
