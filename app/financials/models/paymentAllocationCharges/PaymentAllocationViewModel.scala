@@ -31,7 +31,15 @@ case class AllocationDetailWithClearingDate(allocationDetail: Option[AllocationD
 
 }
 
-case class LatePaymentInterestPaymentAllocationDetails(documentDetail: DocumentDetail, amount: BigDecimal)
+case class LatePaymentInterestPaymentAllocationDetails(documentDetail: DocumentDetail,
+                                                       amount: BigDecimal,
+                                                       isOverRepayment: Boolean = false) {
+
+  val chargeTypeKey: String =
+    if (isOverRepayment) "overRepaymentInterest.text" else documentDetail.getDocumentChargeTypeKey
+
+  val descriptionKey: String = s"paymentAllocation.paymentAllocations.$chargeTypeKey"
+}
 
 case class PaymentAllocationViewModel(
                                        paymentAllocationChargeModel: FinancialDetailsWithDocumentDetailsModel,

@@ -20,7 +20,7 @@ import common.auth.MtdItUser
 import common.config.FrontendAppConfig
 import common.models.core.Nino
 import financials.connectors.FinancialDetailsConnector
-import financials.models.FinancialDetailsModel
+import financials.models.{ChargeType, FinancialDetailsModel}
 import financials.models.paymentAllocationCharges.*
 import financials.models.paymentAllocations.{AllocationDetail, PaymentAllocations, PaymentAllocationsError}
 import play.api.Logging
@@ -118,8 +118,13 @@ class PaymentAllocationsService @Inject()(financialDetailsConnector: FinancialDe
         case (_, financialDetails: FinancialDetailsModel) =>
           financialDetails.documentDetailsWithLpiId(allocation.chargeReference).map {
             documentDetailsWithLpiId =>
+              val isOverRepayment = financialDetails.financialDetails.exists { financialDetail =>
+                financialDetail.transactionId.contains(documentDetailsWithLpiId.transactionId) &&
+                  financialDetail.mainTransaction.contains(ChargeType.overRepaymentCharge)
+              }
               LatePaymentInterestPaymentAllocationDetails(documentDetailsWithLpiId,
-                documentDetailsWithFinancialDetails.documentDetails.head.originalAmount)
+                documentDetailsWithFinancialDetails.documentDetails.head.originalAmount,
+                isOverRepayment)
           }
         case _ => None
       }.headOption
