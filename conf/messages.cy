@@ -2326,6 +2326,7 @@ chargeSummary.chargeHistory.created.firstLatePaymentPenalty.text        = Gwnaet
 chargeSummary.chargeHistory.created.firstLatePaymentPenaltyStoodOver.text   = Y swm sydd wedi’i ohirio tra ei fod yn cael ei adolygu
 chargeSummary.chargeHistory.created.enquiryAmendment.text               = Cafodd y swm ychwanegol ei greu pan wnaeth CThEF diwygio’ch Ffurflen Dreth
 chargeSummary.chargeHistory.created.itsaReturnAmendment.text            = Creodd CThEF eich swm ychwanegol taliad mantoli o ganlyniad i Ffurflen Dreth ddiwygiedig
+chargeSummary.chargeHistory.created.itsaOverRepayment.text              = Swm ychwanegol wedi’i greu oherwydd i chi gywiro’ch Ffurflen Dreth
 chargeSummary.chargeHistory.created.hmrcAdjustment.text                 = Addasiad CThEF wedi’i greu
 chargeSummary.chargeHistory.created.hmrcCorrection.text                 = Cafodd y swm ychwanegol ei greu pan wnaeth CThEF gywiro’ch Ffurflen Dreth
 chargeSummary.chargeHistory.request.paymentOnAccount1.text	   	        = Y taliad cyntaf ar gyfrif wedi’i ostwng oherwydd cais gan y trethdalwr
@@ -2749,6 +2750,7 @@ yourSelfAssessmentChargeSummary.codingOut.text.heading                          
 yourSelfAssessmentChargeSummary.itsaReturnAmendmentCredit.text.heading              = Credyd o’ch Ffurfln Dreth ddiwygiedig
 yourSelfAssessmentChargeSummary.enquiryAmendmentCredit.text.heading                 = Credyd o ddiwygiad yn sgil ymholiad gan CThEF
 yourSelfAssessmentChargeSummary.hmrcCorrection.text.heading                         = Diwygiad CThEF: swm ychwanegol i’w dalu o ganlyniad i gywiro Ffurflen Dreth
+yourSelfAssessmentChargeSummary.itsaOverRepayment.text.heading                      = Ad-daliad i’w dalu yn ôl yn dilyn newid i’ch Ffurflen Dreth
 yourSelfAssessmentChargeSummary.unknown.heading                                     = Anhysbys
 
 yourSelfAssessmentChargeSummary.poa1CodedOut.text.heading                           = Taliad cyntaf ar gyfrif sy’n cael ei gasglu drwy’ch cod treth TWE
@@ -2785,6 +2787,9 @@ yourSelfAssessmentChargeSummary.chargeHistory.hmrcCorrection.caption.text       
 
 yourSelfAssessmentChargeSummary.itsaReturnAmendmentCredit.p1                        = Mae CThEF wedi ychwanegu credyd at eich cyfrif oherwydd bod eich Ffurflen Dreth ddiwygiedig yn dangos bod eich bil treth ar gyfer {0} i {1} yn rhy uchel.
 yourSelfAssessmentChargeSummary.itsaReturnAmendmentCredit.p2                        = Efallai y bydd CThEF yn defnyddio’r credyd hwn yn awtomatig i dalu’ch biliau treth yn y dyfodol pan fydd y rhain yn dod yn ddyledus.
+
+yourSelfAssessmentChargeSummary.itsaOverRepayment.p1                                = Rydym wedi gwirio’r newid diweddar i’ch Ffurflen Dreth Hunanasesiad ac wedi canfod bod yr ad-daliad y gwnaethoch ei hawlio’n flaenorol yn uwch na’r swm y mae gennych hawl iddo.
+yourSelfAssessmentChargeSummary.itsaOverRepayment.p2                                = Mae hyn yn golygu eich bod chi wedi cael gordaliad o {0} ar gyfer blwyddyn dreth {1} i {2}.
 
 yourSelfAssessmentChargeSummary.correction.p1.1                                     = Mae CThEF wedi cywiro’ch Ffurflen Dreth. Mae hyn wedi newid eich
 yourSelfAssessmentChargeSummary.correction.p1.link-text                             = cyfrifiad treth ar gyfer {0} i {1}

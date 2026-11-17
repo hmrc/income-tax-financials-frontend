@@ -74,6 +74,7 @@ trait TransactionItem extends Logging {
       case (ITSAReturnAmendment, _, Some(RevenueAmendments))                       => "enquiryAmendment.text"
       case (ITSAReturnAmendment, _, Some(AutoCorrection | ManualCorrection))       => "hmrcCorrection.text"
       case (ITSAReturnAmendment, _, _)                                             => "itsaReturnAmendment.text"
+      case (ITSAOverRepayment, _, _)                                               => "itsaOverRepayment.text"
       case (ITSAReturnAmendmentCredit, _, Some(RevenueAmendments))                 => "enquiryAmendmentCredit.text"
       case (ITSAReturnAmendmentCredit, _, Some(AutoCorrection | ManualCorrection)) => "correctionCredit.text"
       case (ITSAReturnAmendmentCredit, _, _)                                       => "itsaReturnAmendmentCredit.text"

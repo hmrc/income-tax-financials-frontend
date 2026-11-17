@@ -2342,6 +2342,7 @@ chargeSummary.chargeHistory.created.firstLatePaymentPenalty.text        = HMRC c
 chargeSummary.chargeHistory.created.firstLatePaymentPenaltyStoodOver.text   = Amount suspended while it is under review
 chargeSummary.chargeHistory.created.enquiryAmendment.text               = Extra amount created when HMRC amended your tax return
 chargeSummary.chargeHistory.created.itsaReturnAmendment.text            = HMRC created your balancing payment extra amount due to amended return
+chargeSummary.chargeHistory.created.itsaOverRepayment.text              = Extra amount created because you corrected your tax return
 chargeSummary.chargeHistory.created.hmrcAdjustment.text                 = HMRC adjustment created
 chargeSummary.chargeHistory.created.hmrcCorrection.text                 = Extra amount created when HMRC corrected your return
 chargeSummary.chargeHistory.request.paymentOnAccount1.text	   	        = First payment on account reduced by taxpayer request
@@ -2726,6 +2727,7 @@ yourSelfAssessmentChargeSummary.codingOut.text.heading                          
 yourSelfAssessmentChargeSummary.itsaReturnAmendmentCredit.text.heading              = Credit from your amended tax return
 yourSelfAssessmentChargeSummary.enquiryAmendmentCredit.text.heading                 = Credit from HMRC enquiry amendment
 yourSelfAssessmentChargeSummary.hmrcCorrection.text.heading                         = HMRC amendment: extra amount to pay due to corrected tax return
+yourSelfAssessmentChargeSummary.itsaOverRepayment.text.heading                      = Refund to repay after a change to your tax return
 yourSelfAssessmentChargeSummary.unknown.heading                                     = Unknown
 
 yourSelfAssessmentChargeSummary.lpi.paymentOnAccount1.text.heading					= Late payment interest on first payment on account
@@ -2800,6 +2802,9 @@ yourSelfAssessmentChargeSummary.chargeHistory.hmrcCorrection.caption.text       
 
 yourSelfAssessmentChargeSummary.itsaReturnAmendmentCredit.p1                        = HMRC has added a credit to your account because your amended tax return shows that your {0} to {1} tax bill was too high.
 yourSelfAssessmentChargeSummary.itsaReturnAmendmentCredit.p2                        = This credit may be used automatically by HMRC to cover your future tax bills when they become due.
+
+yourSelfAssessmentChargeSummary.itsaOverRepayment.p1                                = We’ve checked the recent change to your Self Assessment tax return and found that the refund you previously claimed is higher than the amount you’re entitled to.
+yourSelfAssessmentChargeSummary.itsaOverRepayment.p2                                = This means you’ve been overpaid by {0} for the {1} to {2} tax year.
 
 yourSelfAssessmentChargeSummary.correction.p1.1                                     = HMRC corrected your tax return. This changed your
 yourSelfAssessmentChargeSummary.correction.p1.link-text                             = tax calculation for {0} to {1}
