@@ -718,7 +718,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
             "Coding Out is Enabled" in new TestSetup(codedOutPoaItem, adjustmentHistory = codedOutEmptyAdjustmentHistory(2500.00)) {
               document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
               document.select("h1").text() shouldBe chargeSummaryPoa1CodedOutHeading
-              document.getElementById("howIsInterestCalculated.p1").text() shouldBe "’Payments on account’ are two advance payments made towards your next tax bill."
+              document.getElementById("howIsInterestCalculated.p1").text() shouldBe "‘Payments on account’ are two advance payments made towards your next tax bill."
               document.getElementById("howIsInterestCalculated.list").child(0).text() shouldBe "Income Tax"
               document.getElementById("howIsInterestCalculated.list").child(1).text() shouldBe "Class 4 National Insurance contributions (opens in new tab)"
               document.getElementById("howIsInterestCalculated.list").child(1).link.attr("href") shouldBe "https://www.gov.uk/self-employed-national-insurance-rates"
@@ -841,7 +841,7 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
             "Coding Out is Enabled" in new TestSetup(codedOutPoaItem, adjustmentHistory = codedOutEmptyAdjustmentHistory(2500.00)) {
               document.getElementsByClass("govuk-caption-xl").first().text() shouldBe poa1Caption(2018)
               document.select("h1").text() shouldBe chargeSummaryPoa2CodedOutHeading
-              document.getElementById("howIsInterestCalculated.p1").text() shouldBe "’Payments on account’ are two advance payments made towards your next tax bill."
+              document.getElementById("howIsInterestCalculated.p1").text() shouldBe "‘Payments on account’ are two advance payments made towards your next tax bill."
               document.getElementById("howIsInterestCalculated.list").child(0).text() shouldBe "Income Tax"
               document.getElementById("howIsInterestCalculated.list").child(1).text() shouldBe "Class 4 National Insurance contributions (opens in new tab)"
               document.getElementById("howIsInterestCalculated.list").child(1).link.attr("href") shouldBe "https://www.gov.uk/self-employed-national-insurance-rates"
