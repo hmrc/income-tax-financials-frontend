@@ -308,6 +308,11 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
 
     def dunningLockBannerText(formattedAmount: String, date: String) =
       s"$dunningLockBannerLink ${messages("chargeSummary.dunning.locks.banner.note", s"$formattedAmount", s"$date")}"
+
+    val itsaOverRepaymentHeading = "Refund to repay after a change to your tax return"
+    val itsaOverRepaymentParagraph1 = "We’ve checked the recent change to your Self Assessment tax return and found that the refund you previously claimed is higher than the amount you’re entitled to."
+    val itsaOverRepaymentParagraph2 = "This means you’ve been overpaid by £1,400.00 for the 2017 to 2018 tax year."
+    val itsaOverRepaymentDescriptionText = "Extra amount created because you corrected your tax return"
   }
 
   val amendedChargeHistoryModel: ChargeHistoryModel = ChargeHistoryModel("", "", fixedDate, "", 1500,
@@ -1554,6 +1559,15 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         p1 should include(", resulting in a credit being added to your account.")
 
         document.getElementById("itsa-return-correction-credit-p2").text() shouldBe "This credit may be used automatically by HMRC to cover your future tax bills when they become due."
+      }
+    }
+
+    "charge is an ITSAOverRepayment" should {
+      "display the correct content" in new TestSetupv2(chargeItem = chargeItemModel(transactionType = ITSAOverRepayment)) {
+        document.getElementsByClass("govuk-heading-xl").text() shouldBe itsaOverRepaymentHeading
+        document.getElementById("itsa-over-repayment-p1").text() shouldBe itsaOverRepaymentParagraph1
+        document.getElementById("itsa-over-repayment-p2").text() shouldBe itsaOverRepaymentParagraph2
+        document.select("#payment-history-table > tbody > tr > td:nth-child(2)").text() shouldBe itsaOverRepaymentDescriptionText
       }
     }
 

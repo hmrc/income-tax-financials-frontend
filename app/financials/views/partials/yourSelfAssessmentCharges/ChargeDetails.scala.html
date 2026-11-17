@@ -26,6 +26,7 @@
 @import financials.models.FirstLatePaymentPenalty
 @import financials.models.ITSAReturnAmendment
 @import financials.models.ITSAReturnAmendmentCredit
+@import financials.models.ITSAOverRepayment
 @import financials.views.html.partials.yourSelfAssessmentCharges.CodedOutExplanationContent
 @import financials.views.html.partials.yourSelfAssessmentCharges.CancelledPAYEExplanationContent
 @import financials.views.html.partials.yourSelfAssessmentCharges.FirstLatePaymentPenaltyContent
@@ -44,6 +45,7 @@
 @import financials.views.html.partials.yourSelfAssessmentCharges.LateSubmissionPenaltyLPIContent
 @import financials.views.html.partials.yourSelfAssessmentCharges.FirstLatePaymentPenaltyLPIContent
 @import financials.views.html.partials.yourSelfAssessmentCharges.ItsaHmrcCorrectionContent
+@import financials.views.html.partials.yourSelfAssessmentCharges.ItsaOverRepaymentContent
 @import shared.enums.ChargeClassificationType.isCorrection
 @import financials.models.Nics2
 @import financials.views.html.partials.yourSelfAssessmentCharges.ClassTwoNICSContent
@@ -79,6 +81,7 @@
     itsaAmendmentChargeLPIContent: ITSAAmendmentChargeLPIContent,
     itsaCorrectionChargeContent: ItsaCorrectionChargeContent,
     itsaHmrcCorrectionContent: ItsaHmrcCorrectionContent,
+    itsaOverRepaymentContent: ItsaOverRepaymentContent,
     govukDetails: GovukDetails
 )
 
@@ -107,6 +110,7 @@
     case (ITSAReturnAmendment, _, _, Some(RevenueAmendments)) => itsaReturnAmendmentRAContent(viewModel)
     case (ITSAReturnAmendment, _, true, _)                    => itsaAmendmentChargeLPIContent()
     case (ITSAReturnAmendment, _, _, _)                       => itsaReturnAmendmentContent()
+    case (ITSAOverRepayment, _, _, _)                         => itsaOverRepaymentContent(viewModel)
     case (ITSAReturnAmendmentCredit, _, _, Some(RevenueAmendments))              => itsaEnquiryAmendmentCreditContent(viewModel)
     case (ITSAReturnAmendmentCredit, _, _, Some(AutoCorrection | ManualCorrection))              => itsaCorrectionChargeContent(viewModel.chargeItem.taxYear, viewModel.taxYearSummaryUrl)
     case (ITSAReturnAmendmentCredit, _, _, _)                 => itsaReturnAmendmentCreditContent(viewModel.chargeItem.taxYear)
