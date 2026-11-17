@@ -269,12 +269,6 @@ class ChargeSummaryController @Inject()(val authActions: AuthActions,
                       taxYearSummaryUrl = appConfig.taxYearSummaryUrl(isAgent, _, origin = origin)
                     )
                   }
-                  
-                  println("XXXXXXXX")
-                  println("XXXXXXXX")
-                  println(viewModel.latePaymentInterestCharge)
-                  println("XXXXXXXX")
-                  println("XXXXXXXX")
 
                   getPaymentAllocation(chargeItem).map { allocationData =>
 
