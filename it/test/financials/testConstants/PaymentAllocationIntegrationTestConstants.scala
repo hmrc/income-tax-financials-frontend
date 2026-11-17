@@ -16,11 +16,11 @@
 
 package financials.testConstants
 
-import financials.enums.ChargeType.{ITSA_ENGLAND_AND_NI, ITSA_NIC2_INTEREST_GB, ITSA_NIC4_INTEREST_GB, NIC4_WALES}
+import financials.enums.ChargeType.{ITSA_ENGLAND_AND_NI, ITSA_NIC2_INTEREST_GB, ITSA_NIC4_INTEREST_GB, NIC4_GB, NIC4_WALES}
 import financials.models.{DocumentDetail, FinancialDetail, SubItem}
 import financials.models.paymentAllocationCharges.{AllocationDetailWithClearingDate, FinancialDetailsWithDocumentDetailsModel, LatePaymentInterestPaymentAllocationDetails, PaymentAllocationViewModel}
 import financials.models.paymentAllocations.{AllocationDetail, PaymentAllocations}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 
 import java.time.LocalDate
 
@@ -347,6 +347,30 @@ object PaymentAllocationIntegrationTestConstants {
 
   val lpiPaymentAllocationViewModel: PaymentAllocationViewModel = PaymentAllocationViewModel(paymentAllocationChargesModel,
     Seq(), Some(LatePaymentInterestPaymentAllocationDetails(lpiDocumentDetail, -300.00)), true)
+
+  val testValidOverRepaymentPaymentAllocationsModel: PaymentAllocations = PaymentAllocations(
+    Some(110.10), Some("Payment by Card"), Some(LocalDate.parse("2019-05-27")), Some("reference"),
+    Seq(
+      AllocationDetail(Some("1040000872"), Some(LocalDate.parse("2019-06-27")), Some(LocalDate.parse("2019-08-27")), None, Some(ITSA_ENGLAND_AND_NI), Some("ITSA Over-repayment"), Some(10.10), Some(5.50), Some("chargeReference1"), Some("5070")),
+      AllocationDetail(Some("1040000873"), Some(LocalDate.parse("2019-07-28")), Some(LocalDate.parse("2019-09-28")), None, Some(NIC4_GB), Some("ITSA Over-repayment"), Some(10.90), Some(5.90), Some("chargeReference2"), Some("5070"))
+    )
+  )
+
+  val paymentAllocationViewModelOverRepayment: PaymentAllocationViewModel = PaymentAllocationViewModel(paymentAllocationChargesModel,
+    testValidOverRepaymentPaymentAllocationsModel.allocations.map(allocation =>
+      AllocationDetailWithClearingDate(Some(allocation), Some(LocalDate.parse("2019-05-27")))))
+
+  val lpiOverRepaymentPaymentAllocationViewModel: PaymentAllocationViewModel = PaymentAllocationViewModel(paymentAllocationChargesModel,
+    Seq(), Some(LatePaymentInterestPaymentAllocationDetails(lpiDocumentDetail, -300.00, isOverRepayment = true)), true)
+
+  def withLpiParentChargeAsOverRepayment(financialDetailsJson: JsValue): JsValue = {
+    val financialDetails = (financialDetailsJson \ "financialDetails").as[Seq[JsObject]].map { financialDetail =>
+      if ((financialDetail \ "transactionId").asOpt[String].contains("PAYID01"))
+        financialDetail ++ Json.obj("mainType" -> "ITSA Over-repayment", "mainTransaction" -> "5070")
+      else financialDetail
+    }
+    financialDetailsJson.as[JsObject] ++ Json.obj("financialDetails" -> financialDetails)
+  }
 
   val validPaymentAllocationChargesJson: JsValue = Json.parse(
     """{
