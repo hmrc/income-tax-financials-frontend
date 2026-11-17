@@ -2375,6 +2375,7 @@ chargeSummary.lpi.chargeHistory.created.enquiryAmendment.text       = Late payme
 chargeSummary.lpi.chargeHistory.created.firstLatePaymentPenalty.text = HMRC created your late payment interest on first late payment penalty
 chargeSummary.lpi.chargeHistory.created.lateSubmissionPenalty.text  = HMRC created your late payment interest on late submission penalty
 chargeSummary.lpi.chargeHistory.created.itsaReturnAmendment.text    = Late payment interest created on balancing payment extra amount
+chargeSummary.lpi.chargeHistory.created.itsaOverRepayment.text      = Late payment interest on a refund to pay back created
 
 chargeSummary.lpi.balancingCharge.p1                               = You owe HMRC interest because you paid your balancing payment late.
 chargeSummary.lpi.balancingCharge.textOne                          = Late payment interest is charged from the first day your payment is overdue until the day it’s paid in full. It’s calculated at the
@@ -2737,6 +2738,7 @@ yourSelfAssessmentChargeSummary.lpi.hmrcCorrection.text.heading                 
 yourSelfAssessmentChargeSummary.lpi.enquiryAmendment.text.heading                   = Late payment interest on the extra amount due to HMRC enquiry amendment
 yourSelfAssessmentChargeSummary.lpi.interestPeriod								    = Interest period:
 yourSelfAssessmentChargeSummary.lpi.interestPeriod.dates						    = {0} to {1}
+yourSelfAssessmentChargeSummary.lpi.itsaOverRepayment.text.heading                  = Late payment interest on a refund you need to pay back
 
 yourSelfAssessmentChargeSummary.lpi.reviewAndReconcilePoa1.text.heading              = Late payment interest for first payment on account: extra amount
 yourSelfAssessmentChargeSummary.lpi.reviewAndReconcilePoa2.text.heading              = Late payment interest for second payment on account: extra amount
@@ -2765,6 +2767,8 @@ yourSelfAssessmentChargeSummary.lpi.penalties.linkText                       = B
 yourSelfAssessmentChargeSummary.lpi.penalties.textTwo                        = plus 2.5%.
 yourSelfAssessmentChargeSummary.lpi.penalties.p3                             = See guidance on the
 yourSelfAssessmentChargeSummary.lpi.penalties.p3LinkText                     = interest rates set by HMRC (opens in new tab)
+
+yourSelfAssessmentChargeSummary.itsaOverRepaymentLPI.info                    = You owe HMRC interest because you paid back the refund late.
 
 yourSelfAssessmentChargeSummary.poa1CodedOut.text.heading                           = First payment on account collected through PAYE tax code
 yourSelfAssessmentChargeSummary.poa2CodedOut.text.heading                           = Second payment on account collected through PAYE tax code
