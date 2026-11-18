@@ -45,34 +45,11 @@ trait ExternalRedirectHelper {
   lazy val enterClientsUTRUrl: String = s"$hubAgentBaseUrl/client-utr"
 
   lazy val confirmClientUTRUrl: String = s"$hubAgentBaseUrl/confirm-client-details"
-
-
-  //Obligation routes
-  
-  lazy val obligationsBaseUrl: String = servicesConfig.getString("income-tax-obligations-frontend.baseUrl")
-  lazy val obligationsAgentBaseUrl: String = s"$obligationsBaseUrl/agents"
-  
-  lazy val obligationsWaitToSignUpIndividualUrl: Boolean => String = newObligationsEnabled =>
-    if (newObligationsEnabled)
-      s"$obligationsBaseUrl/access-service-from-next-tax-year"
-    else
-      s"$vcFrontendBaseUrl/access-service-from-next-tax-year"
-
-  lazy val obligationsWaitToSignUpAgentUrl: Boolean => String = newObligationsEnabled =>
-    if (newObligationsEnabled)
-      s"$obligationsAgentBaseUrl/view-client-from-next-tax-year"
-    else
-      s"$vcFrontendAgentBaseUrl/view-client-from-next-tax-year"
       
   //Business Details routes
 
   lazy val businessDetailsBaseUrl: String = servicesConfig.getString("income-tax-business-details-frontend.baseUrl")
   lazy val businessDetailsAgentBaseUrl: String = s"$businessDetailsBaseUrl/agents"
-
-  def triggeredMigrationCheckHMRCRecordsUrl(isAgent: Boolean): String = {
-      val baseUri = if (isAgent) businessDetailsAgentBaseUrl else businessDetailsBaseUrl
-      s"$baseUri/check-your-active-businesses/hmrc-record"
-  }
 
   def triggeredMigrationCompleteStepsUrl(isAgent: Boolean): String = {
       val baseUri = if (isAgent) businessDetailsAgentBaseUrl else businessDetailsBaseUrl
