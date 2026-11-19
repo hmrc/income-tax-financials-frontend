@@ -2024,7 +2024,8 @@ whatYouOwe.lpi.secondLatePaymentPenalty.text                    = Llog am dalu�
 whatYouOwe.lpi.lateSubmissionPenalty.text                       = Llog am dalu’n hwyr ar gosb am gyflwyno’n hwyr
 whatYouOwe.itsaReturnAmendment.text                             = Taliad mantoli: swm ychwanegol oherwydd Ffurflen Dreth ddiwygiedig
 whatYouOwe.lpi.itsaReturnAmendment.text                         = Llog am dalu’r daliad mantoli yn hwyr: swm ychwanegol oherwydd Ffurflen Dreth ddiwygiedig
-
+whatYouOwe.itsaOverRepayment.text                               = Ad-daliad i’w dalu yn ôl yn dilyn newid i’ch Ffurflen Dreth
+whatYouOwe.lpi.itsaOverRepayment.text                           = Llog am dalu’n hwyr ar ad-daliad i’w dalu yn ôl
 whatYouOwe.payments-due                                         = Y dreth sydd arnoch yn nhrefn y dyddiadau dyledus
 whatYouOwe.tax-owed-due-order-heading                           = Y dreth sydd arnoch yn nhrefn y dyddiadau dyledus
 whatYouOwe.payments-processing-note                             = Gall taliadau a wnewch gymryd hyd at 3 diwrnod gwaith yn dibynnu ar y dull talu rydych chi’n ei ddefnyddio. Rhaid i daliadau gyrraedd CThEF erbyn y dyddiad dyledus er mwyn osgoi unrhyw log neu gosb am dalu’n hwyr.
