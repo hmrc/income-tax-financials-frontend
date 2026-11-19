@@ -67,6 +67,8 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
   val preMtdSaBody: String = s"${messages("whatYouOwe.pre-mtd.body")} $preMtdSaLink."
   val saNote2Agent: String = s"${messages("whatYouOwe.sa-note-2-body-agent-1")} $saLink2Agent. ${messages("whatYouOwe.sa-note-2-body-agent-2")}"
   val osChargesNote: String = messages("whatYouOwe.outstanding-charges-note")
+  val overRepaymentText: String = messages("whatYouOwe.itsaOverRepayment.text")
+  val overRepaymentLpiText: String = messages("whatYouOwe.lpi.itsaOverRepayment.text")
   val preMtdOsChargesNote: String = messages("whatYouOwe.pre-mtd-outstanding-charges")
   val chargeType: String = messages("whatYouOwe.tableHead.charge-type")
   val taxYear: String = messages("whatYouOwe.tableHead.tax-year")
@@ -561,6 +563,31 @@ class WhatYouOweViewSpec extends TestSupport with FeatureSwitching with Implicit
           lpp2Row.select("td").get(1).text() shouldBe lpp2Interest + " 4"
           lpp2Row.select("td").get(2).text() shouldBe taxYearSummaryText((fixedDate.getYear - 1).toString, fixedDate.getYear.toString)
           lpp2Row.select("td").last().text() shouldBe "£98.00"
+        }
+
+        "should display an over-repayment charge with no interest accrued" in new TestSetup(charges = whatYouOweOverRepayment) {
+          val row: Element = pageDocument.getElementsByClass("govuk-table__row").get(1)
+          row.select("td").first().text() shouldBe LocalDate.of(2026, 7, 2).toLongDateShort
+          row.getElementById("due-0-link").text() shouldBe s"$overRepaymentText 1"
+          row.select("td").get(2).text() shouldBe taxYearSummaryText("2026", "2027")
+          row.select("td").last().text() shouldBe "£1,000.00"
+        }
+
+        "should display an over-repayment charge with accrued interest" in new TestSetup(charges = whatYouOweOverRepaymentWithInterest) {
+          val row: Element = pageDocument.getElementsByClass("govuk-table__row").get(1)
+          row.select("td").first().text() shouldBe LocalDate.of(2026, 7, 2).toLongDateShort
+          row.getElementById("due-0-link").text() shouldBe s"$overRepaymentText 1"
+          row.select("td").get(2).text() shouldBe taxYearSummaryText("2026", "2027")
+          pageDocument.getElementById("accrued-interest-amount-due-0").text shouldBe "£50.00"
+          row.select("td").last().text() shouldBe "£1,000.00"
+        }
+
+        "should display late payment interest on an over-repayment charge" in new TestSetup(charges = whatYouOweOverRepaymentLpi) {
+          val row: Element = pageDocument.getElementsByClass("govuk-table__row").get(1)
+          row.select("td").first().text() shouldBe LocalDate.of(2026, 7, 12).toLongDateShort
+          row.getElementById("due-0-link").text() shouldBe s"$overRepaymentLpiText 1"
+          row.select("td").get(2).text() shouldBe taxYearSummaryText("2026", "2027")
+          row.select("td").last().text() shouldBe "£75.00"
         }
 
         "should have corrections in the table" in new TestSetup(charges = whatYouOweWithCorrections) {
