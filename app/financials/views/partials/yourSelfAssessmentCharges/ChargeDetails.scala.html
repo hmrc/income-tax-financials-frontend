@@ -46,6 +46,7 @@
 @import financials.views.html.partials.yourSelfAssessmentCharges.FirstLatePaymentPenaltyLPIContent
 @import financials.views.html.partials.yourSelfAssessmentCharges.ItsaHmrcCorrectionContent
 @import financials.views.html.partials.yourSelfAssessmentCharges.ItsaOverRepaymentContent
+@import financials.views.html.partials.yourSelfAssessmentCharges.ItsaOverRepaymentLPIContent
 @import shared.enums.ChargeClassificationType.isCorrection
 @import financials.models.Nics2
 @import financials.views.html.partials.yourSelfAssessmentCharges.ClassTwoNICSContent
@@ -82,6 +83,7 @@
     itsaCorrectionChargeContent: ItsaCorrectionChargeContent,
     itsaHmrcCorrectionContent: ItsaHmrcCorrectionContent,
     itsaOverRepaymentContent: ItsaOverRepaymentContent,
+    itsaOverRepaymentLPIContent: ItsaOverRepaymentLPIContent,
     govukDetails: GovukDetails
 )
 
@@ -110,6 +112,7 @@
     case (ITSAReturnAmendment, _, _, Some(RevenueAmendments)) => itsaReturnAmendmentRAContent(viewModel)
     case (ITSAReturnAmendment, _, true, _)                    => itsaAmendmentChargeLPIContent()
     case (ITSAReturnAmendment, _, _, _)                       => itsaReturnAmendmentContent()
+    case (ITSAOverRepayment, _, true, _)                      => itsaOverRepaymentLPIContent()
     case (ITSAOverRepayment, _, _, _)                         => itsaOverRepaymentContent(viewModel)
     case (ITSAReturnAmendmentCredit, _, _, Some(RevenueAmendments))              => itsaEnquiryAmendmentCreditContent(viewModel)
     case (ITSAReturnAmendmentCredit, _, _, Some(AutoCorrection | ManualCorrection))              => itsaCorrectionChargeContent(viewModel.chargeItem.taxYear, viewModel.taxYearSummaryUrl)
