@@ -28,10 +28,6 @@ object InternalUrlHelper {
   val signinUrl = appRoutes.SignInController.signIn().url
   val signinCall = appRoutes.SignInController.signIn()
   val signoutUrl = appRoutes.SignOutController.signOut().url
-  val switchLocaleToWelshUrl = appRoutes.LocalLanguageController.switchToLanguage("cymraeg").url
-  val switchLocaleToEnglishUrl = appRoutes.LocalLanguageController.switchToLanguage("english").url
-  val switchItvcLangToEnglishCall = appRoutes.ItvcLanguageController.switchToEnglish(None)
-  val switchItvcLangToWelshCall = appRoutes.ItvcLanguageController.switchToWelsh(None)
   val keepAliveUrl = timeoutRoutes.SessionTimeoutController.keepAlive().url
   val timeoutUrl = timeoutRoutes.SessionTimeoutController.timeout().url
   val timeoutCall = timeoutRoutes.SessionTimeoutController.timeout()
