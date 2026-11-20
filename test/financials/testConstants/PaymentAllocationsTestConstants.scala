@@ -460,6 +460,13 @@ object PaymentAllocationsTestConstants {
     financialDetails = List(financialDetail)
   )
 
+  val lpiOverRepaymentFinancialDetailsModel: FinancialDetailsModel =
+    lpiFinancialDetailsModel.copy(financialDetails = List(financialDetail.copy(mainType = Some("ITSA Over-repayment"), mainTransaction = Some("5070"))))
+
+  val paymentAllocationViewModelLpiOverRepayment: PaymentAllocationViewModel = paymentAllocationViewModelLpi.copy(
+    latePaymentInterestPaymentAllocationDetails = Some(LatePaymentInterestPaymentAllocationDetails(lpiParentChargeDocumentDetail, -300.00, isOverRepayment = true))
+  )
+
   val singleTestPaymentAllocationChargeWithOutstandingAmountZero: FinancialDetailsWithDocumentDetailsModel = FinancialDetailsWithDocumentDetailsModel(
     List(documentDetail.copy(outstandingAmount = 0)),
     List(financialDetail)

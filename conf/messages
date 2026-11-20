@@ -2505,6 +2505,13 @@ paymentAllocation.paymentAllocations.paymentOnAccount1.text     = Late payment i
 paymentAllocation.paymentAllocations.paymentOnAccount2.text     = Late payment interest for second payment on account
 paymentAllocation.paymentAllocations.balancingCharge.text       = Late payment interest on balancing payment
 paymentAllocation.paymentAllocations.hmrcAdjustment.text        = HMRC adjustment
+paymentAllocation.paymentAllocations.overRepayment.incomeTax    = Income Tax for refund to pay back
+paymentAllocation.paymentAllocations.overRepayment.nic2         = Class 2 National Insurance for refund to pay back
+paymentAllocation.paymentAllocations.overRepayment.vcnic2       = Voluntary Class 2 National Insurance for refund to pay back
+paymentAllocation.paymentAllocations.overRepayment.nic4         = Class 4 National Insurance for refund to pay back
+paymentAllocation.paymentAllocations.overRepayment.sl           = Student Loans for refund to pay back
+paymentAllocation.paymentAllocations.overRepayment.cgt          = Capital Gains Tax for refund to pay back
+paymentAllocation.paymentAllocations.overRepaymentInterest.text = Late payment interest on a refund to pay back
 paymentAllocation.paymentAllocations.onAccount.table.description.poa = No Data
 
 

@@ -130,6 +130,13 @@ object FinancialDetail {
       case ct if ct.startsWith(CTypeInvalid) => "invalid"
     }
 
+  private val overRepaymentTaxComponents: Set[String] = Set("incomeTax", "nic4", "nic2", "vcnic2", "sl", "cgt")
+
+  def getOverRepaymentMessageKey(chargeType: Option[String]): Option[String] =
+    getMessageKeyForChargeType(chargeType)
+      .filter(overRepaymentTaxComponents.contains)
+      .map(taxComponent => s"overRepayment.$taxComponent")
+
   object Types {
 
     // Main Charge Types

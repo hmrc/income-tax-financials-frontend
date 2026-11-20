@@ -2486,6 +2486,13 @@ paymentAllocation.paymentAllocations.paymentOnAccount1.text     = Llog am dalu�
 paymentAllocation.paymentAllocations.paymentOnAccount2.text     = Llog am dalu’r ail daliad ar gyfrif yn hwyr
 paymentAllocation.paymentAllocations.balancingCharge.text       = Llog am dalu’n hwyr ar gyfer y Taliad Mantoli
 paymentAllocation.paymentAllocations.hmrcAdjustment.text        = Addasiad CThEF
+paymentAllocation.paymentAllocations.overRepayment.incomeTax    = Treth Incwm ar gyfer ad-daliad i’w dalu yn ôl
+paymentAllocation.paymentAllocations.overRepayment.nic2         = Yswiriant Gwladol Dosbarth 2 ar gyfer ad-daliad i’w dalu yn ôl
+paymentAllocation.paymentAllocations.overRepayment.vcnic2       = Yswiriant Gwladol Dosbarth 2 gwirfoddol ar gyfer ad-daliad i’w dalu yn ôl
+paymentAllocation.paymentAllocations.overRepayment.nic4         = Ad-daliad Yswiriant Gwladol Dosbarth 4 ar gyfer ad-daliad i’w dalu yn ôl
+paymentAllocation.paymentAllocations.overRepayment.sl           = Benthyciadau Myfyriwr ar gyfer ad-daliad i’w dalu yn ôl
+paymentAllocation.paymentAllocations.overRepayment.cgt          = Treth Enillion Cyfalaf ar gyfer ad-daliad i’w dalu yn ôl
+paymentAllocation.paymentAllocations.overRepaymentInterest.text = Llog am dalu’n hwyr ar ad-daliad i’w dalu yn ôl
 paymentAllocation.paymentAllocations.onAccount.table.description.poa = Amh
 
 

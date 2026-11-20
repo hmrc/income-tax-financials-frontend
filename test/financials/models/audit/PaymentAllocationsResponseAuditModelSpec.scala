@@ -21,9 +21,9 @@ import common.models.incomeSourceDetails.IncomeSourceDetailsModel
 import common.testConstants.BaseTestConstants.*
 import common.testUtils.TestSupport
 import financials.models.{DocumentDetail, FinancialDetail, SubItem}
-import financials.models.paymentAllocationCharges.{AllocationDetailWithClearingDate, FinancialDetailsWithDocumentDetailsModel, PaymentAllocationViewModel}
+import financials.models.paymentAllocationCharges.{AllocationDetailWithClearingDate, FinancialDetailsWithDocumentDetailsModel, LatePaymentInterestPaymentAllocationDetails, PaymentAllocationViewModel}
 import financials.models.paymentAllocations.AllocationDetail
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 
@@ -243,5 +243,43 @@ class PaymentAllocationsResponseAuditModelSpec extends TestSupport {
       }
     }
   }
-}
 
+  "The PaymentAllocationsRequestAuditModel for a payment allocated to an over-repayment charge" should {
+
+    def overRepaymentAllocation(chargeType: String): AllocationDetailWithClearingDate =
+      AllocationDetailWithClearingDate(
+        Some(allocationDetail.copy(chargeType = Some(chargeType), mainType = Some("ITSA Over-repayment"), mainTransaction = Some("5070"))),
+        Some(LocalDate.parse("2017-03-21")))
+
+    val auditModel = PaymentAllocationsResponseAuditModel(
+      mtdItUser = defaultMTDITUser(Some(Individual), IncomeSourceDetailsModel(testNino, testMtditid, None, List.empty, List.empty, "1")),
+      paymentAllocations = PaymentAllocationViewModel(paymentAllocationChargeModel,
+        Seq("ITSA England & NI", "NIC4-GB", "NIC2-GB", "Voluntary NIC2-GB", "SL", "CGT").map(overRepaymentAllocation))
+    )
+
+    "describe each tax component as a refund to pay back" in {
+      (auditModel.detail \ "paymentAllocations").as[Seq[JsObject]].map(allocation => (allocation \ "paymentAllocationDescription").as[String]) shouldBe Seq(
+        "Income Tax for refund to pay back",
+        "Class 4 National Insurance for refund to pay back",
+        "Class 2 National Insurance for refund to pay back",
+        "Voluntary Class 2 National Insurance for refund to pay back",
+        "Student Loans for refund to pay back",
+        "Capital Gains Tax for refund to pay back"
+      )
+    }
+  }
+
+  "The PaymentAllocationsRequestAuditModel for a payment allocated to late payment interest on an over-repayment charge" should {
+
+    val auditModel = PaymentAllocationsResponseAuditModel(
+      mtdItUser = defaultMTDITUser(Some(Individual), IncomeSourceDetailsModel(testNino, testMtditid, None, List.empty, List.empty, "1")),
+      paymentAllocations = PaymentAllocationViewModel(paymentAllocationChargeModel, Seq(),
+        Some(LatePaymentInterestPaymentAllocationDetails(dd1, 100.00, isOverRepayment = true)), isLpiPayment = true)
+    )
+
+    "describe the allocation as late payment interest on a refund to pay back" in {
+      (auditModel.detail \ "paymentAllocations").as[Seq[JsObject]].map(allocation => (allocation \ "paymentAllocationDescription").as[String]) shouldBe
+        Seq("Late payment interest on a refund to pay back")
+    }
+  }
+}

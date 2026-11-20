@@ -108,12 +108,12 @@
                     if(user.isAgent) {
                         HtmlContent(link(
                             link = financialsRoutes.ChargeSummaryController.showAgent(latePaymentInterestPaymentAllocationDetails.documentDetail.taxYear, latePaymentInterestPaymentAllocationDetails.documentDetail.transactionId, isInterestCharge = true).url,
-                            messageKey = messages(s"paymentAllocation.paymentAllocations.${latePaymentInterestPaymentAllocationDetails.documentDetail.getDocumentChargeTypeKey}")
+                            messageKey = messages(latePaymentInterestPaymentAllocationDetails.descriptionKey)
                         ))
                     } else {
                         HtmlContent(link(
                             link = financialsRoutes.ChargeSummaryController.show(latePaymentInterestPaymentAllocationDetails.documentDetail.taxYear, latePaymentInterestPaymentAllocationDetails.documentDetail.transactionId, isInterestCharge = true, origin).url,
-                            messageKey = messages(s"paymentAllocation.paymentAllocations.${latePaymentInterestPaymentAllocationDetails.documentDetail.getDocumentChargeTypeKey}")
+                            messageKey = messages(latePaymentInterestPaymentAllocationDetails.descriptionKey)
                         ))
                     }
 

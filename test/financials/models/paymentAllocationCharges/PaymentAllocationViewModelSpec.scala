@@ -19,6 +19,7 @@ package financials.models.paymentAllocationCharges
 import common.exceptions.MissingFieldException
 import common.testUtils.TestSupport
 import financials.models.paymentAllocations.AllocationDetail
+import financials.testConstants.PaymentAllocationsTestConstants.lpiParentChargeDocumentDetail
 import org.scalatest.matchers.should.Matchers
 
 import java.time.LocalDate
@@ -59,6 +60,22 @@ class PaymentAllocationViewModelSpec extends TestSupport with Matchers{
       intercept[MissingFieldException]{
         allocationDetailWithClearingDate.clearingDateActual
       }
+    }
+  }
+
+  "LatePaymentInterestPaymentAllocationDetails" should {
+    "use the over-repayment interest key when the parent charge is an over-repayment" in {
+      val details = LatePaymentInterestPaymentAllocationDetails(lpiParentChargeDocumentDetail, -300.00, isOverRepayment = true)
+
+      details.chargeTypeKey shouldBe "overRepaymentInterest.text"
+      details.descriptionKey shouldBe "paymentAllocation.paymentAllocations.overRepaymentInterest.text"
+    }
+
+    "use the parent charge's document description otherwise" in {
+      val details = LatePaymentInterestPaymentAllocationDetails(lpiParentChargeDocumentDetail, -300.00)
+
+      details.chargeTypeKey shouldBe lpiParentChargeDocumentDetail.getDocumentChargeTypeKey
+      details.descriptionKey shouldBe s"paymentAllocation.paymentAllocations.${lpiParentChargeDocumentDetail.getDocumentChargeTypeKey}"
     }
   }
 }

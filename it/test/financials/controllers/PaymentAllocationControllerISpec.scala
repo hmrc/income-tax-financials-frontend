@@ -145,6 +145,48 @@ class PaymentAllocationControllerISpec extends ControllerISpecHelper {
                 verifyAuditContainsDetail(PaymentAllocationsResponseAuditModel(testUser(mtdUserRole), lpiPaymentAllocationViewModel).detail)
               }
             }
+
+            "shows payment allocations to an over-repayment charge" in {
+              stubAuthorised(mtdUserRole)
+              GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
+
+              FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, docNumber)(OK, validPaymentAllocationChargesJson)
+              FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(OK, Json.toJson(testValidOverRepaymentPaymentAllocationsModel))
+
+              whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
+                result should have(
+                  httpStatus(OK),
+                  pageTitle(mtdUserRole, "paymentAllocation.heading"),
+                  elementTextBySelector("#payment-allocation-0 a")("Income Tax for refund to pay back"),
+                  elementTextBySelector("#payment-allocation-1 a")("Class 4 National Insurance for refund to pay back")
+                )
+
+                verifyAuditContainsDetail(PaymentAllocationsResponseAuditModel(testUser(mtdUserRole), paymentAllocationViewModelOverRepayment).detail)
+              }
+            }
+
+            "shows late payment interest on an over-repayment charge" in {
+              stubAuthorised(mtdUserRole)
+              GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
+
+              FinancialDetailsStub.stubGetFinancialDetailsByDateRange(nino = testNino, from = s"${getCurrentTaxYearEnd.getYear - 1}-04-06",
+                to = s"${getCurrentTaxYearEnd.getYear}-04-05")(OK, withLpiParentChargeAsOverRepayment(testValidFinancialDetailsModelJson(10.34, 1.2)))
+              FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, docNumber)(OK, validPaymentAllocationChargesJson)
+              FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(OK, Json.toJson(testValidLpiPaymentAllocationsModel))
+              YearOfMigrationStub.stubGetYearOfMigration((getCurrentTaxYearEnd.getYear - 1).toString)
+
+              whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
+                result should have(
+                  httpStatus(OK),
+                  pageTitle(mtdUserRole, "paymentAllocation.heading"),
+                  elementAttributeBySelector("#payment-allocation-0 a", "href")(
+                    s"$basePath" + {if(mtdUserRole != MTDIndividual) "/agents" else ""} +"/tax-years/9999/charge?id=PAYID01&isInterestCharge=true"),
+                  elementTextBySelector("#payment-allocation-0 a")("Late payment interest on a refund to pay back")
+                )
+
+                verifyAuditContainsDetail(PaymentAllocationsResponseAuditModel(testUser(mtdUserRole), lpiOverRepaymentPaymentAllocationViewModel).detail)
+              }
+            }
           }
         }
         testAuthFailures(path, mtdUserRole)

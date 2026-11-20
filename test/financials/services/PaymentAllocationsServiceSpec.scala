@@ -72,6 +72,16 @@ class PaymentAllocationsServiceSpec extends TestSupport with MockFinancialDetail
 
         result shouldBe Right(paymentAllocationViewModelLpi)
       }
+
+      "the late payment interest is on an over-repayment charge (main transaction 5070)" in {
+        setupGetPaymentAllocationCharges(testNino, docNumber)(lpiPaymentAllocationParentChargesModel)
+        setupGetPaymentAllocation(testNino, "paymentLot", "paymentLotItem")(testValidLpiPaymentAllocationsModel)
+        mockGetAllFinancialDetails(List((2020, lpiOverRepaymentFinancialDetailsModel)))
+
+        val result = TestPaymentAllocationsService.getPaymentAllocation(testUserNino, docNumber).futureValue
+
+        result shouldBe Right(paymentAllocationViewModelLpiOverRepayment)
+      }
     }
 
     "return an error" when {
