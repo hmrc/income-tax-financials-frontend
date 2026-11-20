@@ -151,8 +151,6 @@ class FrontendAppConfig @Inject()(val servicesConfig: ServicesConfig, val config
 
   def poaAdjustmentOverrides(): Option[Seq[String]] = config.getOptional[Seq[String]]("afterPoaAmountAdjusted")
 
-  def triggeredMigrationOverrides(): Option[Seq[String]] = config.getOptional[Seq[String]]("afterMigration")
-
   val cacheTtl: Int = config.get[Int]("mongodb.timeToLiveInSeconds")
   
   lazy val readFeatureSwitchesFromMongo: Boolean = servicesConfig.getBoolean("feature-switches.read-from-mongo")
@@ -162,10 +160,6 @@ class FrontendAppConfig @Inject()(val servicesConfig: ServicesConfig, val config
   lazy val timeMachineAddDays: Int = servicesConfig.getInt("time-machine.add-days")
 
   lazy val isSessionDataStorageEnabled: Boolean = servicesConfig.getBoolean("feature-switch.enable-session-data-storage")
-
-  lazy val preThreshold2027 = servicesConfig.getString("thresholds.prethreshold2027")
-  lazy val threshold2027 = servicesConfig.getString("thresholds.threshold2027")
-  lazy val threshold2028 = servicesConfig.getString("thresholds.threshold2028")
 
   lazy val dynamicStubUrl: String = servicesConfig.baseUrl("itvc-dynamic-stub")
 }
