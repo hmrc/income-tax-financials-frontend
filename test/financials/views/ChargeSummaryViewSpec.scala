@@ -313,6 +313,13 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
     val itsaOverRepaymentParagraph1 = "We’ve checked the recent change to your Self Assessment tax return and found that the refund you previously claimed is higher than the amount you’re entitled to."
     val itsaOverRepaymentParagraph2 = "This means you’ve been overpaid by £1,400.00 for the 2017 to 2018 tax year."
     val itsaOverRepaymentDescriptionText = "Extra amount created because you corrected your tax return"
+    
+    val itsaOverRepaymentLpiHeading = "Late payment interest on a refund you need to pay back"
+    val itsaOverRepaymentLpiParagraph1 = "You owe HMRC interest because you paid back the refund late."
+    val itsaOverRepaymentLpiParagraph2: String = "Late payment interest is charged from the first day your payment is overdue until the day it’s paid in full. " +
+      "It’s calculated at the Bank of England base rate (opens in new tab) plus 2.5%."
+    val itsaOverRepaymentLpiLink = "https://www.bankofengland.co.uk/monetary-policy/the-interest-rate-bank-rate"
+    val itsaOverRepaymentLpiDescriptionText = "Late payment interest on a refund to pay back created"
   }
 
   val amendedChargeHistoryModel: ChargeHistoryModel = ChargeHistoryModel("", "", fixedDate, "", 1500,
@@ -1568,6 +1575,15 @@ class ChargeSummaryViewSpec extends ViewSpec with FeatureSwitching with ChargeCo
         document.getElementById("itsa-over-repayment-p1").text() shouldBe itsaOverRepaymentParagraph1
         document.getElementById("itsa-over-repayment-p2").text() shouldBe itsaOverRepaymentParagraph2
         document.select("#payment-history-table > tbody > tr > td:nth-child(2)").text() shouldBe itsaOverRepaymentDescriptionText
+      }
+
+      "display the correct content when the charge is late payment interest" in new TestSetupv2(chargeItem = chargeItemModel(
+        transactionType = ITSAOverRepayment, accruingInterestAmount = None, originalAmount = 0), latePaymentInterestCharge = true) {
+        document.getElementsByClass("govuk-heading-xl").text() shouldBe itsaOverRepaymentLpiHeading
+        document.getElementById("itsaOverRepaymentLPI.p1").text() shouldBe itsaOverRepaymentLpiParagraph1
+        document.getElementById("itsaOverRepaymentLPI.p2").text() shouldBe itsaOverRepaymentLpiParagraph2
+        document.getElementById("itsaOverRepaymentLPI.p2").link.attr("href") shouldBe itsaOverRepaymentLpiLink
+        document.select("#payment-history-table > tbody > tr > td:nth-child(2)").text() shouldBe itsaOverRepaymentLpiDescriptionText
       }
     }
 

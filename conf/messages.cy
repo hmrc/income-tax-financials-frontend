@@ -2024,7 +2024,8 @@ whatYouOwe.lpi.secondLatePaymentPenalty.text                    = Llog am dalu�
 whatYouOwe.lpi.lateSubmissionPenalty.text                       = Llog am dalu’n hwyr ar gosb am gyflwyno’n hwyr
 whatYouOwe.itsaReturnAmendment.text                             = Taliad mantoli: swm ychwanegol oherwydd Ffurflen Dreth ddiwygiedig
 whatYouOwe.lpi.itsaReturnAmendment.text                         = Llog am dalu’r daliad mantoli yn hwyr: swm ychwanegol oherwydd Ffurflen Dreth ddiwygiedig
-
+whatYouOwe.itsaOverRepayment.text                               = Ad-daliad i’w dalu yn ôl yn dilyn newid i’ch Ffurflen Dreth
+whatYouOwe.lpi.itsaOverRepayment.text                           = Llog am dalu’n hwyr ar ad-daliad i’w dalu yn ôl
 whatYouOwe.payments-due                                         = Y dreth sydd arnoch yn nhrefn y dyddiadau dyledus
 whatYouOwe.tax-owed-due-order-heading                           = Y dreth sydd arnoch yn nhrefn y dyddiadau dyledus
 whatYouOwe.payments-processing-note                             = Gall taliadau a wnewch gymryd hyd at 3 diwrnod gwaith yn dibynnu ar y dull talu rydych chi’n ei ddefnyddio. Rhaid i daliadau gyrraedd CThEF erbyn y dyddiad dyledus er mwyn osgoi unrhyw log neu gosb am dalu’n hwyr.
@@ -2358,6 +2359,7 @@ chargeSummary.lpi.chargeHistory.created.balancingCharge.text            = Llog a
 chargeSummary.lpi.chargeHistory.created.hmrcCorrection.text             = Llog am dalu’n hwyr wedi’i greu ar gyfer swm ychwanegol o ganlyniad i gywiriadau CThEF
 chargeSummary.lpi.chargeHistory.created.enquiryAmendment.text           = Llog am dalu’n hwyr wedi’i greu ar gyfer swm ychwanegol o ganlyniad i ddiwygiad yn sgil ymholiad CThEF
 chargeSummary.lpi.chargeHistory.created.itsaReturnAmendment.text        = Llog am dalu’n hwyr wedi’i greu ar gyfer swm ychwanegol taliad mantoli
+chargeSummary.lpi.chargeHistory.created.itsaOverRepayment.text          = Llog am dalu’n hwyr ar ad-daliad i’w dalu yn ôl
 
 chargeSummary.lpi.balancingCharge.p1                               = Mae arnoch log i CThEF oherwydd eich bod wedi talu’ch taliad mantoli yn hwyr.
 chargeSummary.lpi.balancingCharge.textOne                          = Mae llog am dalu’n hwyr yn cael ei godi o’r diwrnod cyntaf y mae’ch taliad yn hwyr tan y diwrnod y mae’n cael ei dalu’n llawn. Mae’n cael ei gyfrifo ar
@@ -2651,6 +2653,7 @@ yourSelfAssessmentChargeSummary.lpi.hmrcCorrection.text.heading                 
 yourSelfAssessmentChargeSummary.lpi.enquiryAmendment.text.heading                       = Llog am dalu’n hwyr ar y swm ychwanegol o ganlyniad i ddiwygiad yn sgil ymholiad CThEF
 yourSelfAssessmentChargeSummary.lpi.interestPeriod								        = Cyfnod llog:
 yourSelfAssessmentChargeSummary.lpi.interestPeriod.dates							    = {0} i {1}
+yourSelfAssessmentChargeSummary.lpi.itsaOverRepayment.text.heading                      = Llog am dalu’n hwyr ar ad-daliad y mae angen i chi ei dalu yn ôl
 
 yourSelfAssessmentChargeSummary.lpi.reviewAndReconcilePoa1.text.heading               = Llog am daliad hwyr ar gyfer y taliad cyntaf ar gyfrif: swm ychwanegol
 yourSelfAssessmentChargeSummary.lpi.reviewAndReconcilePoa2.text.heading               = Llog am daliad hwyr ar gyfer yr ail daliad ar gyfrif: swm ychwanegol
@@ -2679,6 +2682,8 @@ yourSelfAssessmentChargeSummary.lpi.penalties.linkText                          
 yourSelfAssessmentChargeSummary.lpi.penalties.textTwo                            = plws 2.5%.
 yourSelfAssessmentChargeSummary.lpi.penalties.p3                                 = Gweler yr arweiniad ynghylch y
 yourSelfAssessmentChargeSummary.lpi.penalties.p3LinkText                         = cyfraddau llog a bennir gan CThEF (yn agor tab newydd)
+
+yourSelfAssessmentChargeSummary.itsaOverRepaymentLPI.info                    = Mae arnoch log i CThEF oherwydd i chi ad-dalu’r ad-daliad yn hwyr.
 
 yourSelfAssessmentChargeSummary.table.daysOverdue                       = {0} i {1}
 yourSelfAssessmentChargeSummary.table.totalInterestToDate               = Cyfanswm y llog ar y tâl hwn

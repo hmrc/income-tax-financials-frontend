@@ -1172,6 +1172,60 @@ trait ChargeConstants {
     outstandingChargesModel = Some(OutstandingChargesModel(List()))
   )
 
+  val overRepaymentCharge: ChargeItem = chargeItemModel(
+    taxYear = TaxYear.forYearEnd(2027),
+    transactionType = ITSAOverRepayment,
+    originalAmount = 1000.00,
+    outstandingAmount = 1000.00,
+    interestOutstandingAmount = None,
+    accruingInterestAmount = None,
+    latePaymentInterestAmount = None,
+    lpiWithDunningLock = None,
+    dueDate = Some(LocalDate.of(2026, 7, 2))
+  )
+
+  val whatYouOweOverRepayment: WhatYouOweChargesList = WhatYouOweChargesList(
+    balanceDetails = BalanceDetails(1.00, 2.00, 4.00, 3.00, None, None, None, None, None, None, None, None),
+    chargesList = List(overRepaymentCharge),
+    outstandingChargesModel = Some(OutstandingChargesModel(List()))
+  )
+
+  val overRepaymentChargeWithAccruingInterest: ChargeItem = chargeItemModel(
+    taxYear = TaxYear.forYearEnd(2027),
+    transactionType = ITSAOverRepayment,
+    originalAmount = 1000.00,
+    outstandingAmount = 1000.00,
+    interestOutstandingAmount = Some(50.0),
+    accruingInterestAmount = Some(50.0),
+    latePaymentInterestAmount = None,
+    lpiWithDunningLock = None,
+    dueDate = Some(LocalDate.of(2026, 7, 2))
+  )
+
+  val whatYouOweOverRepaymentWithInterest: WhatYouOweChargesList = WhatYouOweChargesList(
+    balanceDetails = BalanceDetails(1.00, 2.00, 4.00, 3.00, None, None, None, None, None, None, None, None),
+    chargesList = List(overRepaymentChargeWithAccruingInterest),
+    outstandingChargesModel = Some(OutstandingChargesModel(List()))
+  )
+
+  val overRepaymentLpiCharge: ChargeItem = chargeItemModel(
+    taxYear = TaxYear.forYearEnd(2027),
+    transactionType = ITSAOverRepayment,
+    originalAmount = 1000.00,
+    outstandingAmount = 0,
+    interestOutstandingAmount = Some(75.0),
+    accruingInterestAmount = None,
+    latePaymentInterestAmount = Some(75.0),
+    lpiWithDunningLock = None,
+    dueDate = Some(LocalDate.of(2026, 7, 12))
+  )
+
+  val whatYouOweOverRepaymentLpi: WhatYouOweChargesList = WhatYouOweChargesList(
+    balanceDetails = BalanceDetails(1.00, 2.00, 4.00, 3.00, None, None, None, None, None, None, None, None),
+    chargesList = List(overRepaymentLpiCharge),
+    outstandingChargesModel = Some(OutstandingChargesModel(List()))
+  )
+  
   val financialDetailsWithMixedData1Ci: List[ChargeItem] = testFinancialDetailsChargeItems(
     dueDate = List(Some(fixedDate.plusDays(35)), Some(fixedDate.minusDays(1))),
     outstandingAmount = List(25.0, 50.0),
