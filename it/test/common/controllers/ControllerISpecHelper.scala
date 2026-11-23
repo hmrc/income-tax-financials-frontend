@@ -16,19 +16,19 @@
 
 package common.controllers
 
-import common.config.FrontendAppConfig
-import common.controllers.agent.errors.routes as agentErrorRoutes
-import common.controllers.agent.routes as agentRoutes
-import common.controllers.errors.routes as errorRoutes
-import common.enums.{MTDIndividual, MTDPrimaryAgent, MTDSupportingAgent, MTDUserRole}
+import config.FrontendAppConfig
+import _root_.app.controllers.agent.errors.routes as agentErrorRoutes
+import _root_.app.controllers.agent.routes as agentRoutes
+import _root_.app.controllers.errors.routes as errorRoutes
+import enums.{MTDIndividual, MTDPrimaryAgent, MTDSupportingAgent, MTDUserRole}
 import common.helpers.ComponentSpecBase
 import common.helpers.servicemocks.BusinessDetailsStub.stubGetBusinessDetails
 import common.helpers.servicemocks.CitizenDetailsStub.stubGetCitizenDetails
 import common.helpers.servicemocks.FeatureSwitchStub.{featureSwitchesResponse, stubGetFeatureSwitches}
 import common.helpers.servicemocks.{AuditStub, MTDAgentAuthStub, MTDIndividualAuthStub, SessionDataStub}
-import common.models.admin.FeatureSwitchName
-import common.models.audit.AccessDeniedForSupportingAgentAuditModel
-import common.viewUtils.InternalUrlHelper
+import models.admin.FeatureSwitchName
+import models.audit.AccessDeniedForSupportingAgentAuditModel
+import viewUtils.InternalUrlHelper
 import play.api.http.Status.{SEE_OTHER, UNAUTHORIZED}
 import play.api.libs.ws.WSResponse
 import common.testConstants.BaseIntegrationTestConstants.getAgentClientDetailsForCookie

@@ -16,10 +16,11 @@
 
 package common.connectors
 
+import connectors.GetSessionDataConnector
 import common.helpers.ComponentSpecBase
 import common.helpers.WiremockHelper
 import common.helpers.servicemocks.SessionDataStub
-import common.models.sessionData.SessionDataGetResponse.{SessionDataGetSuccess, SessionDataNotFound, SessionDataUnexpectedResponse}
+import models.sessionData.SessionDataGetResponse.{SessionDataGetSuccess, SessionDataNotFound, SessionDataUnexpectedResponse}
 import common.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino, testSaUtr}
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}

@@ -16,10 +16,11 @@
 
 package financials.controllers.claimToAdjustPoa
 
+
 import common.controllers.ControllerISpecHelper
-import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import common.testConstants.IncomeSourceIntegrationTestConstants.*
-import financials.services.PaymentOnAccountSessionService
+import services.PaymentOnAccountSessionService
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.JsValue
 import play.api.test.Helpers.{await, defaultAwaitTimeout}

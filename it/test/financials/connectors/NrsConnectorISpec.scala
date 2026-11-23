@@ -16,11 +16,12 @@
 
 package financials.connectors
 
+import connectors.NrsConnector
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import common.helpers.ComponentSpecBase
-import financials.models.nrs.NrsSubmissionFailure.{NrsErrorResponse, NrsExceptionThrown}
-import financials.models.nrs.NrsSuccessResponse
-import financials.testConstants.NrsUtils
+import models.nrs.NrsSubmissionFailure.{NrsErrorResponse, NrsExceptionThrown}
+import models.nrs.NrsSuccessResponse
+import testConstants.NrsUtils
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.MimeTypes
 import play.api.http.Status.{ACCEPTED, BAD_REQUEST}

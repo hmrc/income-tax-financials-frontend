@@ -16,10 +16,10 @@
 
 package financials.testConstants
 
-import financials.enums.ChargeType.{ITSA_ENGLAND_AND_NI, ITSA_NIC2_INTEREST_GB, ITSA_NIC4_INTEREST_GB, NIC4_GB, NIC4_WALES}
-import financials.models.{DocumentDetail, FinancialDetail, SubItem}
-import financials.models.paymentAllocationCharges.{AllocationDetailWithClearingDate, FinancialDetailsWithDocumentDetailsModel, LatePaymentInterestPaymentAllocationDetails, PaymentAllocationViewModel}
-import financials.models.paymentAllocations.{AllocationDetail, PaymentAllocations}
+import enums.ChargeType.{ITSA_ENGLAND_AND_NI, ITSA_NIC2_INTEREST_GB, ITSA_NIC4_INTEREST_GB, NIC4_GB, NIC4_WALES}
+import models.{DocumentDetail, FinancialDetail, SubItem}
+import models.paymentAllocationCharges.{AllocationDetailWithClearingDate, FinancialDetailsWithDocumentDetailsModel, LatePaymentInterestPaymentAllocationDetails, PaymentAllocationViewModel}
+import models.paymentAllocations.{AllocationDetail, PaymentAllocations}
 import play.api.libs.json.{JsObject, JsValue, Json}
 
 import java.time.LocalDate

@@ -16,8 +16,9 @@
 
 package financials.connectors
 
+import connectors.OutstandingChargesConnector
 import common.helpers.{ComponentSpecBase, WiremockHelper}
-import financials.models.outstandingCharges.{OutstandingChargeModel, OutstandingChargesErrorModel, OutstandingChargesModel, OutstandingChargesResponseModel}
+import models.outstandingCharges.{OutstandingChargeModel, OutstandingChargesErrorModel, OutstandingChargesModel, OutstandingChargesResponseModel}
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}

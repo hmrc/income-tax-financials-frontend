@@ -16,11 +16,12 @@
 
 package common.connectors
 
-import common.auth.AuthorisedAndEnrolledRequest
+import connectors.{BusinessDetailsConnector, IncomeSourceConnector}
+import auth.AuthorisedAndEnrolledRequest
 import common.helpers.{ComponentSpecBase, WiremockHelper}
-import common.enums.MTDIndividual
-import common.models.core.{AccountingPeriodModel, AddressModel}
-import common.models.incomeSourceDetails.{BusinessDetailsModel, IncomeSourceDetailsError, IncomeSourceDetailsModel, IncomeSourceDetailsResponse, LatencyDetails}
+import enums.MTDIndividual
+import models.core.{AccountingPeriodModel, AddressModel}
+import models.incomeSourceDetails.{BusinessDetailsModel, IncomeSourceDetailsError, IncomeSourceDetailsModel, IncomeSourceDetailsResponse, LatencyDetails}
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.Json

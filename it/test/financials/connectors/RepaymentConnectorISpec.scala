@@ -16,8 +16,9 @@
 
 package financials.connectors
 
+import connectors.RepaymentConnector
 import common.helpers.{ComponentSpecBase, WiremockHelper}
-import financials.models.core.RepaymentJourneyResponseModel.{RepaymentJourneyErrorResponse, RepaymentJourneyModel}
+import models.core.RepaymentJourneyResponseModel.{RepaymentJourneyErrorResponse, RepaymentJourneyModel}
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{ACCEPTED, INTERNAL_SERVER_ERROR}
 import play.api.libs.json.Json

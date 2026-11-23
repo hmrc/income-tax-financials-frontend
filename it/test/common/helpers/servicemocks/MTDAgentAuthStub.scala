@@ -17,7 +17,7 @@
 package common.helpers.servicemocks
 
 import common.helpers.WiremockHelper.{stubPostWithRequest, stubPostWithRequestAndResponseHeaders}
-import common.utils.AuthUtils.*
+import utils.AuthUtils.*
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import common.testConstants.BaseIntegrationTestConstants.{credId, testArn, testMtditid}

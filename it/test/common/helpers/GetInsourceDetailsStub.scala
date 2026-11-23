@@ -17,7 +17,7 @@
 package common.helpers
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.models.incomeSourceDetails.IncomeSourceDetailsResponse
+import models.incomeSourceDetails.IncomeSourceDetailsResponse
 import play.api.libs.json.JsValue
 object GetInsourceDetailsStub {
 

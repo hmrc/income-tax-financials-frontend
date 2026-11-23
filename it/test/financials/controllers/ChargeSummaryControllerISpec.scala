@@ -16,19 +16,19 @@
 
 package financials.controllers
 
-import common.auth.MtdItUser
-import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import auth.MtdItUser
+import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import common.helpers.GetInsourceDetailsStub
 import common.helpers.servicemocks.{AuditStub, YearOfMigrationStub}
-import common.models.admin.ChargeHistory
+import models.admin.ChargeHistory
 import common.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino, testTaxYear, testTaxYearTyped}
 import common.testConstants.IncomeSourceIntegrationTestConstants.*
 import financials.testConstants.messages.ChargeSummaryMessages.*
-import financials.enums.ChargeType.ITSA_ENGLAND_AND_NI
-import shared.enums.CodingOutType.*
+import enums.ChargeType.ITSA_ENGLAND_AND_NI
+import enums.CodingOutType.*
 import financials.helpers.FinancialDetailsStub
-import financials.models.*
-import financials.models.audit.ChargeSummaryAudit
+import models.*
+import models.audit.ChargeSummaryAudit
 import financials.testConstants.FinancialDetailsIntegrationTestConstants.*
 import financials.helpers.servicemocks.ChargeItemStub.{chargeItemWithInterestAndOverdue, docDetail}
 import play.api.http.Status.*

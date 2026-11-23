@@ -16,10 +16,11 @@
 
 package common.connectors.agent
 
+import connectors.agent.CitizenDetailsConnector
 import com.github.tomakehurst.wiremock.client.WireMock
 import common.helpers.servicemocks.AuditStub
 import common.helpers.{ComponentSpecBase, WiremockHelper}
-import common.models.citizenDetails.{CitizenDetailsErrorModel, CitizenDetailsModel}
+import models.citizenDetails.{CitizenDetailsErrorModel, CitizenDetailsModel}
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.test.Injecting

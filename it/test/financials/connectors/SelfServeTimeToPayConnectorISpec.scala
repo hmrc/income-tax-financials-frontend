@@ -16,8 +16,9 @@
 
 package financials.connectors
 
+import connectors.SelfServeTimeToPayConnector
 import common.helpers.{ComponentSpecBase, WiremockHelper}
-import financials.models.core.{SelfServeTimeToPayJourneyErrorResponse, SelfServeTimeToPayJourneyResponse, SelfServeTimeToPayJourneyResponseModel}
+import models.core.{SelfServeTimeToPayJourneyErrorResponse, SelfServeTimeToPayJourneyResponse, SelfServeTimeToPayJourneyResponseModel}
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{CREATED, INTERNAL_SERVER_ERROR}
 import play.api.libs.json.Json

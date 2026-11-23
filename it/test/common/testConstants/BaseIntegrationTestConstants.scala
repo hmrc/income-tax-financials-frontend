@@ -16,11 +16,11 @@
 
 package common.testConstants
 
-import common.auth.{AgentClientDetails, AuthUserDetails}
-import common.enums.{MTDIndividual, MTDUserRole}
-import common.models.core.{AccountingPeriodModel, AddressModel}
-import common.utils.sessionUtils.SessionKeys
-import common.models.incomeSourceDetails.*
+import auth.{AgentClientDetails, AuthUserDetails}
+import enums.{MTDIndividual, MTDUserRole}
+import models.core.{AccountingPeriodModel, AddressModel}
+import utils.sessionUtils.SessionKeys
+import models.incomeSourceDetails.*
 import play.api.http.Status
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.Credentials

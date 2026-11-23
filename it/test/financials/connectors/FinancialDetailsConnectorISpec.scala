@@ -16,17 +16,18 @@
 
 package financials.connectors
 
+import connectors.FinancialDetailsConnector
 import common.helpers.{ComponentSpecBase, WiremockHelper}
-import common.models.core.Nino
-import common.models.incomeSourceDetails.TaxYear
-import common.testConstants.BaseTestConstants.{testPaymentLot, testPaymentLotItem}
-import financials.models.core.*
-import financials.models.core.ResponseModel.ResponseModel
-import financials.models.creditsandrefunds.CreditsModel
-import financials.models.paymentAllocationCharges.{FinancialDetailsWithDocumentDetailsErrorModel, FinancialDetailsWithDocumentDetailsModel}
-import financials.models.paymentAllocations.{PaymentAllocationsError, PaymentAllocationsResponse}
-import financials.models.{Payment, Payments, PaymentsError}
-import financials.testConstants.PaymentAllocationsTestConstants.*
+import models.core.Nino
+import models.incomeSourceDetails.TaxYear
+import testConstants.BaseTestConstants.{testPaymentLot, testPaymentLotItem}
+import models.core.*
+import models.core.ResponseModel.ResponseModel
+import models.creditsandrefunds.CreditsModel
+import models.paymentAllocationCharges.{FinancialDetailsWithDocumentDetailsErrorModel, FinancialDetailsWithDocumentDetailsModel}
+import models.paymentAllocations.{PaymentAllocationsError, PaymentAllocationsResponse}
+import models.{Payment, Payments, PaymentsError}
+import testConstants.PaymentAllocationsTestConstants.*
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.Json

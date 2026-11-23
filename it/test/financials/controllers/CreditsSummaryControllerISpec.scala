@@ -16,12 +16,12 @@
 
 package financials.controllers
 
-import common.auth.AuthorisedAndEnrolledRequest
+import auth.AuthorisedAndEnrolledRequest
 import common.controllers.ControllerISpecHelper
-import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import common.helpers.servicemocks.AuditStub
 import common.helpers.GetInsourceDetailsStub
-import common.models.audit.IncomeSourceDetailsResponseAuditModel
+import models.audit.IncomeSourceDetailsResponseAuditModel
 import play.api.http.Status.OK
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.ws.WSResponse
@@ -61,7 +61,7 @@ class CreditsSummaryControllerISpec extends ControllerISpecHelper with CreditsSu
           } else {
             "render the credit summary page" when {
               "a valid response is received" in {
-                import financials.models.audit.CreditSummaryAuditing.*
+                import models.audit.CreditSummaryAuditing.*
                 stubAuthorised(mtdUserRole)
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, incomeSources)
                 FinancialDetailsStub.stubGetFinancialDetailsByDateRange(
@@ -112,7 +112,7 @@ class CreditsSummaryControllerISpec extends ControllerISpecHelper with CreditsSu
 
             "correctly audit a list of credits" when {
               "the list contains Balancing Charge Credits" in {
-                import financials.models.audit.CreditSummaryAuditing.*
+                import models.audit.CreditSummaryAuditing.*
                 stubAuthorised(mtdUserRole)
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, incomeSources)
 

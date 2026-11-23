@@ -17,14 +17,14 @@
 package financials.testConstants
 
 import common.helpers.ComponentSpecBase
-import common.models.core.AccountingPeriodModel
-import common.models.incomeSourceDetails.{IncomeSourceDetailsModel, PropertyDetailsModel}
-import common.services.DateServiceInterface
+import models.core.AccountingPeriodModel
+import models.incomeSourceDetails.{IncomeSourceDetailsModel, PropertyDetailsModel}
+import services.DateServiceInterface
 import common.testConstants.BaseIntegrationTestConstants.*
-import financials.enums.ChargeType.{ITSA_NI, NIC4_SCOTLAND, NIC4_WALES}
-import shared.enums.CodingOutType.{CODING_OUT_ACCEPTED, CODING_OUT_CANCELLED, CODING_OUT_CLASS2_NICS}
-import financials.models.*
-import financials.models.outstandingCharges.{OutstandingChargeModel, OutstandingChargesModel}
+import enums.ChargeType.{ITSA_NI, NIC4_SCOTLAND, NIC4_WALES}
+import enums.CodingOutType.{CODING_OUT_ACCEPTED, CODING_OUT_CANCELLED, CODING_OUT_CLASS2_NICS}
+import models.*
+import models.outstandingCharges.{OutstandingChargeModel, OutstandingChargesModel}
 import financials.testConstants.PaymentHistoryTestConstraints.oldBusiness1
 import play.api.libs.json.{JsObject, JsValue, Json}
 

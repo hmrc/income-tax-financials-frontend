@@ -17,7 +17,7 @@
 package shared.testConstants
 
 import play.api.libs.json.{JsValue, Json}
-import shared.models.calculationList.CalculationListModel
+import models.calculationList.CalculationListModel
 
 object CalculationListIntegrationTestConstants {
   val successResponseCrystallised: JsValue = Json.parse(

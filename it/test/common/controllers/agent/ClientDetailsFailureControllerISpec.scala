@@ -16,11 +16,11 @@
 
 package common.controllers.agent
 
-import common.controllers.agent.errors.routes as agentErrorRoutes
-import common.controllers.agent.routes as agentRoutes
+import _root_.app.controllers.agent.errors.routes as agentErrorRoutes
+import _root_.app.controllers.agent.routes as agentRoutes
 import common.helpers.ComponentSpecBase
 import common.helpers.servicemocks.MTDAgentAuthStub
-import common.viewUtils.InternalUrlHelper
+import viewUtils.InternalUrlHelper
 import play.api.http.Status.*
 import play.api.libs.ws.WSResponse
 
