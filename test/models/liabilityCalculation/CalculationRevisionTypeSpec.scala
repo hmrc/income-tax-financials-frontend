@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package models.liabilitycalculation
+package models.liabilityCalculation
 
 import testUtils.UnitSpec
-import models.liabilitycalculation.CalculationRevisionType.*
+import models.liabilityCalculation.CalculationRevisionType.*
 
 class CalculationRevisionTypeSpec extends UnitSpec {
 
