@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.liabilitycalculation
+package models.liabilityCalculation
 
 import enums.TaxYearSummary.CalculationType.{amendmentTypes, crystallisedTypes, notCrystallisedTypes}
 import play.api.libs.json.*
