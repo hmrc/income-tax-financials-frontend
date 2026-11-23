@@ -16,8 +16,8 @@
 
 package common.testConstants
 
-import common.models.core.AccountingPeriodModel
-import common.models.incomeSourceDetails.{IncomeSourceDetailsModel, IncomeSourceDetailsResponse, PropertyDetailsModel}
+import models.core.AccountingPeriodModel
+import models.incomeSourceDetails.{IncomeSourceDetailsModel, IncomeSourceDetailsResponse, PropertyDetailsModel}
 import common.testConstants.BaseIntegrationTestConstants.*
 
 object IncomeSourceIntegrationTestConstants {

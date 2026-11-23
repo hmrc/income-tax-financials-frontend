@@ -16,22 +16,22 @@
 
 package financials.controllers
 
-import common.auth.MtdItUser
+import auth.MtdItUser
 import common.controllers.ControllerISpecHelper
-import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import common.helpers.GetInsourceDetailsStub
 import common.helpers.servicemocks.{AuditStub, YearOfMigrationStub}
-import common.models.admin.CreditsRefundsRepay
-import financials.testConstants.ANewCreditAndRefundModel
+import models.admin.CreditsRefundsRepay
+import testConstants.ANewCreditAndRefundModel
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
 import play.api.libs.json.{JsValue, Json}
 import common.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino}
 import common.testConstants.IncomeSourceIntegrationTestConstants.multipleBusinessesAndPropertyResponse
-import common.viewUtils.InternalUrlHelper
+import viewUtils.InternalUrlHelper
 import financials.helpers.FinancialDetailsStub
-import financials.models.audit.ClaimARefundAuditModel
-import financials.models.core.ErrorModel
-import financials.models.creditsandrefunds.CreditsModel
+import models.audit.ClaimARefundAuditModel
+import models.core.ErrorModel
+import models.creditsandrefunds.CreditsModel
 
 import java.time.LocalDate
 

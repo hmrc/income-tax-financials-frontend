@@ -16,10 +16,10 @@
 
 package common.controllers
 
-import common.config.FrontendAppConfig
+import config.FrontendAppConfig
 import common.helpers.{SessionCookieBaker, TestDateService, WiremockHelper}
-import common.implicits.ImplicitDateFormatterImpl
-import common.services.{DateService, DateServiceInterface}
+import implicits.ImplicitDateFormatterImpl
+import services.{DateService, DateServiceInterface}
 import org.scalatest.*
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.should.Matchers

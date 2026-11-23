@@ -16,22 +16,22 @@
 
 package financials.controllers
 
-import common.auth.MtdItUser
+import auth.MtdItUser
 import common.controllers.ControllerISpecHelper
-import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import common.helpers.servicemocks.{AuditStub, YearOfMigrationStub}
-import common.models.admin.*
-import common.models.incomeSourceDetails.TaxYear
-import common.services.DateServiceInterface
+import models.admin.*
+import models.incomeSourceDetails.TaxYear
+import services.DateServiceInterface
 import common.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino, testSaUtr}
 import common.testConstants.IncomeSourceIntegrationTestConstants.*
 import financials.helpers.FinancialDetailsStub
 import financials.testConstants.messages.WhatYouOweMessages.hmrcAdjustment
-import financials.models.*
-import financials.models.audit.WhatYouOweResponseAuditModel
-import financials.models.core.SelfServeTimeToPayJourneyResponseModel
-import financials.models.extensions.FinancialDetailsModelExtension
-import financials.testConstants.ChargeConstants
+import models.*
+import models.audit.WhatYouOweResponseAuditModel
+import models.core.SelfServeTimeToPayJourneyResponseModel
+import models.extensions.FinancialDetailsModelExtension
+import testConstants.ChargeConstants
 import financials.testConstants.FinancialDetailsIntegrationTestConstants.*
 import financials.testConstants.OutstandingChargesIntegrationTestConstants.*
 import play.api.http.Status.*

@@ -17,14 +17,14 @@
 package common.helpers
 
 import com.github.tomakehurst.wiremock.client.WireMock
-import common.auth.{AuthorisedAndEnrolledRequest, MtdItUser}
-import common.config.FrontendAppConfig
-import common.enums.{MTDIndividual, MTDUserRole}
+import auth.{AuthorisedAndEnrolledRequest, MtdItUser}
+import config.FrontendAppConfig
+import enums.{MTDIndividual, MTDUserRole}
 import common.helpers.servicemocks.AuditStub
-import common.implicits.ImplicitDateFormatterImpl
-import common.models.admin.FeatureSwitch
-import common.models.incomeSourceDetails.{IncomeSourceDetailsModel, TaxYear}
-import common.services.{DateService, DateServiceInterface}
+import implicits.ImplicitDateFormatterImpl
+import models.admin.FeatureSwitch
+import models.incomeSourceDetails.{IncomeSourceDetailsModel, TaxYear}
+import services.{DateService, DateServiceInterface}
 import org.scalatest.*
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.should.Matchers

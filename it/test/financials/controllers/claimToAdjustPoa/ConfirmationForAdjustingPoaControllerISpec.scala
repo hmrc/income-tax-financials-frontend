@@ -16,14 +16,16 @@
 
 package financials.controllers.claimToAdjustPoa
 
+import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as routes
+
 import common.controllers.ControllerISpecHelper
-import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
-import common.models.core.AccountingPeriodModel
-import common.models.incomeSourceDetails.{BusinessDetailsModel, IncomeSourceDetailsModel}
+import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import models.core.AccountingPeriodModel
+import models.incomeSourceDetails.{BusinessDetailsModel, IncomeSourceDetailsModel}
 import common.testConstants.BaseIntegrationTestConstants.*
 import financials.helpers.FinancialDetailsStub
-import financials.models.claimToAdjustPoa.{MainIncomeLower, PoaAmendmentData}
-import financials.services.PaymentOnAccountSessionService
+import models.claimToAdjustPoa.{MainIncomeLower, PoaAmendmentData}
+import services.PaymentOnAccountSessionService
 import financials.testConstants.FinancialDetailsIntegrationTestConstants.*
 import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}

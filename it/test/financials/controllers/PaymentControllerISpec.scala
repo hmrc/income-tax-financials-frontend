@@ -17,13 +17,13 @@
 package financials.controllers
 
 import common.controllers.ControllerISpecHelper
-import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}
 import common.testConstants.BaseIntegrationTestConstants.testMtditid
 import common.testConstants.IncomeSourceIntegrationTestConstants.multipleBusinessesAndUkProperty
 import financials.helpers.FinancialDetailsStub
-import financials.models.core.PaymentJourneyModel
+import models.core.PaymentJourneyModel
 import common.helpers.GetInsourceDetailsStub
 
 class PaymentControllerISpec extends ControllerISpecHelper {

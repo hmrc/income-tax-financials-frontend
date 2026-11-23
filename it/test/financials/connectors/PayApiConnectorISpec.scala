@@ -16,9 +16,10 @@
 
 package financials.connectors
 
+import connectors.PayApiConnector
 import common.helpers.{ComponentSpecBase, WiremockHelper}
 import common.testConstants.MicroserviceSpecificConstants
-import financials.models.core.{PaymentJourneyErrorResponse, PaymentJourneyModel, PaymentJourneyResponse}
+import models.core.{PaymentJourneyErrorResponse, PaymentJourneyModel, PaymentJourneyResponse}
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{CREATED, INTERNAL_SERVER_ERROR}
 import play.api.libs.json.Json

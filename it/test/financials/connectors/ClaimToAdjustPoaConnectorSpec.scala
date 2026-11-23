@@ -16,11 +16,12 @@
 
 package financials.connectors
 
+import connectors.ClaimToAdjustPoaConnector
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import common.helpers.{ComponentSpecBase, WiremockHelper}
-import financials.models.claimToAdjustPoa.ClaimToAdjustPoaResponse.*
-import financials.models.claimToAdjustPoa.{ClaimToAdjustPoaRequest, MainIncomeLower}
-import financials.models.core.CorrelationId
+import models.claimToAdjustPoa.ClaimToAdjustPoaResponse.*
+import models.claimToAdjustPoa.{ClaimToAdjustPoaRequest, MainIncomeLower}
+import models.core.CorrelationId
 import org.scalatest.time.SpanSugar.convertIntToGrainOfTime
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{BAD_REQUEST, CREATED}

@@ -16,7 +16,7 @@
 
 package common.helpers.servicemocks
 
-import common.models.audit.ExtendedAuditModel
+import models.audit.ExtendedAuditModel
 import common.testConstants.MicroserviceSpecificConstants
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Millis, Seconds, Span}

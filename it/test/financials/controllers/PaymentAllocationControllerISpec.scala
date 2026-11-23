@@ -16,15 +16,15 @@
 
 package financials.controllers
 
-import common.auth.MtdItUser
+import auth.MtdItUser
 import common.controllers.ControllerISpecHelper
-import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import common.helpers.servicemocks.AuditStub.verifyAuditContainsDetail
 import common.helpers.servicemocks.YearOfMigrationStub
 import common.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino}
 import financials.helpers.FinancialDetailsStub
-import financials.models.audit.PaymentAllocationsResponseAuditModel
-import financials.models.paymentAllocationCharges.FinancialDetailsWithDocumentDetailsModel
+import models.audit.PaymentAllocationsResponseAuditModel
+import models.paymentAllocationCharges.FinancialDetailsWithDocumentDetailsModel
 import financials.testConstants.PaymentAllocationIntegrationTestConstants.*
 import financials.testConstants.FinancialDetailsIntegrationTestConstants.{testValidFinancialDetailsModelJson, paymentHistoryBusinessAndPropertyResponse}
 import play.api.http.Status.OK

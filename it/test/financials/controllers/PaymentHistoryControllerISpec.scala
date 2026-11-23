@@ -16,17 +16,17 @@
 
 package financials.controllers
 
-import common.auth.MtdItUser
+import auth.MtdItUser
 import common.controllers.ControllerISpecHelper
-import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import common.helpers.WiremockHelper
 import common.helpers.servicemocks.AuditStub.verifyAuditContainsDetail
-import common.models.admin.PaymentHistoryRefunds
+import models.admin.PaymentHistoryRefunds
 import common.testConstants.BaseIntegrationTestConstants.*
 import financials.helpers.FinancialDetailsStub
-import financials.models.Payment
-import financials.models.audit.PaymentHistoryResponseAuditModel
-import financials.models.core.RepaymentJourneyResponseModel.RepaymentJourneyModel
+import models.Payment
+import models.audit.PaymentHistoryResponseAuditModel
+import models.core.RepaymentJourneyResponseModel.RepaymentJourneyModel
 import financials.testConstants.FinancialDetailsIntegrationTestConstants.*
 import play.api.http.Status.*
 import play.api.libs.json.Json

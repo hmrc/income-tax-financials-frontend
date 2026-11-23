@@ -18,9 +18,9 @@ package financials.helpers
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.helpers.WiremockHelper
-import common.models.core.Nino
-import financials.models.Payment
-import financials.models.repaymentHistory.RepaymentHistoryModel
+import models.core.Nino
+import models.Payment
+import models.repaymentHistory.RepaymentHistoryModel
 import play.api.libs.json.{JsValue, Json}
 
 object  FinancialDetailsStub { // scalastyle:off number.of.methods

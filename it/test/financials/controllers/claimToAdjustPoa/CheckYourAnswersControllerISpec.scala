@@ -16,19 +16,21 @@
 
 package financials.controllers.claimToAdjustPoa
 
+import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as routes
+
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.controllers.ControllerISpecHelper
-import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import common.helpers.servicemocks.AuditStub.verifyAuditContainsDetail
-import common.models.core.AccountingPeriodModel
-import common.models.incomeSourceDetails.{BusinessDetailsModel, IncomeSourceDetailsModel}
+import models.core.AccountingPeriodModel
+import models.incomeSourceDetails.{BusinessDetailsModel, IncomeSourceDetailsModel}
 import common.testConstants.BaseIntegrationTestConstants.*
-import financials.controllers.claimToAdjustPoa.routes.{ApiFailureSubmittingPoaController, PoaAdjustedController}
+import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes.{ApiFailureSubmittingPoaController, PoaAdjustedController}
 import financials.helpers.FinancialDetailsStub
-import financials.models.audit.AdjustPaymentsOnAccountAuditModel
-import financials.models.claimToAdjustPoa.ClaimToAdjustPoaResponse.ClaimToAdjustPoaSuccess
-import financials.models.claimToAdjustPoa.PoaAmendmentData
-import financials.services.PaymentOnAccountSessionService
+import models.audit.AdjustPaymentsOnAccountAuditModel
+import models.claimToAdjustPoa.ClaimToAdjustPoaResponse.ClaimToAdjustPoaSuccess
+import models.claimToAdjustPoa.PoaAmendmentData
+import services.PaymentOnAccountSessionService
 import financials.testConstants.ClaimToAdjustPoaTestConstants.validSession
 import financials.testConstants.FinancialDetailsIntegrationTestConstants.*
 import play.api.http.Status.*
