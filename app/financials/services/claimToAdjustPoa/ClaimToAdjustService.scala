@@ -29,7 +29,6 @@ import shared.connectors.CalculationListConnector
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.annotation.unused
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
