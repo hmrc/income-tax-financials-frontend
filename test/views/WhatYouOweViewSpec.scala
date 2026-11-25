@@ -23,8 +23,8 @@ import implicits.ImplicitDateFormatter
 import models.incomeSourceDetails.{IncomeSourceDetailsModel, TaxYear}
 import testConstants.BaseTestConstants.{testNino, testUserTypeAgent, testUserTypeIndividual}
 import testUtils.{TestSupport, ViewSpec}
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.routes as financialsRoutes
 import enums.CodingOutType.*
 import implicits.ImplicitCurrencyFormatter.CurrencyFormatter
 import models.*

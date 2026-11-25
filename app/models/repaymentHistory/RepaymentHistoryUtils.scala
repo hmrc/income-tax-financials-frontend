@@ -18,7 +18,7 @@ package models.repaymentHistory
 
 import exceptions.MissingFieldException
 import services.DateServiceInterface
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import implicits.ImplicitCurrencyFormatter.CurrencyFormatter
 import models.*
 import play.api.Logging

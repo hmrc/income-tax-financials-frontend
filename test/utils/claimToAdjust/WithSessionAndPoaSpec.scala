@@ -24,7 +24,7 @@ import models.incomeSourceDetails.IncomeSourceDetailsModel
 import testConstants.BaseTestConstants.{testNino, testUserTypeAgent, testUserTypeIndividual}
 import testConstants.IncomeSourceDetailsTestConstants.businessAndPropertyAligned
 import testUtils.TestSupport
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import mocks.services.{MockClaimToAdjustService, MockPaymentOnAccountSessionService}
 import models.claimToAdjustPoa.PoaAmendmentData
 import models.claimToAdjustPoa.viewModels.PaymentOnAccountViewModel

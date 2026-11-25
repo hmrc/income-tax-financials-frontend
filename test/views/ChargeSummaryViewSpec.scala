@@ -20,7 +20,7 @@ import config.featureswitch.FeatureSwitching
 import exceptions.MissingFieldException
 import models.incomeSourceDetails.TaxYear
 import testUtils.ViewSpec
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import enums.*
 import enums.ChargeType.*
 import models.*

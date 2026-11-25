@@ -25,9 +25,8 @@ import models.core.Nino
 import models.incomeSourceDetails.TaxYear
 import services.{AuditingService, DateServiceInterface}
 import controllers.ChargeSummaryController.ErrorCode
-import _root_.app.controllers.agent.errors.routes as agentErrorRoutes
-import _root_.app.controllers.errors.routes as errorRoutes
-import _root_.app.controllers.routes as routes
+import controllers.agent.errors.routes as agentErrorRoutes
+import controllers.errors.routes as errorRoutes
 import forms.utils.SessionKeys.gatewayPage
 import models.*
 import models.audit.ChargeSummaryAudit

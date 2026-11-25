@@ -20,7 +20,7 @@ import auth.MtdItUser
 import models.core.CheckMode
 import models.incomeSourceDetails.TaxYear
 import testUtils.TestSupport
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import models.claimToAdjustPoa.{Increase, MainIncomeLower, SelectYourReason}
 import views.html.claimToAdjustPoa.CheckYourAnswersView
 import org.jsoup.Jsoup

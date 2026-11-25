@@ -16,14 +16,13 @@
 
 package controllers
 
-import _root_.app.controllers.routes as routes
 import auth.{AuthActions, MtdItUser}
 import config.featureswitch.FeatureSwitching
 import config.*
 import enums.GatewayPage.WhatYouOwePage
 import models.admin.{SelfServeTimeToPayR17, StoodOverCharges}
 import services.{DateServiceInterface, YearOfMigrationService}
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import services.WhatYouOweService
 import forms.utils.SessionKeys.gatewayPage
 import play.api.Logging

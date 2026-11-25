@@ -18,7 +18,7 @@ package models.creditsandrefunds
 
 import models.incomeSourceDetails.TaxYear
 import testUtils.UnitSpec
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import models.*
 import testConstants.{ANewCreditAndRefundModel, TestTransactions}
 

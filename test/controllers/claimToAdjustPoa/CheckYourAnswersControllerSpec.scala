@@ -21,7 +21,7 @@ import enums.{MTDIndividual, MTDSupportingAgent}
 import mocks.auth.MockAuthActions
 import models.incomeSourceDetails.TaxYear
 import services.DateServiceInterface
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import mocks.services.{MockClaimToAdjustPoaCalculationService, MockClaimToAdjustService, MockPaymentOnAccountSessionService}
 import models.claimToAdjustPoa.viewModels.PaymentOnAccountViewModel
 import models.claimToAdjustPoa.{Increase, MainIncomeLower, PoaAmendmentData}

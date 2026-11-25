@@ -21,7 +21,7 @@ import com.google.inject.Singleton
 import auth.{AuthActions, MtdItUser}
 import config.{AgentItvcErrorHandler, FrontendAppConfig, ItvcErrorHandler}
 import models.core.{Mode, NormalMode}
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes.*
+import controllers.claimToAdjustPoa.routes.*
 import forms.adjustPoa.SelectYourReasonFormProvider
 import models.claimToAdjustPoa.viewModels.PaymentOnAccountViewModel
 import models.claimToAdjustPoa.{Increase, SelectYourReason}

@@ -17,7 +17,7 @@
 package models
 
 import services.DateServiceInterface
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 
 import java.time.LocalDate
 

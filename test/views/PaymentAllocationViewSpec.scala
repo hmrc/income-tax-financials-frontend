@@ -23,7 +23,7 @@ import exceptions.MissingFieldException
 import implicits.ImplicitDateFormatter
 import testConstants.IncomeSourceDetailsTestConstants.businessAndPropertyAligned
 import testUtils.ViewSpec
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import enums.ChargeType.*
 import models.paymentAllocationCharges.{AllocationDetailWithClearingDate, FinancialDetailsWithDocumentDetailsModel, PaymentAllocationViewModel}
 import models.paymentAllocations.AllocationDetail

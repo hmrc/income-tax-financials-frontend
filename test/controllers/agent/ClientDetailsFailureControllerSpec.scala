@@ -16,7 +16,7 @@
 
 package controllers.agent
 
-import _root_.app.controllers.agent.errors.routes as agentErrorRoutes
+import controllers.agent.errors.routes as agentErrorRoutes
 import mocks.auth.MockAuthActions
 import mocks.views.agent.MockClientRelationshipFailure
 import viewUtils.InternalUrlHelper

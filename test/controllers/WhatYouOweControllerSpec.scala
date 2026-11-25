@@ -24,9 +24,8 @@ import models.admin.{CreditsRefundsRepay, PenaltiesAndAppeals}
 import models.incomeSourceDetails.TaxYear
 import models.itsaStatus.ITSAStatusYearOfMigrationModel
 import services.{DateService, DateServiceInterface, YearOfMigrationService}
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
-import _root_.app.controllers.routes as routes
-import _root_.app.controllers.routes.{ChargeSummaryController, MoneyInYourAccountController, PaymentController}
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.routes.{ChargeSummaryController, MoneyInYourAccountController, PaymentController}
 import forms.utils.SessionKeys.gatewayPage
 import models.outstandingCharges.{OutstandingChargeModel, OutstandingChargesModel}
 import models.{BalanceDetails, FinancialDetailsModel, WYOClaimToAdjustViewModel, WhatYouOweChargesList, WhatYouOweViewModel}

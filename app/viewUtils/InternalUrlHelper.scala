@@ -16,12 +16,12 @@
 
 package viewUtils
 
-import _root_.app.controllers.routes as appRoutes
-import _root_.app.controllers.agent.routes as agentRoutes
-import _root_.app.controllers.errors.routes as errorRoutes
-import _root_.app.controllers.timeout.routes as timeoutRoutes
-import _root_.app.controllers.feedback.routes as feedbackRoutes
-import _root_.app.controllers.agent.errors.routes as agentErrorRoutes
+import controllers.routes as appRoutes
+import controllers.agent.routes as agentRoutes
+import controllers.errors.routes as errorRoutes
+import controllers.timeout.routes as timeoutRoutes
+import controllers.feedback.routes as feedbackRoutes
+import controllers.agent.errors.routes as agentErrorRoutes
 
 object InternalUrlHelper {
 

@@ -19,8 +19,8 @@ package views.claimToAdjustPoa
 import auth.MtdItUser
 import models.incomeSourceDetails.TaxYear
 import testUtils.TestSupport
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.routes as financialsRoutes
 import models.claimToAdjustPoa.viewModels.PaymentOnAccountViewModel
 import views.html.claimToAdjustPoa.AmendablePoaView
 import org.jsoup.Jsoup

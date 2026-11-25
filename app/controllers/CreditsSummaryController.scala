@@ -20,7 +20,7 @@ import auth.{AuthActions, MtdItUser}
 import config.featureswitch.FeatureSwitching
 import config.{AgentItvcErrorHandler, FrontendAppConfig, ItvcErrorHandler}
 import services.AuditingService
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import models.audit.CreditSummaryAuditing
 import models.creditDetailModel.CreditDetailModel
 import services.CreditHistoryService

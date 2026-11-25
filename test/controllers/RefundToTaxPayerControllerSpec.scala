@@ -22,7 +22,6 @@ import enums.{MTDIndividual, MTDSupportingAgent}
 import mocks.auth.MockAuthActions
 import models.admin.PaymentHistoryRefunds
 import services.DateServiceInterface
-import _root_.app.controllers.routes as routes
 import testConstants.BaseTestConstants.testMtditid
 import connectors.RepaymentHistoryConnector
 import mocks.connectors.MockRepaymentHistoryConnector

@@ -25,8 +25,7 @@ import services.DateServiceInterface
 import testConstants.BaseTestConstants
 import utils.sessionUtils
 import utils.sessionUtils.SessionKeys
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as routes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import generators.PoaGenerator
 import mocks.services.{MockClaimToAdjustService, MockPaymentOnAccountSessionService}
 import models.claimToAdjustPoa.viewModels.PaymentOnAccountViewModel

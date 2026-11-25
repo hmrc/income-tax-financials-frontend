@@ -23,7 +23,7 @@ import models.incomeSourceDetails.IncomeSourceDetailsModel
 import testConstants.BaseTestConstants.{testNino, testUserTypeAgent, testUserTypeIndividual}
 import testUtils.TestSupport
 import enums.{AfterSubmissionPage, BeforeSubmissionPage, CannotGoBackPage, InitialPage}
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import mocks.services.MockPaymentOnAccountSessionService
 import models.claimToAdjustPoa.PoaAmendmentData
 import services.PaymentOnAccountSessionService

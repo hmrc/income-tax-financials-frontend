@@ -21,7 +21,7 @@ import config.FrontendAppConfig
 import config.featureswitch.FeatureSwitching
 import implicits.ImplicitDateFormatter
 import testUtils.{TestSupport, ViewSpec}
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import models.creditsandrefunds.{CreditsModel, MoneyInYourAccountViewModel}
 import testConstants.ANewCreditAndRefundModel
 import views.html.CreditAndRefundsView

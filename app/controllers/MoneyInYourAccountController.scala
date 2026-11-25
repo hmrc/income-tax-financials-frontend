@@ -22,7 +22,7 @@ import config.{AgentItvcErrorHandler, FrontendAppConfig, ItvcErrorHandler}
 import models.admin.CreditsRefundsRepay
 import services.AuditingService
 import views.html.errorPages.CustomNotFoundErrorView
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import models.audit.ClaimARefundAuditModel
 import models.creditsandrefunds.{CreditsModel, MoneyInYourAccountViewModel}
 import services.{CreditService, RepaymentService}

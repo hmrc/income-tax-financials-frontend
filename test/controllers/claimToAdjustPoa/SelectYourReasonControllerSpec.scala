@@ -22,8 +22,7 @@ import mocks.auth.MockAuthActions
 import models.core.{CheckMode, NormalMode}
 import models.incomeSourceDetails.TaxYear
 import services.DateServiceInterface
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as routes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import mocks.services.{MockClaimToAdjustService, MockPaymentOnAccountSessionService}
 import models.claimToAdjustPoa.*
 import models.claimToAdjustPoa.viewModels.PaymentOnAccountViewModel

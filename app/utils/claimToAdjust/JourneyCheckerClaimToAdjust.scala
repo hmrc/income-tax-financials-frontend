@@ -17,7 +17,7 @@
 package utils.claimToAdjust
 
 import auth.MtdItUser
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import models.claimToAdjustPoa.PoaAmendmentData
 import services.PaymentOnAccountSessionService
 import utils.ErrorRecovery

@@ -22,7 +22,6 @@ import enums.{MTDIndividual, MTDSupportingAgent}
 import mocks.auth.MockAuthActions
 import services.DateServiceInterface
 import testConstants.BaseTestConstants.{calendarYear2018, testMtdItAgentUser, testMtdItUser, testSaUtr}
-import _root_.app.controllers.routes as routes
 import mocks.services.{MockCreditHistoryService, MockFinancialDetailsService}
 import models.{BalanceDetails, DocumentDetail}
 import services.CreditHistoryService

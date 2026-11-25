@@ -19,7 +19,7 @@ package utils
 import auth.MtdItUser
 import config.FrontendAppConfig
 import enums.GatewayPage.{GatewayPage, PaymentHistoryPage, TaxYearSummaryPage, WhatYouOwePage}
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 
 trait FallBackBackLinks {
 

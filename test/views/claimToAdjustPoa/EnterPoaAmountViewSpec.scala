@@ -20,7 +20,7 @@ import implicits.ImplicitCurrencyFormatter.*
 import models.core.NormalMode
 import models.incomeSourceDetails.TaxYear
 import testUtils.TestSupport
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import forms.adjustPoa.EnterPoaAmountForm
 import models.claimToAdjustPoa.viewModels.PaymentOnAccountViewModel
 import views.html.claimToAdjustPoa.EnterPoaAmountView

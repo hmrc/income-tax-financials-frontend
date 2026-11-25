@@ -16,7 +16,6 @@
 
 package controllers
 
-import _root_.app.controllers.routes as routes
 import auth.{AuthActions, MtdItUser}
 import config.{AgentItvcErrorHandler, FrontendAppConfig, ItvcErrorHandler}
 import services.AuditingService

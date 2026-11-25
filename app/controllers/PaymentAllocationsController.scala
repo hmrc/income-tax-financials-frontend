@@ -24,8 +24,8 @@ import implicits.ImplicitDateFormatterImpl
 import models.admin.CreditsRefundsRepay
 import models.core.Nino
 import services.AuditingService
-import _root_.app.controllers.agent.errors.routes as agentErrorRoutes
-import _root_.app.controllers.errors.routes as errorRoutes
+import controllers.agent.errors.routes as agentErrorRoutes
+import controllers.errors.routes as errorRoutes
 import forms.utils.SessionKeys.gatewayPage
 import models.audit.PaymentAllocationsResponseAuditModel
 import models.paymentAllocationCharges.{PaymentAllocationError, PaymentAllocationViewModel}

@@ -50,7 +50,7 @@
         @if(!user.isAgent) {
             @h2(msg = getMessage("sa-note-1-heading"))
             @p(id = Some("sa-note-1-migrated-2"))(Html(getMessage("sa-note-1-body-2") +
-                    link(link = _root_.app.controllers.routes.SelfServeTimeToPayController.fetchUrl().url,
+                    link(link = controllers.routes.SelfServeTimeToPayController.fetchUrl().url,
                         messageKey = getMessage("sa-link-1-body-1"),
                         rel = Some("noreferrer noopener"),
                         target = Some("_blank")).toString() +
@@ -78,7 +78,7 @@
                     getMessage("sa-note-1-body-3")))
 
             @p(id = Some("sa-note-1-migrated-2"))(Html(getMessage("sa-note-1-body-2") +
-                    link(link = _root_.app.controllers.routes.SelfServeTimeToPayController.fetchUrl().url,
+                    link(link = controllers.routes.SelfServeTimeToPayController.fetchUrl().url,
                         messageKey = getMessage("sa-link-1-body-1"),
                         rel = Some("noreferrer noopener"),
                         target = Some("_blank")).toString() +

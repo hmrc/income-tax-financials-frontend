@@ -17,7 +17,7 @@
 package controllers
 
 import connectors.FeedbackConnector
-import _root_.app.controllers.feedback.routes as feedbackRoutes
+import controllers.feedback.routes as feedbackRoutes
 import controllers.feedback.FeedbackController
 import enums.MTDIndividual
 import implicits.ImplicitDateFormatter

@@ -18,7 +18,7 @@ package views.claimToAdjustPoa
 
 import auth.MtdItUser
 import testUtils.TestSupport
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import views.html.claimToAdjustPoa.ApiFailureSubmittingPoaView
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

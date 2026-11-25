@@ -21,7 +21,7 @@ import auth.{AuthActions, MtdItUser}
 import config.{AgentItvcErrorHandler, FrontendAppConfig, ItvcErrorHandler}
 import models.core.CheckMode
 import services.AuditingService
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes.*
+import controllers.claimToAdjustPoa.routes.*
 import models.claimToAdjustPoa.{PoaAmendmentData, SelectYourReason}
 import services.claimToAdjustPoa.{ClaimToAdjustPoaCalculationService, ClaimToAdjustService, RecalculatePoaHelper}
 import services.{NrsService, PaymentOnAccountSessionService}

@@ -22,7 +22,7 @@ import config.featureswitch.FeatureSwitching
 import implicits.ImplicitDateFormatter
 import testConstants.BaseTestConstants.testMtditid
 import testUtils.{TestSupport, ViewSpec}
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import models.creditDetailModel.CreditDetailModel
 import services.helpers.CreditHistoryDataHelper
 import testConstants.FinancialDetailsTestConstants.*

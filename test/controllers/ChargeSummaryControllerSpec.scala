@@ -21,9 +21,8 @@ import enums.{MTDIndividual, MTDSupportingAgent}
 import models.admin.{ChargeHistory, PenaltiesAndAppeals}
 import services.DateServiceInterface
 import testConstants.BaseTestConstants.*
-import _root_.app.controllers.routes as routes
-import _root_.app.controllers.agent.errors.routes as agentErrorRoutes
-import _root_.app.controllers.errors.routes as errorRoutes
+import controllers.agent.errors.routes as agentErrorRoutes
+import controllers.errors.routes as errorRoutes
 import enums.{AdjustmentReversalReason, AmendedReturnReversalReason}
 import models.chargeHistory.{AdjustmentHistoryModel, AdjustmentModel}
 import models.repaymentHistory.RepaymentHistoryUtils

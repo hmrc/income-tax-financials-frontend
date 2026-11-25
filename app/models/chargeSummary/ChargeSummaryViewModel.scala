@@ -17,7 +17,7 @@
 package models.chargeSummary
 
 import enums.GatewayPage.GatewayPage
-import _root_.app.controllers.routes.*
+import controllers.routes.*
 import models.*
 import models.chargeHistory.AdjustmentHistoryModel
 import models.repaymentHistory.RepaymentHistoryUtils

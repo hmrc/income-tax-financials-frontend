@@ -20,7 +20,7 @@ import cats.data.EitherT
 import auth.{AuthActions, MtdItUser}
 import config.{AgentItvcErrorHandler, FrontendAppConfig, ItvcErrorHandler}
 import models.core.NormalMode
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import models.claimToAdjustPoa.viewModels.{PaymentOnAccountViewModel, WhatYouNeedToKnowViewModel}
 import services.PaymentOnAccountSessionService
 import services.claimToAdjustPoa.ClaimToAdjustService

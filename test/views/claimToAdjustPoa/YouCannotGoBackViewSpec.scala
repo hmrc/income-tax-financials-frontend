@@ -19,7 +19,7 @@ package views.claimToAdjustPoa
 import auth.MtdItUser
 import models.incomeSourceDetails.TaxYear
 import testUtils.TestSupport
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import views.html.claimToAdjustPoa.YouCannotGoBackView
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

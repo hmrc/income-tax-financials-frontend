@@ -19,7 +19,7 @@ package views
 import testUtils.ViewSpec
 import views.html.errorPages.UpliftFailedView
 import play.twirl.api.Html
-import _root_.app.controllers.routes as commonRoutes
+import controllers.routes as commonRoutes
 
 class UpliftFailedViewSpec extends ViewSpec {
 

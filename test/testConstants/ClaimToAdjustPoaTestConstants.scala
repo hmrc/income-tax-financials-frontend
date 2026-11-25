@@ -18,7 +18,7 @@ package testConstants
 
 import models.core.NormalMode
 import models.incomeSourceDetails.TaxYear
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
+import controllers.claimToAdjustPoa.routes as claimToAdjustPoaRoutes
 import models.*
 import models.chargeHistory.ChargeHistoryModel
 import models.claimToAdjustPoa.viewModels.{PaymentOnAccountViewModel, WhatYouNeedToKnowViewModel}

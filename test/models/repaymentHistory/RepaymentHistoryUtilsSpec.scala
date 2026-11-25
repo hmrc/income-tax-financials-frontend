@@ -22,7 +22,7 @@ import models.*
 import models.repaymentHistory.RepaymentHistoryUtils.*
 import testConstants.ChargeConstants
 import org.scalatest.matchers.should.Matchers
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import java.time.LocalDate
 
 class RepaymentHistoryUtilsSpec extends TestSupport with Matchers with ChargeConstants {

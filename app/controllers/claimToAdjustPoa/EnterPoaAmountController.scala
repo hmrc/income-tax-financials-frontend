@@ -16,7 +16,6 @@
 
 package controllers.claimToAdjustPoa
 
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes as routes
 import auth.{AuthActions, MtdItUser}
 import config.featureswitch.FeatureSwitching
 import config.{AgentItvcErrorHandler, FrontendAppConfig, ItvcErrorHandler}

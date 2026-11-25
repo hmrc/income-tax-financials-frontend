@@ -21,7 +21,7 @@ import config.featureswitch.FeatureSwitching
 import models.admin.SubmitClaimToAdjustToNrs
 import models.core.Nino
 import services.AuditingService
-import _root_.claimToAdjustPoa.controllers.claimToAdjustPoa.routes.*
+import controllers.claimToAdjustPoa.routes.*
 import models.audit.AdjustPaymentsOnAccountAuditModel
 import models.claimToAdjustPoa.viewModels.PaymentOnAccountViewModel
 import models.claimToAdjustPoa.{ClaimToAdjustNrsPayload, PoaAmendmentData, SelectYourReason}

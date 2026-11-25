@@ -23,7 +23,7 @@ import models.admin.PaymentHistoryRefunds
 import models.core.Nino
 import services.AuditingService
 import connectors.RepaymentHistoryConnector
-import _root_.app.controllers.routes as financialsRoutes
+import controllers.routes as financialsRoutes
 import models.audit.RefundToTaxPayerResponseAuditModel
 import models.creditsandrefunds.RefundToTaxPayerViewModel
 import models.repaymentHistory.{RepaymentHistoryErrorModel, RepaymentHistoryModel}
