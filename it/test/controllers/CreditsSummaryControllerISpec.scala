@@ -18,16 +18,16 @@ package controllers
 
 import auth.AuthorisedAndEnrolledRequest
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
-import _root_.helpers.servicemocks.AuditStub
-import _root_.helpers.GetInsourceDetailsStub
+import helpers.servicemocks.AuditStub
+import helpers.GetInsourceDetailsStub
 import models.audit.IncomeSourceDetailsResponseAuditModel
 import play.api.http.Status.OK
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.ws.WSResponse
 import play.api.test.FakeRequest
-import _root_.testConstants.BaseIntegrationTestConstants.*
-import _root_.helpers.{CreditsSummaryDataHelper, FinancialDetailsStub}
-import _root_.testConstants.FinancialDetailsIntegrationTestConstants.*
+import testConstants.BaseIntegrationTestConstants.*
+import helpers.{CreditsSummaryDataHelper, FinancialDetailsStub}
+import testConstants.FinancialDetailsIntegrationTestConstants.*
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 
 class CreditsSummaryControllerISpec extends ControllerISpecHelper with CreditsSummaryDataHelper {

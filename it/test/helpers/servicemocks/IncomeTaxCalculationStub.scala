@@ -16,7 +16,7 @@
 
 package helpers.servicemocks
 
-import _root_.helpers.WiremockHelper
+import helpers.WiremockHelper
 
 import models.liabilityCalculation.{LiabilityCalculationError, LiabilityCalculationResponse}
 import play.api.libs.json.Json

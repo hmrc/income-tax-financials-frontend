@@ -17,7 +17,7 @@
 package helpers.servicemocks
 
 import models.audit.ExtendedAuditModel
-import _root_.testConstants.MicroserviceSpecificConstants
+import testConstants.MicroserviceSpecificConstants
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Millis, Seconds, Span}
 import play.api.http.Status.NO_CONTENT

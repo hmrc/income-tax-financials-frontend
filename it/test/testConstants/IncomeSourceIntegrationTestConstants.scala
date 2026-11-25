@@ -18,7 +18,7 @@ package testConstants
 
 import models.core.AccountingPeriodModel
 import models.incomeSourceDetails.{IncomeSourceDetailsModel, IncomeSourceDetailsResponse, PropertyDetailsModel}
-import _root_.testConstants.BaseIntegrationTestConstants.*
+import testConstants.BaseIntegrationTestConstants.*
 
 object IncomeSourceIntegrationTestConstants {
 

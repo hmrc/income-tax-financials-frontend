@@ -16,14 +16,14 @@
 
 package connectors
 
-import _root_.connectors.constants.ITSAStatusUpdateConnectorConstants.*
+import connectors.constants.ITSAStatusUpdateConnectorConstants.*
 
-import _root_.helpers.{ComponentSpecBase, WiremockHelper}
+import helpers.{ComponentSpecBase, WiremockHelper}
 import models.itsaStatus.{ITSAStatusResponse, ITSAStatusResponseError, ITSAStatusResponseModel}
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.Json
-import _root_.testConstants.ITSAStatusTestConstants.{successITSAStatusResponseJson, successITSAStatusResponseModel}
+import testConstants.ITSAStatusTestConstants.{successITSAStatusResponseJson, successITSAStatusResponseModel}
 
 class ITSAStatusConnectorISpec extends AnyWordSpec with ComponentSpecBase {
 

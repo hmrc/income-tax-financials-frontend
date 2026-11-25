@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import auth.{AuthorisedAndEnrolledRequest, MtdItUser}
 import config.FrontendAppConfig
 import enums.{MTDIndividual, MTDUserRole}
-import _root_.helpers.servicemocks.AuditStub
+import helpers.servicemocks.AuditStub
 import implicits.ImplicitDateFormatterImpl
 import models.admin.FeatureSwitch
 import models.incomeSourceDetails.{IncomeSourceDetailsModel, TaxYear}
@@ -37,7 +37,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.crypto.DefaultCookieSigner
 import play.api.test.FakeRequest
 import play.api.{Application, Environment, Mode}
-import _root_.testConstants.BaseIntegrationTestConstants.*
+import testConstants.BaseIntegrationTestConstants.*
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.language.LanguageUtils
 

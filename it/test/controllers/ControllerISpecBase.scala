@@ -17,7 +17,7 @@
 package controllers
 
 import config.FrontendAppConfig
-import _root_.helpers.{SessionCookieBaker, TestDateService, WiremockHelper}
+import helpers.{SessionCookieBaker, TestDateService, WiremockHelper}
 import implicits.ImplicitDateFormatterImpl
 import services.{DateService, DateServiceInterface}
 import org.scalatest.*
@@ -31,7 +31,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.crypto.DefaultCookieSigner
 import play.api.{Application, Environment, Mode}
-import _root_.testConstants.BaseIntegrationTestConstants.testSessionId
+import testConstants.BaseIntegrationTestConstants.testSessionId
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import uk.gov.hmrc.play.language.LanguageUtils
 

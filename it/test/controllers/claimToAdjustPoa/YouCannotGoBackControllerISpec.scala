@@ -16,19 +16,19 @@
 
 package controllers.claimToAdjustPoa
 
-import _root_.controllers.ControllerISpecHelper
+import controllers.ControllerISpecHelper
 
 
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
-import _root_.testConstants.IncomeSourceIntegrationTestConstants.*
+import testConstants.IncomeSourceIntegrationTestConstants.*
 import services.PaymentOnAccountSessionService
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.JsValue
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import _root_.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino}
-import _root_.helpers.FinancialDetailsStub
-import _root_.testConstants.ClaimToAdjustPoaTestConstants.{testTaxYearPoa, validFinancialDetailsResponseBody, validSession}
-import _root_.helpers.GetInsourceDetailsStub
+import testConstants.BaseIntegrationTestConstants.{testMtditid, testNino}
+import helpers.FinancialDetailsStub
+import testConstants.ClaimToAdjustPoaTestConstants.{testTaxYearPoa, validFinancialDetailsResponseBody, validSession}
+import helpers.GetInsourceDetailsStub
 
 class YouCannotGoBackControllerISpec extends ControllerISpecHelper {
 

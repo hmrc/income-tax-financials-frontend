@@ -16,24 +16,24 @@
 
 package controllers
 
-import _root_.helpers.WiremockHelper
+import helpers.WiremockHelper
 
 import auth.MtdItUser
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
-import _root_.helpers.servicemocks.AuditStub.verifyAuditContainsDetail
+import helpers.servicemocks.AuditStub.verifyAuditContainsDetail
 import models.admin.PaymentHistoryRefunds
-import _root_.testConstants.BaseIntegrationTestConstants.*
-import _root_.helpers.FinancialDetailsStub
+import testConstants.BaseIntegrationTestConstants.*
+import helpers.FinancialDetailsStub
 import models.Payment
 import models.audit.PaymentHistoryResponseAuditModel
 import models.core.RepaymentJourneyResponseModel.RepaymentJourneyModel
-import _root_.testConstants.FinancialDetailsIntegrationTestConstants.*
+import testConstants.FinancialDetailsIntegrationTestConstants.*
 import play.api.http.Status.*
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 
 import java.time.LocalDate
-import _root_.helpers.GetInsourceDetailsStub
+import helpers.GetInsourceDetailsStub
 
 class PaymentHistoryControllerISpec extends ControllerISpecHelper {
 

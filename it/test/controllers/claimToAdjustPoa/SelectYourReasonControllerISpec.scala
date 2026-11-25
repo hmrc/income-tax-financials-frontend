@@ -16,19 +16,19 @@
 
 package controllers.claimToAdjustPoa
 
-import _root_.controllers.ControllerISpecHelper
+import controllers.ControllerISpecHelper
 
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import models.core.NormalMode
-import _root_.testConstants.BaseIntegrationTestConstants.{testDate, testMtditid, testNino}
+import testConstants.BaseIntegrationTestConstants.{testDate, testMtditid, testNino}
 import forms.adjustPoa.SelectYourReasonFormProvider
-import _root_.helpers.FinancialDetailsStub
+import helpers.FinancialDetailsStub
 import models.claimToAdjustPoa.{Increase, MainIncomeLower, PoaAmendmentData, SelectYourReason}
 import services.PaymentOnAccountSessionService
-import _root_.testConstants.FinancialDetailsIntegrationTestConstants.*
+import testConstants.FinancialDetailsIntegrationTestConstants.*
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK, SEE_OTHER}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import _root_.helpers.GetInsourceDetailsStub
+import helpers.GetInsourceDetailsStub
 
 class SelectYourReasonControllerISpec extends ControllerISpecHelper {
 

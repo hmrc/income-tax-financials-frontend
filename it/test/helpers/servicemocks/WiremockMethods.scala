@@ -16,7 +16,7 @@
 
 package helpers.servicemocks
 
-import _root_.helpers.WiremockHelper
+import helpers.WiremockHelper
 
 import com.github.tomakehurst.wiremock.client.MappingBuilder
 import com.github.tomakehurst.wiremock.client.WireMock.*

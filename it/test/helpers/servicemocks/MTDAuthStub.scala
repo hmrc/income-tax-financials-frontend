@@ -16,7 +16,7 @@
 
 package helpers.servicemocks
 
-import _root_.helpers.ComponentSpecBase
+import helpers.ComponentSpecBase
 import play.api.libs.json.{JsString, JsValue, Json}
 import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 

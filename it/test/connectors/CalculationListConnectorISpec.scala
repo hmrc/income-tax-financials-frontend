@@ -16,12 +16,12 @@
 
 package connectors
 
-import _root_.helpers.{ComponentSpecBase, WiremockHelper}
+import helpers.{ComponentSpecBase, WiremockHelper}
 import models.core.Nino
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.test.Injecting
-import _root_.testConstants.BaseIntegrationTestConstants.testMtditid
+import testConstants.BaseIntegrationTestConstants.testMtditid
 import models.calculationList.{CalculationListErrorModel, CalculationListModel}
 
 class CalculationListConnectorISpec extends AnyWordSpec with ComponentSpecBase with Injecting {

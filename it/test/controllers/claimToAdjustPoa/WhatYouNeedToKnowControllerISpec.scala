@@ -16,20 +16,20 @@
 
 package controllers.claimToAdjustPoa
 
-import _root_.controllers.ControllerISpecHelper
+import controllers.ControllerISpecHelper
 
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import models.core.NormalMode
-import _root_.testConstants.BaseIntegrationTestConstants.{testDate, testMtditid, testNino}
-import _root_.helpers.FinancialDetailsStub
+import testConstants.BaseIntegrationTestConstants.{testDate, testMtditid, testNino}
+import helpers.FinancialDetailsStub
 import models.claimToAdjustPoa.PoaAmendmentData
 import services.PaymentOnAccountSessionService
-import _root_.testConstants.FinancialDetailsIntegrationTestConstants.*
+import testConstants.FinancialDetailsIntegrationTestConstants.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK, SEE_OTHER}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import _root_.helpers.GetInsourceDetailsStub
+import helpers.GetInsourceDetailsStub
 
 class WhatYouNeedToKnowControllerISpec extends ControllerISpecHelper {
 

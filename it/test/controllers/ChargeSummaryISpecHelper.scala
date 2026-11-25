@@ -18,12 +18,12 @@ package controllers
 
 import models.incomeSourceDetails.TaxYear
 import services.DateService
-import _root_.testConstants.BaseIntegrationTestConstants.testTaxYear
+import testConstants.BaseIntegrationTestConstants.testTaxYear
 import enums.ChargeType.{ITSA_ENGLAND_AND_NI, ITSA_NI, NIC4_SCOTLAND}
 import models.{ChargeItem, FinancialDetail, MfaDebitCharge}
 import models.chargeHistory.ChargeHistoryModel
 import models.chargeSummary.{PaymentHistoryAllocation, PaymentHistoryAllocations}
-import _root_.testConstants.FinancialDetailsIntegrationTestConstants.financialDetailModelPartial
+import testConstants.FinancialDetailsIntegrationTestConstants.financialDetailModelPartial
 import play.api.libs.json.Json
 
 import java.time.{LocalDate, LocalDateTime, LocalTime}

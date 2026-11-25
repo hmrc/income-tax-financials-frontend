@@ -23,15 +23,15 @@ import com.github.tomakehurst.wiremock.common.ConsoleNotifier
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.*
 import com.github.tomakehurst.wiremock.http.{HttpHeader, HttpHeaders}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import _root_.helpers.servicemocks.MTDAgentAuthStub.bakeSessionCookie
+import helpers.servicemocks.MTDAgentAuthStub.bakeSessionCookie
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.http.HeaderNames
 import play.api.libs.json.JsValue
 import play.api.libs.ws.DefaultBodyWritables.*
 import play.api.libs.ws.{WSClient, WSResponse}
-import _root_.testConstants.BaseIntegrationTestConstants.testSessionId
-import _root_.testConstants.MicroserviceSpecificConstants
+import testConstants.BaseIntegrationTestConstants.testSessionId
+import testConstants.MicroserviceSpecificConstants
 
 import scala.concurrent.Future
 

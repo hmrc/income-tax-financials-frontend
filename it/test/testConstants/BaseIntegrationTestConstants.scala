@@ -19,7 +19,7 @@ package testConstants
 import auth.{AgentClientDetails, AuthUserDetails}
 import enums.{MTDIndividual, MTDUserRole}
 import models.core.{AccountingPeriodModel, AddressModel}
-import _root_.utils.sessionUtils.SessionKeys
+import utils.sessionUtils.SessionKeys
 import models.incomeSourceDetails.*
 import play.api.http.Status
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}

@@ -17,10 +17,10 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import _root_.helpers.ComponentSpecBase
+import helpers.ComponentSpecBase
 import models.nrs.NrsSubmissionFailure.{NrsErrorResponse, NrsExceptionThrown}
 import models.nrs.NrsSuccessResponse
-import _root_.testConstants.NrsUtils
+import testConstants.NrsUtils
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.MimeTypes
 import play.api.http.Status.{ACCEPTED, BAD_REQUEST}

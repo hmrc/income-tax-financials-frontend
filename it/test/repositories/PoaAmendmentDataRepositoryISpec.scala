@@ -16,7 +16,7 @@
 
 package repositories
 
-import _root_.helpers.ComponentSpecBase
+import helpers.ComponentSpecBase
 import models.claimToAdjustPoa.{MainIncomeLower, PoaAmendmentData, PoaSessionData}
 import org.mongodb.scala.SingleObservableFuture
 import org.mongodb.scala.bson.BsonDocument

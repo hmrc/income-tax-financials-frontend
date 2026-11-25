@@ -16,7 +16,7 @@
 
 package controllers.agent
 
-import _root_.helpers.ComponentSpecBase
+import helpers.ComponentSpecBase
 import play.api.http.Status.SEE_OTHER
 
 class AgentLanguageControllerISpec extends ComponentSpecBase {

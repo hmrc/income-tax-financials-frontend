@@ -16,20 +16,20 @@
 
 package controllers.claimToAdjustPoa
 
-import _root_.controllers.ControllerISpecHelper
+import controllers.ControllerISpecHelper
 
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import models.core.AccountingPeriodModel
 import models.incomeSourceDetails.{BusinessDetailsModel, IncomeSourceDetailsModel}
-import _root_.testConstants.BaseIntegrationTestConstants.*
-import _root_.helpers.FinancialDetailsStub
+import testConstants.BaseIntegrationTestConstants.*
+import helpers.FinancialDetailsStub
 import models.claimToAdjustPoa.{MainIncomeLower, PoaAmendmentData}
 import services.PaymentOnAccountSessionService
-import _root_.testConstants.FinancialDetailsIntegrationTestConstants.*
+import testConstants.FinancialDetailsIntegrationTestConstants.*
 import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import _root_.helpers.GetInsourceDetailsStub
+import helpers.GetInsourceDetailsStub
 
 import java.time.LocalDate
 

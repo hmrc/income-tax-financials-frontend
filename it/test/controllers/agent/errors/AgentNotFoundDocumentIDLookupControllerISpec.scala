@@ -16,9 +16,9 @@
 
 package controllers.agent.errors
 
-import _root_.controllers.ControllerISpecHelper
+import controllers.ControllerISpecHelper
 
-import _root_.helpers.servicemocks.MTDAgentAuthStub
+import helpers.servicemocks.MTDAgentAuthStub
 import play.api.http.Status.*
 
 class AgentNotFoundDocumentIDLookupControllerISpec extends ControllerISpecHelper {

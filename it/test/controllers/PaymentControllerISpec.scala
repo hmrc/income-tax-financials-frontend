@@ -19,11 +19,11 @@ package controllers
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import play.api.http.Status.OK
 import play.api.libs.json.{JsValue, Json}
-import _root_.testConstants.BaseIntegrationTestConstants.testMtditid
-import _root_.testConstants.IncomeSourceIntegrationTestConstants.multipleBusinessesAndUkProperty
-import _root_.helpers.FinancialDetailsStub
+import testConstants.BaseIntegrationTestConstants.testMtditid
+import testConstants.IncomeSourceIntegrationTestConstants.multipleBusinessesAndUkProperty
+import helpers.FinancialDetailsStub
 import models.core.PaymentJourneyModel
-import _root_.helpers.GetInsourceDetailsStub
+import helpers.GetInsourceDetailsStub
 
 class PaymentControllerISpec extends ControllerISpecHelper {
 

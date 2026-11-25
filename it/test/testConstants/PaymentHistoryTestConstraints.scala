@@ -17,7 +17,7 @@
 package testConstants
 
 import models.core.{AccountingPeriodModel, AddressModel}
-import _root_.testConstants.BaseIntegrationTestConstants.{getCurrentTaxYearEnd, otherTestSelfEmploymentId, testIncomeSource, testSelfEmploymentId}
+import testConstants.BaseIntegrationTestConstants.{getCurrentTaxYearEnd, otherTestSelfEmploymentId, testIncomeSource, testSelfEmploymentId}
 import models.incomeSourceDetails.BusinessDetailsModel
 
 import java.time.LocalDate

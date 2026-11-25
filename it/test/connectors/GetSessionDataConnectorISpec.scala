@@ -16,12 +16,12 @@
 
 package connectors
 
-import _root_.helpers.WiremockHelper
+import helpers.WiremockHelper
 
-import _root_.helpers.ComponentSpecBase
-import _root_.helpers.servicemocks.SessionDataStub
+import helpers.ComponentSpecBase
+import helpers.servicemocks.SessionDataStub
 import models.sessionData.SessionDataGetResponse.{SessionDataGetSuccess, SessionDataNotFound, SessionDataUnexpectedResponse}
-import _root_.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino, testSaUtr}
+import testConstants.BaseIntegrationTestConstants.{testMtditid, testNino, testSaUtr}
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
 

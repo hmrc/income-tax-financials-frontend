@@ -20,17 +20,17 @@ import auth.MtdItUser
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import helpers.GetInsourceDetailsStub
 import helpers.servicemocks.{AuditStub, YearOfMigrationStub}
+import helpers.servicemocks.ChargeItemStub.{chargeItemWithInterestAndOverdue, docDetail}
 import models.admin.ChargeHistory
-import _root_.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino, testTaxYear, testTaxYearTyped}
-import _root_.testConstants.IncomeSourceIntegrationTestConstants.*
-import _root_.testConstants.messages.ChargeSummaryMessages.*
+import testConstants.BaseIntegrationTestConstants.{testMtditid, testNino, testTaxYear, testTaxYearTyped}
+import testConstants.IncomeSourceIntegrationTestConstants.*
+import testConstants.messages.ChargeSummaryMessages.*
 import enums.ChargeType.ITSA_ENGLAND_AND_NI
 import enums.CodingOutType.*
 import helpers.FinancialDetailsStub
 import models.*
 import models.audit.ChargeSummaryAudit
-import _root_.testConstants.FinancialDetailsIntegrationTestConstants.*
-import _root_.helpers.servicemocks.ChargeItemStub.{chargeItemWithInterestAndOverdue, docDetail}
+import testConstants.FinancialDetailsIntegrationTestConstants.*
 import play.api.http.Status.*
 import play.api.libs.json.Json
 

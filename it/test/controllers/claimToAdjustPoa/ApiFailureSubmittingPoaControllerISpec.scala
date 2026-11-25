@@ -16,14 +16,14 @@
 
 package controllers.claimToAdjustPoa
 
-import _root_.controllers.ControllerISpecHelper
+import controllers.ControllerISpecHelper
 
 
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import play.api.http.Status.OK
-import _root_.testConstants.BaseIntegrationTestConstants.testMtditid
-import _root_.testConstants.IncomeSourceIntegrationTestConstants.multipleBusinessesResponse
-import _root_.helpers.GetInsourceDetailsStub
+import testConstants.BaseIntegrationTestConstants.testMtditid
+import testConstants.IncomeSourceIntegrationTestConstants.multipleBusinessesResponse
+import helpers.GetInsourceDetailsStub
 
 class ApiFailureSubmittingPoaControllerISpec extends ControllerISpecHelper {
 

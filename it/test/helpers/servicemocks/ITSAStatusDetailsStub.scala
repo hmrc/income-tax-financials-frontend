@@ -16,16 +16,16 @@
 
 package helpers.servicemocks
 
-import _root_.helpers.WiremockHelper
+import helpers.WiremockHelper
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import _root_.helpers.ComponentSpecBase
+import helpers.ComponentSpecBase
 import models.itsaStatus.ITSAStatus
 import ITSAStatus.ITSAStatus
 import models.incomeSourceDetails.TaxYear
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
 import play.api.libs.json.{JsArray, Json}
-import _root_.testConstants.BaseIntegrationTestConstants.testNino
+import testConstants.BaseIntegrationTestConstants.testNino
 
 
 object ITSAStatusDetailsStub extends ComponentSpecBase {

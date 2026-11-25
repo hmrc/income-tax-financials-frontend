@@ -16,11 +16,11 @@
 
 package helpers.servicemocks
 
-import _root_.helpers.WiremockHelper
+import helpers.WiremockHelper
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import _root_.helpers.ComponentSpecBase
-import _root_.testConstants.BaseIntegrationTestConstants.testNino
+import helpers.ComponentSpecBase
+import testConstants.BaseIntegrationTestConstants.testNino
 
 object YearOfMigrationStub extends ComponentSpecBase {
 

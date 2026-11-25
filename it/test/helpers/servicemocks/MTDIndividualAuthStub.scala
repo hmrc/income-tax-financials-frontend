@@ -16,10 +16,10 @@
 
 package helpers.servicemocks
 
-import _root_.helpers.WiremockHelper.*
+import helpers.WiremockHelper.*
 import play.api.http.Status
 import play.api.libs.json.{JsArray, JsString, JsValue, Json}
-import _root_.testConstants.BaseIntegrationTestConstants.*
+import testConstants.BaseIntegrationTestConstants.*
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment}
 
 object MTDIndividualAuthStub extends MTDAuthStub {

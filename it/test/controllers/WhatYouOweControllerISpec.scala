@@ -18,28 +18,29 @@ package controllers
 
 import auth.MtdItUser
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
-import _root_.helpers.servicemocks.{AuditStub, YearOfMigrationStub}
+import helpers.servicemocks.{AuditStub, YearOfMigrationStub}
+import helpers.GetInsourceDetailsStub
+import helpers.FinancialDetailsStub
 import models.admin.*
 import models.incomeSourceDetails.TaxYear
 import services.DateServiceInterface
-import _root_.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino, testSaUtr}
-import _root_.testConstants.IncomeSourceIntegrationTestConstants.*
-import _root_.helpers.FinancialDetailsStub
-import _root_.testConstants.messages.WhatYouOweMessages.hmrcAdjustment
+import testConstants.BaseIntegrationTestConstants.{testMtditid, testNino, testSaUtr}
+import testConstants.IncomeSourceIntegrationTestConstants.*
+import testConstants.messages.WhatYouOweMessages.hmrcAdjustment
 import models.*
 import models.audit.WhatYouOweResponseAuditModel
 import models.core.SelfServeTimeToPayJourneyResponseModel
 import models.extensions.FinancialDetailsModelExtension
-import _root_.testConstants.ChargeConstants
-import _root_.testConstants.FinancialDetailsIntegrationTestConstants.*
-import _root_.testConstants.OutstandingChargesIntegrationTestConstants.*
+import testConstants.ChargeConstants
+import testConstants.FinancialDetailsIntegrationTestConstants.*
+import testConstants.OutstandingChargesIntegrationTestConstants.*
 import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSResponse
 
 import java.time.LocalDate
 import java.time.Month.APRIL
-import _root_.helpers.GetInsourceDetailsStub
+
 
 class WhatYouOweControllerISpec extends ControllerISpecHelper
   with ChargeConstants

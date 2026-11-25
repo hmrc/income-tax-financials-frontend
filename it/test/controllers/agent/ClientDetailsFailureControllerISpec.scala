@@ -18,8 +18,8 @@ package controllers.agent
 
 import controllers.agent.errors.routes as agentErrorRoutes
 import controllers.agent.routes as agentRoutes
-import _root_.helpers.ComponentSpecBase
-import _root_.helpers.servicemocks.MTDAgentAuthStub
+import helpers.ComponentSpecBase
+import helpers.servicemocks.MTDAgentAuthStub
 import viewUtils.InternalUrlHelper
 import play.api.http.Status.*
 import play.api.libs.ws.WSResponse

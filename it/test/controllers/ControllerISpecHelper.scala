@@ -21,17 +21,17 @@ import controllers.agent.errors.routes as agentErrorRoutes
 import controllers.agent.routes as agentRoutes
 import controllers.errors.routes as errorRoutes
 import enums.{MTDIndividual, MTDPrimaryAgent, MTDSupportingAgent, MTDUserRole}
-import _root_.helpers.ComponentSpecBase
-import _root_.helpers.servicemocks.BusinessDetailsStub.stubGetBusinessDetails
-import _root_.helpers.servicemocks.CitizenDetailsStub.stubGetCitizenDetails
-import _root_.helpers.servicemocks.FeatureSwitchStub.{featureSwitchesResponse, stubGetFeatureSwitches}
-import _root_.helpers.servicemocks.{AuditStub, MTDAgentAuthStub, MTDIndividualAuthStub, SessionDataStub}
+import helpers.ComponentSpecBase
+import helpers.servicemocks.BusinessDetailsStub.stubGetBusinessDetails
+import helpers.servicemocks.CitizenDetailsStub.stubGetCitizenDetails
+import helpers.servicemocks.FeatureSwitchStub.{featureSwitchesResponse, stubGetFeatureSwitches}
+import helpers.servicemocks.{AuditStub, MTDAgentAuthStub, MTDIndividualAuthStub, SessionDataStub}
 import models.admin.FeatureSwitchName
 import models.audit.AccessDeniedForSupportingAgentAuditModel
 import viewUtils.InternalUrlHelper
 import play.api.http.Status.{SEE_OTHER, UNAUTHORIZED}
 import play.api.libs.ws.WSResponse
-import _root_.testConstants.BaseIntegrationTestConstants.getAgentClientDetailsForCookie
+import testConstants.BaseIntegrationTestConstants.getAgentClientDetailsForCookie
 
 trait ControllerISpecHelper extends ComponentSpecBase {
 

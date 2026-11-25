@@ -16,12 +16,12 @@
 
 package helpers.servicemocks
 
-import _root_.helpers.WiremockHelper
+import helpers.WiremockHelper
 
 import models.incomeSourceDetails.IncomeSourceDetailsModel
 import play.api.http.Status.OK
 import play.api.libs.json.JsValue
-import _root_.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino}
+import testConstants.BaseIntegrationTestConstants.{testMtditid, testNino}
 
 object BusinessDetailsStub {
 

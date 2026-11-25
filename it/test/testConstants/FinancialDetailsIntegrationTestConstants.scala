@@ -16,16 +16,16 @@
 
 package testConstants
 
-import _root_.helpers.ComponentSpecBase
+import helpers.ComponentSpecBase
 import models.core.AccountingPeriodModel
 import models.incomeSourceDetails.{IncomeSourceDetailsModel, PropertyDetailsModel}
 import services.DateServiceInterface
-import _root_.testConstants.BaseIntegrationTestConstants.*
+import testConstants.BaseIntegrationTestConstants.*
 import enums.ChargeType.{ITSA_NI, NIC4_SCOTLAND, NIC4_WALES}
 import enums.CodingOutType.{CODING_OUT_ACCEPTED, CODING_OUT_CANCELLED, CODING_OUT_CLASS2_NICS}
 import models.*
 import models.outstandingCharges.{OutstandingChargeModel, OutstandingChargesModel}
-import _root_.testConstants.PaymentHistoryTestConstraints.oldBusiness1
+import testConstants.PaymentHistoryTestConstraints.oldBusiness1
 import play.api.libs.json.{JsObject, JsValue, Json}
 
 import java.time.LocalDate

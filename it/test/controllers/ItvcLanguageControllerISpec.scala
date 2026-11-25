@@ -16,7 +16,7 @@
 
 package controllers
 
-import _root_.helpers.ComponentSpecBase
+import helpers.ComponentSpecBase
 import play.api.libs.ws.WSResponse
 import play.api.test.Helpers.SEE_OTHER
 

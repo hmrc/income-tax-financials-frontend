@@ -18,16 +18,16 @@ package controllers
 
 import auth.MtdItUser
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
-import _root_.helpers.GetInsourceDetailsStub
-import _root_.helpers.servicemocks.{AuditStub, YearOfMigrationStub}
+import helpers.GetInsourceDetailsStub
+import helpers.servicemocks.{AuditStub, YearOfMigrationStub}
 import models.admin.CreditsRefundsRepay
-import _root_.testConstants.ANewCreditAndRefundModel
+import testConstants.ANewCreditAndRefundModel
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
 import play.api.libs.json.{JsValue, Json}
-import _root_.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino}
-import _root_.testConstants.IncomeSourceIntegrationTestConstants.multipleBusinessesAndPropertyResponse
+import testConstants.BaseIntegrationTestConstants.{testMtditid, testNino}
+import testConstants.IncomeSourceIntegrationTestConstants.multipleBusinessesAndPropertyResponse
 import viewUtils.InternalUrlHelper
-import _root_.helpers.FinancialDetailsStub
+import helpers.FinancialDetailsStub
 import models.audit.ClaimARefundAuditModel
 import models.core.ErrorModel
 import models.creditsandrefunds.CreditsModel

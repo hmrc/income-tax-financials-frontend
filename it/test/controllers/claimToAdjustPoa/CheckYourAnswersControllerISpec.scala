@@ -16,26 +16,26 @@
 
 package controllers.claimToAdjustPoa
 
-import _root_.controllers.ControllerISpecHelper
+import controllers.ControllerISpecHelper
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
-import _root_.helpers.servicemocks.AuditStub.verifyAuditContainsDetail
+import helpers.servicemocks.AuditStub.verifyAuditContainsDetail
 import models.core.AccountingPeriodModel
 import models.incomeSourceDetails.{BusinessDetailsModel, IncomeSourceDetailsModel}
-import _root_.testConstants.BaseIntegrationTestConstants.*
+import testConstants.BaseIntegrationTestConstants.*
 import controllers.claimToAdjustPoa.routes.{ApiFailureSubmittingPoaController, PoaAdjustedController}
-import _root_.helpers.FinancialDetailsStub
+import helpers.FinancialDetailsStub
 import models.audit.AdjustPaymentsOnAccountAuditModel
 import models.claimToAdjustPoa.ClaimToAdjustPoaResponse.ClaimToAdjustPoaSuccess
 import models.claimToAdjustPoa.PoaAmendmentData
 import services.PaymentOnAccountSessionService
-import _root_.testConstants.ClaimToAdjustPoaTestConstants.validSession
-import _root_.testConstants.FinancialDetailsIntegrationTestConstants.*
+import testConstants.ClaimToAdjustPoaTestConstants.validSession
+import testConstants.FinancialDetailsIntegrationTestConstants.*
 import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import _root_.helpers.GetInsourceDetailsStub
+import helpers.GetInsourceDetailsStub
 
 import java.time.LocalDate
 

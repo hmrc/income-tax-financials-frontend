@@ -16,7 +16,7 @@
 
 package testConstants.messages
 
-import _root_.helpers.ComponentSpecBase
+import helpers.ComponentSpecBase
 
 object WhatYouOweMessages extends ComponentSpecBase {
 

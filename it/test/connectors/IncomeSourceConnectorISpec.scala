@@ -18,14 +18,14 @@ package connectors
 
 import auth.AuthorisedAndEnrolledRequest
 import enums.MTDIndividual
-import _root_.helpers.{ComponentSpecBase, WiremockHelper}
+import helpers.{ComponentSpecBase, WiremockHelper}
 import models.core.{AccountingPeriodModel, AddressModel}
 import models.incomeSourceDetails.{BusinessDetailsModel, IncomeSourceDetailsError, IncomeSourceDetailsModel, IncomeSourceDetailsResponse, LatencyDetails}
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import _root_.testConstants.BaseIntegrationTestConstants.defaultAuthUserDetails
+import testConstants.BaseIntegrationTestConstants.defaultAuthUserDetails
 
 import java.time.LocalDate
 

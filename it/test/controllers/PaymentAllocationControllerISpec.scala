@@ -18,18 +18,18 @@ package controllers
 
 import auth.MtdItUser
 import enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
-import _root_.helpers.servicemocks.AuditStub.verifyAuditContainsDetail
-import _root_.helpers.servicemocks.YearOfMigrationStub
-import _root_.testConstants.BaseIntegrationTestConstants.{testMtditid, testNino}
-import _root_.helpers.FinancialDetailsStub
+import helpers.servicemocks.AuditStub.verifyAuditContainsDetail
+import helpers.servicemocks.YearOfMigrationStub
+import testConstants.BaseIntegrationTestConstants.{testMtditid, testNino}
+import helpers.FinancialDetailsStub
 import models.audit.PaymentAllocationsResponseAuditModel
 import models.paymentAllocationCharges.FinancialDetailsWithDocumentDetailsModel
-import _root_.testConstants.PaymentAllocationIntegrationTestConstants.*
-import _root_.testConstants.FinancialDetailsIntegrationTestConstants.{testValidFinancialDetailsModelJson, paymentHistoryBusinessAndPropertyResponse}
+import testConstants.PaymentAllocationIntegrationTestConstants.*
+import testConstants.FinancialDetailsIntegrationTestConstants.{testValidFinancialDetailsModelJson, paymentHistoryBusinessAndPropertyResponse}
 import play.api.http.Status.OK
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import _root_.helpers.GetInsourceDetailsStub
+import helpers.GetInsourceDetailsStub
 
 class PaymentAllocationControllerISpec extends ControllerISpecHelper {
 

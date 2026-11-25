@@ -16,7 +16,7 @@
 
 package utils
 
-import _root_.helpers.ComponentSpecBase
+import helpers.ComponentSpecBase
 import play.api.Environment
 
 import scala.io.Source
