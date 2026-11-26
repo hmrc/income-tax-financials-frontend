@@ -8,6 +8,96 @@ GET         /assets/*file                                                 contro
 GET         /assets/*file                                                 controllers.Assets.at(path="/public", file)
 
 
-->          /                                                             common.Routes
-->          /                                                             financialDetails.Routes
+# Language
+GET         /language/:lang                                                controllers.LocalLanguageController.switchToLanguage(lang: String)
+GET         /agents/language/:lang                                         controllers.agent.AgentLanguageController.switchToLanguage(lang: String)
+
+GET         /language/:lang                                                controllers.ItvcLanguageController.switchToLanguage(lang: String)
+GET         /switch-to-welsh                                               controllers.ItvcLanguageController.switchToWelsh(fragment: Option[String])
+GET         /switch-to-english                                             controllers.ItvcLanguageController.switchToEnglish(fragment: Option[String])
+
+# Client Relationship Failure
+GET         /agents/not-authorised-to-view-client                          controllers.agent.ClientRelationshipFailureController.show()
+GET         /agents/no-assignment                                          controllers.agent.NoAssignmentController.show()
+
+# No Income Sources Error page
+GET         /no-income-sources                                             controllers.NoIncomeSourcesController.show(isAgent: Boolean = false)
+GET         /agents/no-income-sources                                      controllers.NoIncomeSourcesController.show(isAgent: Boolean = true)
+
+# Feedback Routes
+GET         /feedback                                                      controllers.feedback.FeedbackController.show()
+GET         /agents/feedback                                               controllers.feedback.FeedbackController.showAgent()
+POST        /feedback                                                      controllers.feedback.FeedbackController.submit()
+POST        /agents/feedback                                               controllers.feedback.FeedbackController.submitAgent()
+GET         /thankyou                                                      controllers.feedback.FeedbackController.thankYou()
+GET         /agents/thankyou                                               controllers.feedback.FeedbackController.thankYouAgent()
+
+# Timeout Routes
+GET         /session-timeout                                               controllers.timeout.SessionTimeoutController.timeout()
+GET         /keep-alive                                                    controllers.timeout.SessionTimeoutController.keepAlive()
+
+# Sign Out Routes
+GET         /sign-out                                                      controllers.SignOutController.signOut()
+
+# Sign In Routes
+GET         /sign-in                                                       controllers.SignInController.signIn()
+
+# Not Enrolled
+GET         /cannot-access-service                                         controllers.errors.NotEnrolledController.show()
+
+# Agent Error
+GET         /agents/agent-error                                            controllers.agent.errors.AgentErrorController.show()
+
+# Uplift Failed
+GET         /cannot-view-page                                              controllers.errors.UpliftFailedController.show()
+
+# Uplift Success
+GET         /uplift-success                                                controllers.UpliftSuccessController.success()
+
+# Payment
+GET         /payment                                                       controllers.PaymentController.paymentHandoff(amountInPence: Long, origin: Option[String] ?= None)
+GET         /agents/payment                                                controllers.PaymentController.agentPaymentHandoff(amountInPence: Long)
+GET         /making-a-payment                                              controllers.PaymentController.makingPayment(amountInPence: Long, origin: Option[String] ?= None)
+GET         /agents/making-a-payment                                       controllers.PaymentController.agentMakingPayment(amountInPence: Long)
+
+# Payment Allocation
+GET         /payment-made-to-hmrc                                          controllers.PaymentAllocationsController.viewPaymentAllocation(documentNumber: String, origin: Option[String] ?= None)
+GET         /agents/payment-made-to-hmrc                                   controllers.PaymentAllocationsController.viewPaymentAllocationAgent(documentNumber: String)
+
+# What You Owe
+GET         /what-you-owe                                                  controllers.WhatYouOweController.show(origin: Option[String] ?= None)
+GET         /agents/what-you-owe                                           controllers.WhatYouOweController.showAgent()
+
+# Charge summary
+GET         /tax-years/:taxYear/charge                                     controllers.ChargeSummaryController.show(taxYear: Int, id: String, isInterestCharge: Boolean ?= false, origin: Option[String] ?= None, isPartialSuspendedCharge: Boolean ?= false)
+GET         /agents/tax-years/:taxYear/charge                              controllers.ChargeSummaryController.showAgent(taxYear: Int, id: String, isInterestCharge: Boolean ?= false, isPartialSuspendedCharge: Boolean ?= false)
+
+# Payment history
+GET         /payment-refund-history                                        controllers.PaymentHistoryController.show(origin: Option[String] ?= None)
+GET         /agents/payment-refund-history                                 controllers.PaymentHistoryController.showAgent()
+GET         /refund-status                                                 controllers.PaymentHistoryController.refundStatus()
+GET         /agents/refund-status                                          controllers.PaymentHistoryController.refundStatusAgent()
+
+# Custom not found
+GET         /custom-not-found                                              controllers.errors.NotFoundDocumentIDLookupController.show()
+GET         /agents/custom-not-found                                       controllers.agent.errors.AgentNotFoundDocumentIDLookupController.show()
+
+# Credits and Refunds
+GET         /money-in-your-account                                        controllers.MoneyInYourAccountController.show(origin: Option[String] ?= None)
+GET         /agents/money-in-your-account                                 controllers.MoneyInYourAccountController.showAgent()
+GET         /start-refund                                                 controllers.MoneyInYourAccountController.startRefund()
+GET         /agents/start-refund                                          controllers.MoneyInYourAccountController.startRefundAgents()
+
+# Credits
+GET         /credits-from-hmrc/:calendarYear                              controllers.CreditsSummaryController.showCreditsSummary(calendarYear: Int, origin: Option[String] ?= None)
+GET         /agents/credits-from-hmrc/:calendarYear                       controllers.CreditsSummaryController.showAgentCreditsSummary(calendarYear: Int)
+
+# Refund to taxpayer
+GET         /refund-to-taxpayer/:repaymentRequestNumber                   controllers.RefundToTaxPayerController.show(repaymentRequestNumber: String, origin: Option[String] ?= None)
+GET         /agents/refund-to-taxpayer/:repaymentRequestNumber            controllers.RefundToTaxPayerController.showAgent(repaymentRequestNumber: String)
+
+# Self serve time to pay
+GET         /self-serve-time-to-pay                                       controllers.SelfServeTimeToPayController.fetchUrl()
+GET         /agents/self-serve-time-to-pay                                controllers.SelfServeTimeToPayController.agentFetchUrl()
+
 ->          /                                                             claimToAdjustPoa.Routes

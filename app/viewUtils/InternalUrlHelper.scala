@@ -1,0 +1,50 @@
+/*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package viewUtils
+
+import controllers.routes as appRoutes
+import controllers.agent.routes as agentRoutes
+import controllers.errors.routes as errorRoutes
+import controllers.timeout.routes as timeoutRoutes
+import controllers.feedback.routes as feedbackRoutes
+import controllers.agent.errors.routes as agentErrorRoutes
+
+object InternalUrlHelper {
+
+  val signinUrl = appRoutes.SignInController.signIn().url
+  val signinCall = appRoutes.SignInController.signIn()
+  val signoutUrl = appRoutes.SignOutController.signOut().url
+  val keepAliveUrl = timeoutRoutes.SessionTimeoutController.keepAlive().url
+  val timeoutUrl = timeoutRoutes.SessionTimeoutController.timeout().url
+  val timeoutCall = timeoutRoutes.SessionTimeoutController.timeout()
+  val feedbackUrl = feedbackRoutes.FeedbackController.show().url
+  val agentFeedbackUrl = feedbackRoutes.FeedbackController.showAgent().url
+  val agentErrorCall = agentErrorRoutes.AgentErrorController.show()
+
+  def noIncomeSourceUrl(isAgent: Boolean) = appRoutes.NoIncomeSourcesController.show(isAgent)
+
+  val upliftSuccessUrl = appRoutes.UpliftSuccessController.success().url
+
+  val upliftFailureUrl = errorRoutes.UpliftFailedController.show().url
+
+  val clientRelationshipFailureCall = agentRoutes.ClientRelationshipFailureController.show()
+
+  val noAssignmentCall = agentRoutes.NoAssignmentController.show().url
+
+  val notEnrolledCall = errorRoutes.NotEnrolledController.show()
+
+}

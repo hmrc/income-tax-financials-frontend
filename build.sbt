@@ -103,7 +103,7 @@ lazy val microservice = Project(appName, file("."))
       "uk.gov.hmrc.hmrcfrontend.views.html.helpers._",
       "uk.gov.hmrc.hmrcfrontend.views.html.components.implicits._"
     ),
-    RoutesKeys.routesImport := Seq("common.models.admin._", "common.models.core._"),
+    RoutesKeys.routesImport := Seq("models.admin._", "models.core._"),
   )
   .settings(ThisBuild / scalacOptions += "-Wconf:msg=Flag.*repeatedly:s")
   .settings(
