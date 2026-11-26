@@ -57,6 +57,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
   val testTaxYearPoa: Int = getCurrentTaxYearEnd.getYear
 
   val testDate: LocalDate = LocalDate.parse("2022-01-01")
+  val yearOfMigration = "2018"
 
   val configuredChargeItemGetter: List[FinancialDetail] => DocumentDetail => Option[ChargeItem] =
     getChargeItemOpt
@@ -140,12 +141,14 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 stubAuthorised(mtdUserRole)
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK,
                   propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
-                FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYear - 1}-04-06", s"$testTaxYear-04-05")(OK,
-                  testValidFinancialDetailsModelJsonCodingOut(2000, 2000, (testTaxYear - 1).toString, testDate.plusYears(1).toString))
+                (yearOfMigration.toInt to testTaxYearPoa).foreach { year =>
+                  FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${year - 1}-04-06", s"$year-04-05")(OK,
+                    testValidFinancialDetailsModelJsonCodingOut(2000, 2000, (testTaxYear - 1).toString, testDate.plusYears(1).toString))
+                }
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
                 FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                YearOfMigrationStub.stubGetYearOfMigration("2018")
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   AuditStub.verifyAuditContainsDetail(WhatYouOweResponseAuditModel(testUser(mtdUserRole), whatYouOweFinancialDetailsEmptyBCDCharge)(testDateService).detail)
@@ -169,7 +172,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithAciAndBcdCharges)
                 FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                YearOfMigrationStub.stubGetYearOfMigration("2018")
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   AuditStub.verifyAuditContainsDetail(WhatYouOweResponseAuditModel(testUser(mtdUserRole), whatYouOweDataWithDataDueIn30DaysIt)(dateService).detail)
@@ -211,7 +214,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
                 FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                YearOfMigrationStub.stubGetYearOfMigration("2018")
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   val whatYouOweChargesList = {
@@ -278,7 +281,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, testValidOutStandingChargeResponseJsonWithAciAndBcdCharges)
                 FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                YearOfMigrationStub.stubGetYearOfMigration("2018")
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   AuditStub.verifyAuditContainsDetail(WhatYouOweResponseAuditModel(testUser(mtdUserRole), whatYouOweWithAZeroOutstandingAmount())(dateService).detail)
@@ -321,7 +324,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
                 FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                YearOfMigrationStub.stubGetYearOfMigration("2018")
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   val whatYouOweChargesList = {
@@ -362,7 +365,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
                 FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                YearOfMigrationStub.stubGetYearOfMigration("2018")
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   val whatYouOweChargesList = {
@@ -403,7 +406,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
                 FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                YearOfMigrationStub.stubGetYearOfMigration("2018")
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   val whatYouOweChargesList = {
@@ -439,7 +442,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYear - 1}-04-06",
                     s"$testTaxYear-04-05")(OK, testEmptyFinancialDetailsModelJson)
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                  YearOfMigrationStub.stubGetYearOfMigration("2018")
+                  YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                   whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                     AuditStub.verifyAuditContainsDetail(WhatYouOweResponseAuditModel(testUser(mtdUserRole), whatYouOweNoChargeList)(dateService).detail)
@@ -470,7 +473,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
 
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                  YearOfMigrationStub.stubGetYearOfMigration("2018")
+                  YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                   whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                     AuditStub.verifyAuditContainsDetail(WhatYouOweResponseAuditModel(testUser(mtdUserRole), whatYouOweNoChargeList)(dateService).detail)
@@ -509,7 +512,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
                   FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYear - 1}-04-06", s"$testTaxYear-04-05")(OK, mixedJson)
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                  YearOfMigrationStub.stubGetYearOfMigration("2018")
+                  YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                   whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
 
@@ -558,7 +561,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithAciAndBcdCharges)
                   FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYear - 1}-04-06", s"$testTaxYear-04-05")(OK, mixedJson)
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                  YearOfMigrationStub.stubGetYearOfMigration("2018")
+                  YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                   whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                     AuditStub.verifyAuditContainsDetail(WhatYouOweResponseAuditModel(testUser(mtdUserRole), whatYouOweOutstandingChargesOnly)(dateService).detail)
@@ -597,7 +600,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                  YearOfMigrationStub.stubGetYearOfMigration("2018")
+                  YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                   whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                     AuditStub.verifyAuditContainsDetail(WhatYouOweResponseAuditModel(testUser(mtdUserRole), whatYouOweFinancialDetailsEmptyBCDCharge)(dateService).detail)
@@ -637,7 +640,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                  YearOfMigrationStub.stubGetYearOfMigration("2018")
+                  YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                   whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                     GetInsourceDetailsStub.verifyGetIncomeSourceDetails(testMtditid)
@@ -672,7 +675,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithAciAndBcdCharges)
                 FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                YearOfMigrationStub.stubGetYearOfMigration("2018")
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   AuditStub.verifyAuditContainsDetail(WhatYouOweResponseAuditModel(testUser(mtdUserRole), whatYouOweDataWithDataDueInSomeDays)(dateService).detail)
@@ -710,7 +713,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
                 FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                YearOfMigrationStub.stubGetYearOfMigration("2018")
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   GetInsourceDetailsStub.verifyGetIncomeSourceDetails(testMtditid)
@@ -737,7 +740,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYearPoa - 2}-04-06", s"${testTaxYearPoa - 1}-04-05")(OK,
                       testValidFinancialDetailsModelJson(2000, 2000, (testTaxYearPoa - 1).toString, testDate.toString))
                     FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                    YearOfMigrationStub.stubGetYearOfMigration("2018")
+                    YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                     whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                       result should have(
@@ -755,7 +758,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYearPoa - 2}-04-06", s"${testTaxYearPoa - 1}-04-05")(OK,
                       testValidFinancialDetailsModelJson(2000, 0, (testTaxYearPoa - 1).toString, testDate.toString))
                     FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                    YearOfMigrationStub.stubGetYearOfMigration("2018")
+                    YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                     whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                       result should have(
@@ -774,7 +777,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${testTaxYearPoa - 2}-04-06", s"${testTaxYearPoa - 1}-04-05")(OK,
                       testEmptyFinancialDetailsModelJson)
                     FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                    YearOfMigrationStub.stubGetYearOfMigration("2018")
+                    YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                     whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                       result should have(
@@ -810,7 +813,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                         FinancialDetailsStub.stubGetOutstandingChargesResponse(
                           "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithAciAndBcdCharges)
                         FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                        YearOfMigrationStub.stubGetYearOfMigration("2018")
+                        YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                         whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                           result should have(
@@ -840,7 +843,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     FinancialDetailsStub.stubGetOutstandingChargesResponse(
                       "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(INTERNAL_SERVER_ERROR, testOutstandingChargesErrorModelJson)
                     FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                    YearOfMigrationStub.stubGetYearOfMigration("2018")
+                    YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                     whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                       GetInsourceDetailsStub.verifyGetIncomeSourceDetails(testMtditid)
@@ -863,7 +866,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithAciAndBcdCharges)
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                  YearOfMigrationStub.stubGetYearOfMigration("2018")
+                  YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                   whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                     GetInsourceDetailsStub.verifyGetIncomeSourceDetails(testMtditid)
@@ -886,7 +889,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(INTERNAL_SERVER_ERROR, testOutstandingChargesErrorModelJson)
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
-                  YearOfMigrationStub.stubGetYearOfMigration("2018")
+                  YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                   whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                     GetInsourceDetailsStub.verifyGetIncomeSourceDetails(testMtditid)
