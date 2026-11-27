@@ -22,6 +22,7 @@ import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
 import common.helpers.servicemocks.AuditStub
 import common.helpers.GetInsourceDetailsStub
 import common.models.audit.IncomeSourceDetailsResponseAuditModel
+import common.models.incomeSourceDetails.IncomeSourceDetailsModel
 import play.api.http.Status.OK
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.ws.WSResponse
@@ -36,7 +37,7 @@ class CreditsSummaryControllerISpec extends ControllerISpecHelper with CreditsSu
   val calendarYear = "2018"
   implicit val messages: Messages = app.injector.instanceOf[MessagesApi].preferred(FakeRequest())
   implicit val msgs: MessagesApi = app.injector.instanceOf[MessagesApi]
-  val incomeSources = propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString))
+  val incomeSources: IncomeSourceDetailsModel = propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString))
 
   def testUser(mtdUserRole: MTDUserRole): AuthorisedAndEnrolledRequest[_] = {
     AuthorisedAndEnrolledRequest(
@@ -64,17 +65,12 @@ class CreditsSummaryControllerISpec extends ControllerISpecHelper with CreditsSu
                 import financials.models.audit.CreditSummaryAuditing.*
                 stubAuthorised(mtdUserRole)
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, incomeSources)
-                FinancialDetailsStub.stubGetFinancialDetailsByDateRange(
-                  testNino,
-                  s"${testTaxYear}-04-06",
-                  s"${testTaxYear+1}-04-05")(
-                  OK,
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear + 1,
                   testValidFinancialDetailsModelCreditAndRefundsJson(
                     -1400,
                     -1400,
                     testTaxYear.toString,
-                    fixedDate.plusYears(1).toString)
-                )
+                    fixedDate.plusYears(1).toString))
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   GetInsourceDetailsStub.verifyGetIncomeSourceDetails(testMtditid, 1)
@@ -116,11 +112,7 @@ class CreditsSummaryControllerISpec extends ControllerISpecHelper with CreditsSu
                 stubAuthorised(mtdUserRole)
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, incomeSources)
 
-                FinancialDetailsStub.stubGetFinancialDetailsByDateRange(
-                  testNino,
-                  s"${testTaxYear}-04-06",
-                  s"${testTaxYear+1}-04-05")(
-                  OK,
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear + 1,
                   testValidFinancialDetailsModelCreditAndRefundsJsonV2(
                     -1400,
                     -1400,

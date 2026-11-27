@@ -59,17 +59,6 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
   val testDate: LocalDate = LocalDate.parse("2022-01-01")
   val yearOfMigration = "2018"
 
-  private def stubFinancialDetailsForYears(dataYear: Int, json: JsValue, expectedResult: Int = OK): Unit =
-    (yearOfMigration.toInt to testTaxYearPoa).foreach { year =>
-      if (year == dataYear) {
-        FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${year - 1}-04-06", s"$year-04-05")(
-          expectedResult, json)
-      } else {
-        FinancialDetailsStub.stubGetFinancialDetailsByDateRange(testNino, s"${year - 1}-04-06", s"$year-04-05")(
-          NOT_FOUND, Json.obj())
-      }
-    }
-
   val configuredChargeItemGetter: List[FinancialDetail] => DocumentDetail => Option[ChargeItem] =
     getChargeItemOpt
 
@@ -153,7 +142,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK,
                   propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
 
-                stubFinancialDetailsForYears(testTaxYear,
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear,
                   testValidFinancialDetailsModelJsonCodingOut(2000, 2000, (testTaxYear - 1).toString, testDate.plusYears(1).toString))
 
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
@@ -179,7 +168,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 stubAuthorised(mtdUserRole, List(SelfServeTimeToPayR17))
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
 
-                stubFinancialDetailsForYears(testTaxYear,
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear,
                   testValidFinancialDetailsModelJson(2000, 2000, (testTaxYear - 1).toString, testDate.toString))
 
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
@@ -222,7 +211,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 val financialDetailsResponseJson = testValidFinancialDetailsModelJson(2000, 2000, testTaxYear.toString, testDate.minusDays(15).toString)
                 val financialDetailsModel = financialDetailsResponseJson.as[FinancialDetailsModel]
 
-                stubFinancialDetailsForYears(testTaxYear, financialDetailsResponseJson)
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, financialDetailsResponseJson)
 
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
@@ -290,7 +279,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   )
                 )
 
-                stubFinancialDetailsForYears(testTaxYear, mixedJson)
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, mixedJson)
 
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, testValidOutStandingChargeResponseJsonWithAciAndBcdCharges)
@@ -333,7 +322,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 val financialDetailsResponseJson = testValidFinancialDetailsModelJson(2000, 2000, testTaxYear.toString, testDate.minusDays(15).toString, dunningLock = noDunningLock)
                 val financialDetailsModel = financialDetailsResponseJson.as[FinancialDetailsModel]
 
-                stubFinancialDetailsForYears(testTaxYear, financialDetailsResponseJson)
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, financialDetailsResponseJson)
 
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
@@ -374,7 +363,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   chargeClassification = "RA", totalSoAmt = BigDecimal(1754.33))
                 val financialDetailsModel = financialDetailsResponseJson.as[FinancialDetailsModel]
 
-                stubFinancialDetailsForYears(testTaxYear, financialDetailsResponseJson)
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, financialDetailsResponseJson)
 
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
@@ -415,7 +404,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 val financialDetailsResponseJson = testValidFinancialDetailsModelJson(2000, 2000, testTaxYear.toString, testDate.minusDays(15).toString, dunningLock = twoDunningLocks, chargeClassification = "RA", totalSoAmt = BigDecimal(1754.33))
                 val financialDetailsModel = financialDetailsResponseJson.as[FinancialDetailsModel]
 
-                stubFinancialDetailsForYears(testTaxYear, financialDetailsResponseJson)
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, financialDetailsResponseJson)
 
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
@@ -453,7 +442,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   stubAuthorised(mtdUserRole)
                   GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, propertyOnlyResponseWithMigrationData(testTaxYear - 1, None))
 
-                  stubFinancialDetailsForYears(testTaxYear, testEmptyFinancialDetailsModelJson)
+                  FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, testEmptyFinancialDetailsModelJson)
 
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
                   YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
@@ -482,7 +471,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   stubAuthorised(mtdUserRole)
                   GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
 
-                  stubFinancialDetailsForYears(testTaxYear, testEmptyFinancialDetailsModelJson)
+                  FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, testEmptyFinancialDetailsModelJson)
 
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
@@ -526,7 +515,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
 
-                  stubFinancialDetailsForYears(testTaxYear, mixedJson)
+                  FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, mixedJson)
 
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
                   YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
@@ -577,7 +566,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithAciAndBcdCharges)
 
-                  stubFinancialDetailsForYears(testTaxYear, mixedJson)
+                  FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, mixedJson)
 
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
                   YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
@@ -615,7 +604,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK,
                     propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
 
-                  stubFinancialDetailsForYears(testTaxYear, testValidFinancialDetailsModelJson(2000, 2000, testTaxYear.toString, testDate.plusYears(1).toString))
+                  FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, testValidFinancialDetailsModelJson(2000, 2000, testTaxYear.toString, testDate.plusYears(1).toString))
 
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
@@ -655,7 +644,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK,
                     propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
 
-                  stubFinancialDetailsForYears(testTaxYear, testValidFinancialDetailsModelJsonCodingOut(2000, 2000, testTaxYear.toString,
+                  FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, testValidFinancialDetailsModelJsonCodingOut(2000, 2000, testTaxYear.toString,
                     testDate.toString, 0, (testTaxYear - 1).toString, totalLiabilityAmount = 43.21))
 
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
@@ -692,7 +681,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 stubAuthorised(mtdUserRole, List(SelfServeTimeToPayR17))
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
 
-                stubFinancialDetailsForYears(testTaxYear, testValidFinancialDetailsModelJson(2000, 2000, (testTaxYear - 1).toString, testDate.toString, isClass2Nic = true))
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, testValidFinancialDetailsModelJson(2000, 2000, (testTaxYear - 1).toString, testDate.toString, isClass2Nic = true))
 
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithAciAndBcdCharges)
@@ -731,7 +720,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                 stubAuthorised(mtdUserRole)
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
 
-                stubFinancialDetailsForYears(testTaxYear, testValidFinancialDetailsModelMFADebitsJson(2000, 2000, testTaxYear.toString, testDate.plusYears(1).toString))
+                FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, testValidFinancialDetailsModelMFADebitsJson(2000, 2000, testTaxYear.toString, testDate.plusYears(1).toString))
 
                 FinancialDetailsStub.stubGetOutstandingChargesResponse(
                   "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithoutAciAndBcdCharges)
@@ -844,7 +833,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                           )
                         )
 
-                        stubFinancialDetailsForYears(testTaxYear, mixedJson)
+                        FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, mixedJson)
                         FinancialDetailsStub.stubGetOutstandingChargesResponse(
                           "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithAciAndBcdCharges)
                         FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
@@ -873,7 +862,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                     stubAuthorised(mtdUserRole)
                     GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK,
                       propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
-                    stubFinancialDetailsForYears(testTaxYear, testFinancialDetailsErrorModelJson, INTERNAL_SERVER_ERROR)
+                    FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, testFinancialDetailsErrorModelJson, INTERNAL_SERVER_ERROR)
                     FinancialDetailsStub.stubGetOutstandingChargesResponse(
                       "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(INTERNAL_SERVER_ERROR, testOutstandingChargesErrorModelJson)
                     FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
@@ -895,7 +884,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   stubAuthorised(mtdUserRole)
                   GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK,
                     propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
-                  stubFinancialDetailsForYears(testTaxYear, testFinancialDetailsErrorModelJson, INTERNAL_SERVER_ERROR)
+                  FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, testFinancialDetailsErrorModelJson, INTERNAL_SERVER_ERROR)
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(OK, validOutStandingChargeResponseJsonWithAciAndBcdCharges)
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))
@@ -917,7 +906,7 @@ class WhatYouOweControllerISpec extends ControllerISpecHelper
                   GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK,
                     propertyOnlyResponseWithMigrationData(testTaxYear - 1, Some(testTaxYear.toString)))
 
-                  stubFinancialDetailsForYears(testTaxYear, testValidFinancialDetailsModelJson(2000, 2000, testTaxYear.toString, testDate.toString))
+                  FinancialDetailsStub.stubFinancialDetailsForYears(testTaxYear, testValidFinancialDetailsModelJson(2000, 2000, testTaxYear.toString, testDate.toString))
                   FinancialDetailsStub.stubGetOutstandingChargesResponse(
                     "utr", testSaUtr.toLong, (testTaxYear - 1).toString)(INTERNAL_SERVER_ERROR, testOutstandingChargesErrorModelJson)
                   FinancialDetailsStub.stubPostStartSelfServeTimeToPayJourney()(CREATED, Json.toJson(SelfServeTimeToPayJourneyResponseModel("journey-id", "nextUrl")))

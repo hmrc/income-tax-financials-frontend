@@ -26,9 +26,10 @@ import financials.helpers.FinancialDetailsStub
 import financials.models.audit.PaymentAllocationsResponseAuditModel
 import financials.models.paymentAllocationCharges.FinancialDetailsWithDocumentDetailsModel
 import financials.testConstants.PaymentAllocationIntegrationTestConstants.*
-import financials.testConstants.FinancialDetailsIntegrationTestConstants.{testValidFinancialDetailsModelJson, paymentHistoryBusinessAndPropertyResponse}
+import financials.testConstants.FinancialDetailsIntegrationTestConstants.{paymentHistoryBusinessAndPropertyResponse,
+  testValidFinancialDetailsModelJson, testValidFinancialDetailsModelWithPaymentAllocationJson}
 import play.api.http.Status.OK
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSResponse
 import common.helpers.GetInsourceDetailsStub
 
@@ -39,6 +40,12 @@ class PaymentAllocationControllerISpec extends ControllerISpecHelper {
     List(financialDetail)
   )
   val docNumber = "docNumber1"
+  val yearOfMigration: String = (getCurrentTaxYearEnd.getYear - 1).toString
+
+  val financialDetailsPaymentAllocationsResponse: JsValue = testValidFinancialDetailsModelWithPaymentAllocationJson(
+    originalAmount = 2500.00,
+    outstandingAmount = 1040.12,
+  )
 
   val testUser: MTDUserRole => MtdItUser[_] = mtdUserRole =>
     getTestUser(mtdUserRole, paymentHistoryBusinessAndPropertyResponse)
@@ -63,7 +70,10 @@ class PaymentAllocationControllerISpec extends ControllerISpecHelper {
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
 
                 FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, docNumber)(OK, validPaymentAllocationChargesJson)
-                FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(OK, Json.toJson(testValidPaymentAllocationsModel))
+                FinancialDetailsStub.stubFinancialDetailsForYears(getCurrentTaxYearEnd.getYear - 1, financialDetailsPaymentAllocationsResponse, OK)
+                FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem"
+                )(OK, Json.toJson(testValidPaymentAllocationsModel))
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   result should have(
@@ -81,7 +91,9 @@ class PaymentAllocationControllerISpec extends ControllerISpecHelper {
               val docNumber = "MA999991A202202"
               GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
               FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, docNumber)(OK, validPaymentAllocationChargesHmrcAdjustmentJson)
+              FinancialDetailsStub.stubFinancialDetailsForYears(getCurrentTaxYearEnd.getYear - 1, financialDetailsPaymentAllocationsResponse, OK)
               FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "MA999991A", "5")(OK, Json.toJson(testValidNoLpiPaymentAllocationHmrcAdjustment))
+              YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
               whenReady(buildGETMTDClient(getPath(mtdUserRole, docNumber), additionalCookies)) { result =>
                 result should have(
@@ -100,10 +112,12 @@ class PaymentAllocationControllerISpec extends ControllerISpecHelper {
               FinancialDetailsStub.stubGetFinancialDetailsByDateRange(nino = testNino, from = s"${getCurrentTaxYearEnd.getYear - 1}-04-06",
                 to = s"${getCurrentTaxYearEnd.getYear}-04-05")(OK, testValidFinancialDetailsModelJson(10.34, 1.2))
               FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, docNumber)(OK, validPaymentAllocationChargesJson)
-              FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(OK, Json.toJson(testValidLpiPaymentAllocationsModel))
+              FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(
+                OK, Json.toJson(testValidLpiPaymentAllocationsModel))
+              FinancialDetailsStub.stubFinancialDetailsForYears(getCurrentTaxYearEnd.getYear - 1, financialDetailsPaymentAllocationsResponse, OK)
               FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, "1040000872")(OK, validPaymentAllocationChargesJson)
               FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, "1040000873")(OK, validPaymentAllocationChargesJson)
-              YearOfMigrationStub.stubGetYearOfMigration((getCurrentTaxYearEnd.getYear - 1).toString)
+              YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
               whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                 result should have(
@@ -128,10 +142,12 @@ class PaymentAllocationControllerISpec extends ControllerISpecHelper {
                 to = s"${getCurrentTaxYearEnd.getYear}-04-05")(OK, testValidFinancialDetailsModelJson(10.34, 1.2))
 
               FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, docNumber)(OK, validPaymentAllocationChargesJson)
-              FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(OK, Json.toJson(testValidPaymentAndLpiPaymentAllocationsModel))
+              FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(
+                OK, Json.toJson(testValidPaymentAndLpiPaymentAllocationsModel))
               FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, "1040000872")(OK, validPaymentAllocationChargesJson)
               FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, "1040000873")(OK, validPaymentAllocationChargesJson)
-              YearOfMigrationStub.stubGetYearOfMigration((getCurrentTaxYearEnd.getYear - 1).toString)
+              FinancialDetailsStub.stubFinancialDetailsForYears(getCurrentTaxYearEnd.getYear - 1, financialDetailsPaymentAllocationsResponse, OK)
+              YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
               whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                 result should have(
@@ -151,7 +167,10 @@ class PaymentAllocationControllerISpec extends ControllerISpecHelper {
               GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
 
               FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, docNumber)(OK, validPaymentAllocationChargesJson)
-              FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(OK, Json.toJson(testValidOverRepaymentPaymentAllocationsModel))
+              FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(
+                OK, Json.toJson(testValidOverRepaymentPaymentAllocationsModel))
+              FinancialDetailsStub.stubFinancialDetailsForYears(getCurrentTaxYearEnd.getYear - 1, financialDetailsPaymentAllocationsResponse, OK)
+              YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
               whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                 result should have(
@@ -169,11 +188,12 @@ class PaymentAllocationControllerISpec extends ControllerISpecHelper {
               stubAuthorised(mtdUserRole)
               GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
 
-              FinancialDetailsStub.stubGetFinancialDetailsByDateRange(nino = testNino, from = s"${getCurrentTaxYearEnd.getYear - 1}-04-06",
-                to = s"${getCurrentTaxYearEnd.getYear}-04-05")(OK, withLpiParentChargeAsOverRepayment(testValidFinancialDetailsModelJson(10.34, 1.2)))
               FinancialDetailsStub.stubGetFinancialsByDocumentId(testNino, docNumber)(OK, validPaymentAllocationChargesJson)
-              FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(OK, Json.toJson(testValidLpiPaymentAllocationsModel))
-              YearOfMigrationStub.stubGetYearOfMigration((getCurrentTaxYearEnd.getYear - 1).toString)
+              FinancialDetailsStub.stubGetPaymentAllocationResponse(testNino, "paymentLot", "paymentLotItem")(
+                OK, Json.toJson(testValidLpiPaymentAllocationsModel))
+              FinancialDetailsStub.stubFinancialDetailsForYears(getCurrentTaxYearEnd.getYear,
+                withLpiParentChargeAsOverRepayment(testValidFinancialDetailsModelJson(10.34, 1.2)), OK)
+              YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
               whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                 result should have(

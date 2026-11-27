@@ -19,6 +19,8 @@ package financials.controllers
 import common.auth.MtdItUser
 import common.controllers.ControllerISpecHelper
 import common.enums.{MTDIndividual, MTDSupportingAgent, MTDUserRole}
+import common.models.core.Nino
+import financials.models.repaymentHistory.{RepaymentHistory, RepaymentHistoryModel, SentForRisking}
 import common.helpers.WiremockHelper
 import common.helpers.servicemocks.AuditStub.verifyAuditContainsDetail
 import common.models.admin.PaymentHistoryRefunds
@@ -34,6 +36,7 @@ import play.api.libs.ws.WSResponse
 
 import java.time.LocalDate
 import common.helpers.GetInsourceDetailsStub
+import common.helpers.servicemocks.YearOfMigrationStub
 
 class PaymentHistoryControllerISpec extends ControllerISpecHelper {
 
@@ -56,9 +59,24 @@ class PaymentHistoryControllerISpec extends ControllerISpecHelper {
       mainType = Some("SA Balancing Charge Credit"))
   )
 
+  val repaymentHistory: RepaymentHistory = RepaymentHistory(
+    amountApprovedforRepayment = None,
+    amountRequested = 1234.56,
+    repaymentMethod = None,
+    totalRepaymentAmount = None,
+    repaymentItems = None,
+    estimatedRepaymentDate = None,
+    creationDate = Some(LocalDate.of(2023, 6, 1)),
+    repaymentRequestNumber = "0000012345",
+    status = SentForRisking
+  )
+
+  val repaymentHistoryModel: RepaymentHistoryModel = RepaymentHistoryModel(List(repaymentHistory))
+
   val currentTaxYearEnd: Int = getCurrentTaxYearEnd.getYear
   val previousTaxYearEnd: Int = currentTaxYearEnd - 1
   val twoPreviousTaxYearEnd: Int = currentTaxYearEnd - 2
+  val yearOfMigration: String = "2020"
 
   val testUser: MTDUserRole => MtdItUser[_] = mtdUserRole => getTestUser(mtdUserRole, paymentHistoryBusinessAndPropertyResponse)
 
@@ -81,7 +99,9 @@ class PaymentHistoryControllerISpec extends ControllerISpecHelper {
                 "the PaymentHistoryRefunds FS is disabled" in {
                   stubAuthorised(mtdUserRole)
                   GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
-                  FinancialDetailsStub.stubGetPaymentsResponse(testNino, s"$twoPreviousTaxYearEnd-04-06", s"$previousTaxYearEnd-04-05")(OK, payments)
+                  FinancialDetailsStub.stubFinancialDetailsForYears(currentTaxYearEnd, testEmptyFinancialDetailsModelJson, OK)
+                  FinancialDetailsStub.stubGetPaymentsForYears(currentTaxYearEnd, payments)
+                  YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                   whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                     result should have(
@@ -100,7 +120,10 @@ class PaymentHistoryControllerISpec extends ControllerISpecHelper {
                 "the payment is from an earlier tax year description when CutOverCreditsEnabled and credit is defined" in {
                   stubAuthorised(mtdUserRole, List(PaymentHistoryRefunds))
                   GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
-                  FinancialDetailsStub.stubGetPaymentsResponse(testNino, s"$twoPreviousTaxYearEnd-04-06", s"$previousTaxYearEnd-04-05")(OK, payments)
+                  FinancialDetailsStub.stubFinancialDetailsForYears(currentTaxYearEnd, testEmptyFinancialDetailsModelJson, OK)
+                  FinancialDetailsStub.stubGetPaymentsForYears(currentTaxYearEnd, payments)
+                  FinancialDetailsStub.stubGetRepaymentHistoryByNino(Nino(testNino))(OK, repaymentHistoryModel)
+                  YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                   whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                     result should have(
@@ -148,6 +171,7 @@ class PaymentHistoryControllerISpec extends ControllerISpecHelper {
               "the PaymentHistoryRefunds FS is enabled and the refund journey starts" in {
                 stubAuthorised(mtdUserRole, List(PaymentHistoryRefunds))
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
                 WiremockHelper.stubPost(viewRefundHistoryUrl, ACCEPTED, Json.toJson(RepaymentJourneyModel(nextUrl = refundTrackerUrl)).toString())
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
@@ -164,6 +188,7 @@ class PaymentHistoryControllerISpec extends ControllerISpecHelper {
               "the PaymentHistoryRefunds FS is disabled" in {
                 stubAuthorised(mtdUserRole)
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
                   result should have(
@@ -178,6 +203,7 @@ class PaymentHistoryControllerISpec extends ControllerISpecHelper {
               "the refund journey fails to start" in {
                 stubAuthorised(mtdUserRole, List(PaymentHistoryRefunds))
                 GetInsourceDetailsStub.stubGetIncomeSourceDetailsResponse(testMtditid)(OK, paymentHistoryBusinessAndPropertyResponse)
+                YearOfMigrationStub.stubGetYearOfMigration(yearOfMigration)
                 WiremockHelper.stubPost(viewRefundHistoryUrl, INTERNAL_SERVER_ERROR, "")
 
                 whenReady(buildGETMTDClient(path, additionalCookies)) { result =>
